@@ -2,6 +2,7 @@ package group1.go.Model;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map.Entry;
 import java.util.Set;
 
 public class Game {
@@ -31,22 +32,26 @@ public class Game {
 		return 0; // no hay error
 	}
 	
-	public add(int i ,int j, int player){
+	public void add(int i ,int j, char player){
+		Board board = currentState.getBoard();
+		Board newBoard = board.add(i, j, player);
 		
 	}
 
-
+	//te dice cuales fichas tiene alrededor
+	//@param color si le pasas white te dice las que estan alrededor de color white
+	
 	private int getDegree(int i, int j, int color) {
 		
 		HashMap<TilesPosition, Character> aux = getSorrounding(i, j);
 		int white = 0;
 		int black = 0;
-		
-		/*for(TilesPosition t: aux){
-			if(t.getPlayer() == Constants.WHITE){
+		HashSet<Entry<TilesPosition, Character>> entryAux = (HashSet<Entry<TilesPosition, Character>>) aux.entrySet();
+		for(Entry<TilesPosition, Character> e: entryAux){
+			if(e.getValue() == Constants.WHITE){
 				white++;
 			}
-			if(t.getPlayer() == Constants.BLACK){
+			if(e.getValue() == Constants.BLACK){
 				black++;
 			}
 		}
@@ -57,7 +62,7 @@ public class Game {
 			return white;
 		}
 		return black + white;
-		*/
+		
 	}
 	
 	private HashMap<TilesPosition, Character> getSorrounding(int i, int j){
