@@ -1,5 +1,6 @@
 package group1.go.Model;
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
@@ -10,8 +11,8 @@ public class Game {
 	State currentState;
 	State previousState;
 	State pre_previousState;
-	int currentPlayer;
-	int otherPlayer;
+	char currentPlayer;
+	char otherPlayer;
 	
 	
 	//machine()
@@ -32,9 +33,90 @@ public class Game {
 		return 0; // no hay error
 	}
 	
-	public void add(int i ,int j, char player){
+	public void add(int i ,int j){
 		Board board = currentState.getBoard();
-		Board newBoard = board.add(i, j, player);
+		Board nextBoard = board.clone();
+		int blackTilesCapture = currentState.getBlackTilesCapture();
+		int whiteTilesCaputre = currentState.getWhiteTilesCapture(); 
+		
+		ArrayList<TilesPosition> toRemove = eat(i,j);
+		nextBoard.remove(toRemove);
+		
+		if(otherPlayer == Constants.BLACK){
+			blackTilesCapture += toRemove.size();
+		}
+		if(otherPlayer == Constants.WHITE){
+			whiteTilesCaputre += toRemove.size();
+		}
+		pre_previousState = previousState;
+		previousState = currentState;
+		currentState = new State(nextBoard, blackTilesCapture, whiteTilesCaputre);
+		
+	}
+	
+	public void endTurn(){
+		char aux = currentPlayer;
+		currentPlayer = otherPlayer;
+		otherPlayer = aux;
+	}
+	
+	public ArrayList<TilesPosition> eat(int i, int j){
+		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
+		ArrayList<TilesPosition> toRemoveDown = new ArrayList<TilesPosition>();
+		ArrayList<TilesPosition> toRemoveRight = new ArrayList<TilesPosition>();
+		ArrayList<TilesPosition> toRemoveLeft = new ArrayList<TilesPosition>();
+		ArrayList<TilesPosition> rta = new ArrayList<TilesPosition>();
+		Board board = currentState.getBoard().clone();
+		if(eat(toRemoveUp, i-1, j, board)){
+			rta.addAll(toRemoveUp);
+		}
+		if(eat(toRemoveDown, i+1, j, board)){
+			rta.addAll(toRemoveDown);
+		}
+
+		if(eat(toRemoveLeft, i, j-1, board)){
+			rta.addAll(toRemoveLeft);
+		}
+		if(eat(toRemoveRight, i, j+1, board)){
+			rta.addAll(toRemoveRight);
+		}
+		return rta;
+		
+	}
+	
+	public boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board){
+		
+		char upC = board.get(i, j-1);
+		char downC = board.get(i, j+1);
+		char leftC = board.get(i-1, j);
+		char rightC = board.get(i+1, j);
+		boolean up = true;
+		boolean down = true;
+		boolean left = true;
+		boolean right = true;
+		
+		if(upC == Constants.EMPTY && downC == Constants.EMPTY && leftC == Constants.EMPTY && rightC == Constants.EMPTY){
+			return false;
+		}
+		if ( upC == otherPlayer){
+			up = eat(toRemove, i, j-1, board);
+		}
+		if(downC == otherPlayer){
+			down = eat(toRemove, i, j+1, board);
+		}
+		if(leftC == otherPlayer){
+			left = eat(toRemove, i-1, j, board);
+		}
+		if(board.get(i+1, j) == otherPlayer){
+			right = eat(toRemove, i+1, j, board);
+		}
+		
+		boolean rta =  up && down && left && right;
+		if(rta == true){
+			toRemove.add(new TilesPosition(i, j));
+			return rta;
+		}
+		return rta;
 		
 	}
 
