@@ -1,8 +1,10 @@
 package group1.go.Model;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
-public class BoardMapImpl {
+public class BoardMapImpl implements Board {
 	
 	HashMap<TilesPosition,Character> board;
 	int blackTilesCapture; 
@@ -30,10 +32,26 @@ public class BoardMapImpl {
 		return tile;
 	}
 	
-	public BoardMapImpl add(int i, int j, char player){
-		HashMap<TilesPosition,Character> aux = (HashMap<TilesPosition, Character>) board.clone();
-		aux.put(new TilesPosition(i,j), player);
-		return new BoardMapImpl(aux, blackTilesCapture, whiteTilesCapture);
+	public void add(int i, int j, char player) {
+		board.put(new TilesPosition(i,j), player);
+		
+	}
+
+	public void remove(Collection<TilesPosition> toRemove) {
+		for(TilesPosition t: toRemove){
+			board.remove(t);
+		}
+		
+	}
+
+	public void remove(TilesPosition toRemove) {
+		board.remove(toRemove);
+		
+	}
+
+	public Board clone() {
+		Board cloned= new BoardMapImpl((HashMap<TilesPosition, Character>) board.clone(), blackTilesCapture, whiteTilesCapture);
+		return cloned;
 	}
 	
 	
