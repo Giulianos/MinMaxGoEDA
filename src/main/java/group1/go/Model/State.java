@@ -18,7 +18,11 @@ public class State {
 		return whiteTilesCapture;
 	}
 
-
+	public State(){
+		board = new BoardMapImpl();
+		blackTilesCapture = 0;
+		whiteTilesCapture = 0;
+	}
 	public State(Board board, int blackTilesCapture, int whiteTilesCapture){
 		this.board = board;
 		this.blackTilesCapture = blackTilesCapture;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
 public class Game {
@@ -58,6 +59,20 @@ public class Game {
 		char aux = currentPlayer;
 		currentPlayer = otherPlayer;
 		otherPlayer = aux;
+	}
+	
+	public void startGame(){
+		Random rand = new Random();
+		int random = rand.nextInt() % 10;
+		if(random > 5){
+			currentPlayer = Constants.BLACK;
+			otherPlayer = Constants.WHITE;
+		}
+		if(random < 5){
+			otherPlayer = Constants.BLACK;
+			currentPlayer = Constants.WHITE;
+		}
+		currentState = new State();
 	}
 	
 	public ArrayList<TilesPosition> eat(int i, int j){
@@ -176,6 +191,10 @@ public class Game {
 			}
 		}
 		return aux;
+	}
+	
+	public Board getNewBard(){
+		return currentState.getBoard();
 	}
 	
 	

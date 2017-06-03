@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import group1.go.Controller.Controller;
+import group1.go.Model.Game;
+
 import java.awt.GridBagLayout;
 import javax.swing.JButton;
 import java.awt.GridBagConstraints;
@@ -71,7 +75,10 @@ public class StartGUI extends JFrame {
 		JButton start_btn = new JButton("Start");
 		start_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Game game = new Game();
 				BoardGUI boardGUI = new BoardGUI();
+				Controller controller = new Controller(game, boardGUI);
+				boardGUI.setController(controller);
 				StartGUI.this.dispose();
 			}
 		});
