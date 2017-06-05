@@ -155,12 +155,6 @@ public class BoardGUI extends JFrame {
 		});
 		
 		
-		//public void drawBoard(Set<TilesPositionGUI> set){
-			//tilesPanel.set
-			//tilesPanel.repaint();
-		//}
-		
-		
 	}
 
 	public void setController(Controller controller) {
@@ -168,7 +162,8 @@ public class BoardGUI extends JFrame {
 		
 	}
 	
-	public void add(){
+	public void drawBoard(Board board){
+		tilesPanel.drawBoard(board);
 	}
 
 	public void tileInPosition() {

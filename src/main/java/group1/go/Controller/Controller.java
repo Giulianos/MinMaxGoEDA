@@ -33,7 +33,8 @@ public class Controller {
 			break;
 		case 0:
 			game.add(i, j);
-			//boardGUI.add
+			boardGUI.drawBoard(game.getNewBoard());
+			game.endTurn();
 		}
 	}
 	

@@ -22,13 +22,13 @@ public class Game {
 		
 		Board currentBoard = currentState.getBoard();
 		char tileAtPosition = currentBoard.get(i, j);
-		if(tileAtPosition == Constants.EMPTY){
+		if(tileAtPosition != Constants.EMPTY){
 			return -3; //error de que hay una ficha
 		}
 		
-		if(4 == getDegree(i , j , otherPlayer)){
-			return -2; //quiere suicidarse
-		}
+		//if(4 == getDegree(i , j , otherPlayer)){
+			//return -2; //quiere suicidarse
+		//}
 		
 		//previous state
 		return 0; // no hay error
@@ -143,8 +143,7 @@ public class Game {
 		HashMap<TilesPosition, Character> aux = getSorrounding(i, j);
 		int white = 0;
 		int black = 0;
-		HashSet<Entry<TilesPosition, Character>> entryAux = (HashSet<Entry<TilesPosition, Character>>) aux.entrySet();
-		for(Entry<TilesPosition, Character> e: entryAux){
+		for(Entry<TilesPosition, Character> e: aux.entrySet()){
 			if(e.getValue() == Constants.WHITE){
 				white++;
 			}
@@ -193,7 +192,7 @@ public class Game {
 		return aux;
 	}
 	
-	public Board getNewBard(){
+	public Board getNewBoard(){
 		return currentState.getBoard();
 	}
 	
