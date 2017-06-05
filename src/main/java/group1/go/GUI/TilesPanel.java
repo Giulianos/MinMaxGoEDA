@@ -49,7 +49,6 @@ public class TilesPanel extends JPanel {
 		}
 	}
 	   
-	    
 	   
 	}
 	

@@ -32,8 +32,9 @@ public class BoardGUI extends JFrame {
 	private final double deltaX = 40;
 	private Controller controller;
 	private JLayeredPane contentPane;
-	private ImageIcon backgroundImg = new ImageIcon("C:/Users/agust/Downloads/go_board.png");
-	private ImageIcon btnBackground = new ImageIcon("C:/Users/agust/Downloads/btn_board.png");
+	private ImageIcon backgroundImg = new ImageIcon("go_board.png");
+	//private ImageIcon backgroundImg = new ImageIcon("C:/Users/agust/Downloads/go_board.png");
+	//private ImageIcon btnBackground = new ImageIcon("C:/Users/agust/Downloads/btn_board.png");
 	private JLabel backGroundLabel = new JLabel();
 	private JPanel backGroundPanel = new JPanel();
 	private TilesPanel tilesPanel = new TilesPanel();
