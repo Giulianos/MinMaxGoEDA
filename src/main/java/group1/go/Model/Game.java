@@ -26,9 +26,9 @@ public class Game {
 			return -3; //error de que hay una ficha
 		}
 		
-		//if(4 == getDegree(i , j , otherPlayer)){
-			//return -2; //quiere suicidarse
-		//}
+		if(4 == getDegree(i , j , otherPlayer)){
+			return -2; //quiere suicidarse
+		}
 		
 		//previous state
 		return 0; // no hay error
@@ -39,8 +39,8 @@ public class Game {
 		Board nextBoard = board.clone();
 		int blackTilesCapture = currentState.getBlackTilesCapture();
 		int whiteTilesCaputre = currentState.getWhiteTilesCapture(); 
-		
-		ArrayList<TilesPosition> toRemove = eat(i,j);
+		nextBoard.add(i, j, currentPlayer);
+		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone());
 		nextBoard.remove(toRemove);
 		
 		if(otherPlayer == Constants.BLACK){
@@ -75,24 +75,24 @@ public class Game {
 		currentState = new State();
 	}
 	
-	public ArrayList<TilesPosition> eat(int i, int j){
+	public ArrayList<TilesPosition> eat(int i, int j, Board board){
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveDown = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveRight = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveLeft = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> rta = new ArrayList<TilesPosition>();
-		Board board = currentState.getBoard().clone();
-		if(eat(toRemoveUp, i-1, j, board)){
+		
+		if((board.get(i-1, j)==otherPlayer)&&eat(toRemoveUp, i-1, j, board)){
 			rta.addAll(toRemoveUp);
 		}
-		if(eat(toRemoveDown, i+1, j, board)){
+		if((board.get(i+1, j)==otherPlayer)&&eat(toRemoveDown, i+1, j, board)){
 			rta.addAll(toRemoveDown);
 		}
 
-		if(eat(toRemoveLeft, i, j-1, board)){
+		if((board.get(i, j-1)==otherPlayer)&&eat(toRemoveLeft, i, j-1, board)){
 			rta.addAll(toRemoveLeft);
 		}
-		if(eat(toRemoveRight, i, j+1, board)){
+		if((board.get(i, j+1)==otherPlayer)&&eat(toRemoveRight, i, j+1, board)){
 			rta.addAll(toRemoveRight);
 		}
 		return rta;
@@ -109,8 +109,8 @@ public class Game {
 		boolean down = true;
 		boolean left = true;
 		boolean right = true;
-		
-		if(upC == Constants.EMPTY && downC == Constants.EMPTY && leftC == Constants.EMPTY && rightC == Constants.EMPTY){
+		board.add(i, j, currentPlayer);
+		if(upC == Constants.EMPTY || downC == Constants.EMPTY || leftC == Constants.EMPTY || rightC == Constants.EMPTY){
 			return false;
 		}
 		if ( upC == otherPlayer){
@@ -122,7 +122,7 @@ public class Game {
 		if(leftC == otherPlayer){
 			left = eat(toRemove, i-1, j, board);
 		}
-		if(board.get(i+1, j) == otherPlayer){
+		if(rightC == otherPlayer){
 			right = eat(toRemove, i+1, j, board);
 		}
 		
@@ -138,7 +138,7 @@ public class Game {
 	//te dice cuales fichas tiene alrededor
 	//@param color si le pasas white te dice las que estan alrededor de color white
 	
-	private int getDegree(int i, int j, int color) {
+	private int getDegree(int i, int j, char color) {
 		
 		HashMap<TilesPosition, Character> aux = getSorrounding(i, j);
 		int white = 0;
