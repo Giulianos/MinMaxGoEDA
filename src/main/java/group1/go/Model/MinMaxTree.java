@@ -42,7 +42,9 @@ public class MinMaxTree {
             for(j=0; j<Constants.BOARDSIZE; j++)
             {
                 if(GoRules.isPossibleMove(state.currentState, new Point(i, j), (depth%2==0)?AIPlayer:EnemyPlayer)) {
-                  State aux = new State(new Board)
+                	Board auxBoard = state.currentState.getBoard().clone();
+                	State auxState = new State(auxBoard, state.currentState.blackTilesCapture, state.currentState.whiteTilesCapture);
+                	
                 }
             }
         }
