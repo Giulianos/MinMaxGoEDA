@@ -29,6 +29,9 @@ public class State {
 		this.whiteTilesCapture = whiteTilesCapture;
 	}
 	
+	public State clone() {
+		return new State(board.clone(), blackTilesCapture, whiteTilesCapture);
+	}
 	
 	public Board getBoard(){
 		return board;
