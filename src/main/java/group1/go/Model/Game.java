@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.Set;
 
 public class Game {
@@ -21,7 +22,7 @@ public class Game {
 		
 		Board currentBoard = currentState.getBoard();
 		char tileAtPosition = currentBoard.get(i, j);
-		if(tileAtPosition == Constants.EMPTY){
+		if(tileAtPosition != Constants.EMPTY){
 			return -3; //error de que hay una ficha
 		}
 		
@@ -38,8 +39,8 @@ public class Game {
 		Board nextBoard = board.clone();
 		int blackTilesCapture = currentState.getBlackTilesCapture();
 		int whiteTilesCaputre = currentState.getWhiteTilesCapture(); 
-		
-		ArrayList<TilesPosition> toRemove = eat(i,j);
+		nextBoard.add(i, j, currentPlayer);
+		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone());
 		nextBoard.remove(toRemove);
 		
 		if(otherPlayer == Constants.BLACK){
@@ -60,24 +61,38 @@ public class Game {
 		otherPlayer = aux;
 	}
 	
-	public ArrayList<TilesPosition> eat(int i, int j){
+	public void startGame(){
+		Random rand = new Random();
+		int random = rand.nextInt() % 10;
+		if(random > 5){
+			currentPlayer = Constants.BLACK;
+			otherPlayer = Constants.WHITE;
+		}
+		if(random < 5){
+			otherPlayer = Constants.BLACK;
+			currentPlayer = Constants.WHITE;
+		}
+		currentState = new State();
+	}
+	
+	public ArrayList<TilesPosition> eat(int i, int j, Board board){
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveDown = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveRight = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveLeft = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> rta = new ArrayList<TilesPosition>();
-		Board board = currentState.getBoard().clone();
-		if(eat(toRemoveUp, i-1, j, board)){
+		
+		if((board.get(i-1, j)==otherPlayer)&&eat(toRemoveUp, i-1, j, board)){
 			rta.addAll(toRemoveUp);
 		}
-		if(eat(toRemoveDown, i+1, j, board)){
+		if((board.get(i+1, j)==otherPlayer)&&eat(toRemoveDown, i+1, j, board)){
 			rta.addAll(toRemoveDown);
 		}
 
-		if(eat(toRemoveLeft, i, j-1, board)){
+		if((board.get(i, j-1)==otherPlayer)&&eat(toRemoveLeft, i, j-1, board)){
 			rta.addAll(toRemoveLeft);
 		}
-		if(eat(toRemoveRight, i, j+1, board)){
+		if((board.get(i, j+1)==otherPlayer)&&eat(toRemoveRight, i, j+1, board)){
 			rta.addAll(toRemoveRight);
 		}
 		return rta;
@@ -94,8 +109,8 @@ public class Game {
 		boolean down = true;
 		boolean left = true;
 		boolean right = true;
-		
-		if(upC == Constants.EMPTY && downC == Constants.EMPTY && leftC == Constants.EMPTY && rightC == Constants.EMPTY){
+		board.add(i, j, currentPlayer);
+		if(upC == Constants.EMPTY || downC == Constants.EMPTY || leftC == Constants.EMPTY || rightC == Constants.EMPTY){
 			return false;
 		}
 		if ( upC == otherPlayer){
@@ -107,7 +122,7 @@ public class Game {
 		if(leftC == otherPlayer){
 			left = eat(toRemove, i-1, j, board);
 		}
-		if(board.get(i+1, j) == otherPlayer){
+		if(rightC == otherPlayer){
 			right = eat(toRemove, i+1, j, board);
 		}
 		
@@ -123,13 +138,12 @@ public class Game {
 	//te dice cuales fichas tiene alrededor
 	//@param color si le pasas white te dice las que estan alrededor de color white
 	
-	private int getDegree(int i, int j, int color) {
+	private int getDegree(int i, int j, char color) {
 		
 		HashMap<TilesPosition, Character> aux = getSorrounding(i, j);
 		int white = 0;
 		int black = 0;
-		HashSet<Entry<TilesPosition, Character>> entryAux = (HashSet<Entry<TilesPosition, Character>>) aux.entrySet();
-		for(Entry<TilesPosition, Character> e: entryAux){
+		for(Entry<TilesPosition, Character> e: aux.entrySet()){
 			if(e.getValue() == Constants.WHITE){
 				white++;
 			}
@@ -137,6 +151,9 @@ public class Game {
 				black++;
 			}
 		}
+		System.out.println(aux.entrySet().size());
+		System.out.println(black);
+		System.out.println(white);
 		if(color == Constants.BLACK){
 			return black;
 		}
@@ -154,7 +171,7 @@ public class Game {
 		if(j-1 >= 0){
 			playerAux = board.get(i, j-1);
 			if(playerAux != Constants.EMPTY){
-				aux.put( new TilesPosition(i,j), playerAux);
+				aux.put( new TilesPosition(i,j-1), playerAux);
 			}
 		}
 		if(i-1 >= 0){
@@ -163,19 +180,23 @@ public class Game {
 				aux.put( new TilesPosition(i-1,j), playerAux);
 			}
 		}
-		if(j+1 >= Constants.BOARDSIZE){
+		if(j+1 <= Constants.BOARDSIZE){
 			playerAux = board.get(i, j+1);
 			if(playerAux != Constants.EMPTY){
 				aux.put( new TilesPosition(i,j+1), playerAux);
 			}
 		}
-		if(i+1 >= Constants.BOARDSIZE){
+		if(i+1 <= Constants.BOARDSIZE){
 			playerAux = board.get(i+1, j);
 			if(playerAux != Constants.EMPTY){
-				aux.put( new TilesPosition(i,j-1), playerAux);
+				aux.put( new TilesPosition(i+1,j), playerAux);
 			}
 		}
 		return aux;
+	}
+	
+	public Board getNewBoard(){
+		return currentState.getBoard();
 	}
 	
 	

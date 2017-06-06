@@ -17,6 +17,10 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import group1.go.Controller.Controller;
+import group1.go.Model.Board;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -26,14 +30,14 @@ public class BoardGUI extends JFrame {
 	private final int firstPositionY = 19;
 	private final double deltaY =  39.6;
 	private final double deltaX = 40;
-	
+	private Controller controller;
 	private JLayeredPane contentPane;
-	ImageIcon backgroundImg = new ImageIcon("C:/Users/agust/Downloads/go_board.png");
-	ImageIcon btnBackground = new ImageIcon("C:/Users/agust/Downloads/btn_board.png");
-	JLabel backGroundLabel = new JLabel();
-	JPanel backGroundPanel = new JPanel();
-	TilesPanel tilesPanel = new TilesPanel();
-	//Controller controller;
+	private ImageIcon backgroundImg = new ImageIcon("go_board.png");
+	//private ImageIcon backgroundImg = new ImageIcon("C:/Users/agust/Downloads/go_board.png");
+	//private ImageIcon btnBackground = new ImageIcon("C:/Users/agust/Downloads/btn_board.png");
+	private JLabel backGroundLabel = new JLabel();
+	private JPanel backGroundPanel = new JPanel();
+	private TilesPanel tilesPanel = new TilesPanel();
 
 	/**
 	 * Launch the application.
@@ -125,7 +129,7 @@ public class BoardGUI extends JFrame {
 					y = y - deltaY;
 					j++;
 				}
-				//controller.touch(new Point(i-1,j-1);
+				controller.touch(i-1,j-1);
 				
 			}
 
@@ -152,11 +156,24 @@ public class BoardGUI extends JFrame {
 		});
 		
 		
-		//public void drawBoard(Set<TilesPositionGUI> set){
-			//tilesPanel.set
-			//tilesPanel.repaint();
-		//}
+	}
+
+	public void setController(Controller controller) {
+		this.controller = controller;
 		
+	}
+	
+	public void drawBoard(Board board){
+		tilesPanel.drawBoard(board);
+	}
+
+	public void tileInPosition() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void isSuicide() {
+		// TODO Auto-generated method stub
 		
 	}
 }
