@@ -151,9 +151,6 @@ public class Game {
 				black++;
 			}
 		}
-		System.out.println(aux.entrySet().size());
-		System.out.println(black);
-		System.out.println(white);
 		if(color == Constants.BLACK){
 			return black;
 		}
@@ -195,8 +192,8 @@ public class Game {
 		return aux;
 	}
 	
-	public Board getNewBoard(){
-		return currentState.getBoard();
+	public State getState(){
+		return currentState;
 	}
 	
 	

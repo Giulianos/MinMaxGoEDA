@@ -16,10 +16,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import group1.go.Controller.Controller;
 import group1.go.Model.Board;
+import group1.go.Model.Constants;
+import group1.go.Model.State;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -38,7 +41,9 @@ public class BoardGUI extends JFrame {
 	private JLabel backGroundLabel = new JLabel();
 	private JPanel backGroundPanel = new JPanel();
 	private TilesPanel tilesPanel = new TilesPanel();
-
+	private JLabel blackLabel;
+	private JLabel whiteLabel;
+	private JLabel moveLabel;
 	/**
 	 * Launch the application.
 	 */
@@ -74,10 +79,15 @@ public class BoardGUI extends JFrame {
 		//Inicializo los botones y los agrego
 		JButton pass_btn = new JButton("Pass");
 		pass_btn.setBounds(506, 30, 70, 40);
+		pass_btn.setOpaque(false);
+		pass_btn.setContentAreaFilled(false);
 		contentPane.add(pass_btn,0);
 		
 		JButton exit_btn = new JButton("Exit");
 		exit_btn.setBounds(506, 170, 70, 40);
+		exit_btn.setOpaque(false);
+		exit_btn.setContentAreaFilled(false);
+		
 		exit_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -87,6 +97,8 @@ public class BoardGUI extends JFrame {
 		
 		JButton menu_btn = new JButton("Menu");
 		menu_btn.setBounds(506, 100, 70, 40);
+		menu_btn.setOpaque(false);
+		menu_btn.setContentAreaFilled(false);
 		menu_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				StartGUI start = new StartGUI();
@@ -95,6 +107,29 @@ public class BoardGUI extends JFrame {
 		});
 		contentPane.add(menu_btn,0);
 		
+		//seteo el cartel de blackTiles
+		blackLabel = new JLabel("0");
+		blackLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		blackLabel.setBounds(516, 240, 50, 40);
+		blackLabel.setBackground(Color.BLACK);
+		blackLabel.setOpaque(true);
+		blackLabel.setForeground(Color.WHITE);
+		contentPane.add(blackLabel, 4);
+		
+		//seteo el cartel de whiteTiles 
+		whiteLabel = new JLabel("0");
+		whiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		whiteLabel.setBounds(516, 310, 50, 40);
+		whiteLabel.setBackground(Color.WHITE);
+		whiteLabel.setOpaque(true);
+		whiteLabel.setForeground(Color.BLACK);
+		contentPane.add(whiteLabel, 4);
+		
+		//seteo el moveLabel
+		moveLabel = new JLabel("<html>Make a <br>move!!</html>");
+		moveLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		moveLabel.setBounds(506, 380, 70, 40);
+		contentPane.add(moveLabel, 5);
 		//Seteo el background
 		backGroundLabel.setIcon(backgroundImg);
 		backGroundLabel.setBounds(0, 0, backgroundImg.getIconWidth(), backgroundImg.getIconHeight());
@@ -144,8 +179,7 @@ public class BoardGUI extends JFrame {
 			}
 
 			public void mousePressed(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
+			
 			}
 
 			public void mouseReleased(MouseEvent arg0) {
@@ -163,17 +197,22 @@ public class BoardGUI extends JFrame {
 		
 	}
 	
-	public void drawBoard(Board board){
-		tilesPanel.drawBoard(board);
+	public void drawBoard(State state){
+		tilesPanel.drawBoard(state.getBoard());
+		blackLabel.setText(String.valueOf(state.getWhiteTilesCapture()));
+		whiteLabel.setText(String.valueOf(state.getBlackTilesCapture()));
+		moveLabel.setText("moved");
+		
+		
 	}
 
 	public void tileInPosition() {
-		// TODO Auto-generated method stub
+		moveLabel.setText("<html>Tile in<br>the position</html>");
 		
 	}
 
 	public void isSuicide() {
-		// TODO Auto-generated method stub
+		moveLabel.setText("suicide");
 		
 	}
 }
