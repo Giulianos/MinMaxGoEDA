@@ -151,6 +151,9 @@ public class Game {
 				black++;
 			}
 		}
+		System.out.println(aux.entrySet().size());
+		System.out.println(black);
+		System.out.println(white);
 		if(color == Constants.BLACK){
 			return black;
 		}
@@ -168,7 +171,7 @@ public class Game {
 		if(j-1 >= 0){
 			playerAux = board.get(i, j-1);
 			if(playerAux != Constants.EMPTY){
-				aux.put( new TilesPosition(i,j), playerAux);
+				aux.put( new TilesPosition(i,j-1), playerAux);
 			}
 		}
 		if(i-1 >= 0){
@@ -177,16 +180,16 @@ public class Game {
 				aux.put( new TilesPosition(i-1,j), playerAux);
 			}
 		}
-		if(j+1 >= Constants.BOARDSIZE){
+		if(j+1 <= Constants.BOARDSIZE){
 			playerAux = board.get(i, j+1);
 			if(playerAux != Constants.EMPTY){
 				aux.put( new TilesPosition(i,j+1), playerAux);
 			}
 		}
-		if(i+1 >= Constants.BOARDSIZE){
+		if(i+1 <= Constants.BOARDSIZE){
 			playerAux = board.get(i+1, j);
 			if(playerAux != Constants.EMPTY){
-				aux.put( new TilesPosition(i,j-1), playerAux);
+				aux.put( new TilesPosition(i+1,j), playerAux);
 			}
 		}
 		return aux;
