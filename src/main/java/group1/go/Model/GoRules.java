@@ -6,12 +6,12 @@ import java.awt.Point;
  * Created by giulianoscaglioni on 30/5/17.
  */
 public class GoRules {
-    public static boolean isPossibleMove(State state, Point move, int turn) {
+    public static boolean isPossibleMove(State state, TilesPosition move, char turn) {
         return true;
     }
     
-    public static void applyMoveReaction(State state, Point move)
+    public static State applyMove(State state, TilesPosition move, char turn)
     {
-    	
+    	return null; 
     }
 }

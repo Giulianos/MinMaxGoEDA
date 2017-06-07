@@ -7,11 +7,14 @@ import java.awt.*;
  */
 public class AI {
 
-    private Game 
+    //private Game 
 
-    public Point play(int depth)
+    public TilesPosition play(int depth, State currentState, char AIPlayer)
     {
-        MinMaxTree tree = new MinMaxTree();
+        MinMaxTree tree = new MinMaxTree(currentState, AIPlayer, depth);
+        return tree.getOptimalMove();
     }
-
+    public int heuristic(State s){
+    	return -1;
+    }
 }
