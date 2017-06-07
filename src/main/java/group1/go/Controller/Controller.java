@@ -35,6 +35,8 @@ public class Controller {
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
 			game.endTurn();
+		case -4:
+			break;
 		}
 	}
 	

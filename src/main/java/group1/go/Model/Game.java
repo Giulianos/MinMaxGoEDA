@@ -8,7 +8,9 @@ import java.util.Random;
 import java.util.Set;
 
 public class Game {
-
+	
+	static PlayerKO whiteko;
+	static PlayerKO blackko;
 	State currentState;
 	State previousState;
 	State pre_previousState;
@@ -22,15 +24,26 @@ public class Game {
 		
 		Board currentBoard = currentState.getBoard();
 		char tileAtPosition = currentBoard.get(i, j);
+		
+		
 		if(tileAtPosition != Constants.EMPTY){
 			return -3; //error de que hay una ficha
 		}
 		
-		if(4 == getDegree(i , j , otherPlayer)){
+		if(isKO(i,j)){
+			return -4;
+		}
+		
+		
+		Board nextBoard = currentBoard.clone();
+		nextBoard.add(i, j, currentPlayer);
+		System.out.println( "h" +  eat(new ArrayList<TilesPosition>(),i,j,nextBoard,false ));
+		//System.out.println("f" +eat(i, j,nextBoard).isEmpty());
+		if( eat(new ArrayList<TilesPosition>(),i,j,nextBoard,false ) && eat(i, j,nextBoard).isEmpty()){
 			return -2; //quiere suicidarse
 		}
 		
-		//previous state
+		
 		return 0; // no hay error
 	}
 	
@@ -75,6 +88,7 @@ public class Game {
 		currentState = new State();
 	}
 	
+	
 	public ArrayList<TilesPosition> eat(int i, int j, Board board){
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveDown = new ArrayList<TilesPosition>();
@@ -82,24 +96,24 @@ public class Game {
 		ArrayList<TilesPosition> toRemoveLeft = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> rta = new ArrayList<TilesPosition>();
 		
-		if((board.get(i-1, j)==otherPlayer)&&eat(toRemoveUp, i-1, j, board)){
+		if((board.get(i-1, j)==otherPlayer)&&eat(toRemoveUp, i-1, j, board, true)){
 			rta.addAll(toRemoveUp);
 		}
-		if((board.get(i+1, j)==otherPlayer)&&eat(toRemoveDown, i+1, j, board)){
+		if((board.get(i+1, j)==otherPlayer)&&eat(toRemoveDown, i+1, j, board, true)){
 			rta.addAll(toRemoveDown);
 		}
 
-		if((board.get(i, j-1)==otherPlayer)&&eat(toRemoveLeft, i, j-1, board)){
+		if((board.get(i, j-1)==otherPlayer)&&eat(toRemoveLeft, i, j-1, board, true)){
 			rta.addAll(toRemoveLeft);
 		}
-		if((board.get(i, j+1)==otherPlayer)&&eat(toRemoveRight, i, j+1, board)){
+		if((board.get(i, j+1)==otherPlayer)&&eat(toRemoveRight, i, j+1, board, true)){
 			rta.addAll(toRemoveRight);
 		}
 		return rta;
 		
 	}
 	
-	public boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board){
+	public boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board, boolean eaten){
 		
 		char upC = board.get(i, j-1);
 		char downC = board.get(i, j+1);
@@ -109,21 +123,31 @@ public class Game {
 		boolean down = true;
 		boolean left = true;
 		boolean right = true;
-		board.add(i, j, currentPlayer);
+		char cur;
+		char other;
+		if(eaten){
+			cur = currentPlayer;
+			other = otherPlayer;
+		}
+		else {
+			cur = otherPlayer;
+			other = currentPlayer;
+		}
+		board.add(i, j, cur);
 		if(upC == Constants.EMPTY || downC == Constants.EMPTY || leftC == Constants.EMPTY || rightC == Constants.EMPTY){
 			return false;
 		}
-		if ( upC == otherPlayer){
-			up = eat(toRemove, i, j-1, board);
+		if ( upC == other){
+			up = eat(toRemove, i, j-1, board, eaten);
 		}
-		if(downC == otherPlayer){
-			down = eat(toRemove, i, j+1, board);
+		if(downC == other){
+			down = eat(toRemove, i, j+1, board, eaten);
 		}
-		if(leftC == otherPlayer){
-			left = eat(toRemove, i-1, j, board);
+		if(leftC == other){
+			left = eat(toRemove, i-1, j, board, eaten);
 		}
-		if(rightC == otherPlayer){
-			right = eat(toRemove, i+1, j, board);
+		if(rightC == other){
+			right = eat(toRemove, i+1, j, board, eaten);
 		}
 		
 		boolean rta =  up && down && left && right;
@@ -151,6 +175,7 @@ public class Game {
 				black++;
 			}
 		}
+		System.out.println(aux.size());
 		if(color == Constants.BLACK){
 			return black;
 		}
@@ -196,6 +221,151 @@ public class Game {
 		return currentState;
 	}
 	
+	public boolean isKO(int i, int j)
+
+	{
+
+	if(blackko==null){
+
+	blackko= new PlayerKO(0,0,false);
+
+	whiteko= new PlayerKO(0,0,false);
+
+	}
+
+
+	boolean flag = false;
+
+	int degree = getDegree(i,j,otherPlayer);
+
+	if(currentState.board.get(i, j)!=Constants.EMPTY)
+
+	{
+
+
+	return false;
+
+	}
+
+	if(degree < 4)
+
+	{
+
+	return false;
+
+	}
+
+	if(getDegree(i+1,j,currentPlayer) == 3)
+
+	{
+
+	flag = true;
+
+	}
+
+	else if(getDegree(i-1,j,currentPlayer) == 3)
+
+	{
+
+	flag = true;
+
+	}
+
+	else if(getDegree(i,j+1,currentPlayer) == 3)
+
+	{
+
+	flag = true;
+
+	}
+
+	else if(getDegree(i,j-1,currentPlayer) == 3)
+
+	{
+
+	flag = true;
+
+	}
+
+	System.out.println(flag);
+
+	if(currentPlayer == Constants.BLACK)
+
+	{
+
+	if(!flag){
+
+	blackko.setKo(false);
+
+	}else{
+
+	if(blackko.ko())
+
+	{
+
+	return true;
+
+	}
+
+	else
+
+	{
+
+	System.out.println("entra black");
+
+	blackko.setKo(true);
+
+	blackko.setI(i);
+
+	blackko.setJ(j);
+
+	}
+
+	}
+
+	}
+
+	else 
+
+	{
+
+	if(!flag){
+
+	whiteko.setKo(false);
+
+	}else{
+
+	if(whiteko.ko())
+
+	{
+
+	return true;
+
+	}
+
+	else
+
+	{
+
+	System.out.println("entra white");
+
+	whiteko.setKo(true);
+
+	whiteko.setI(i);
+
+	whiteko.setJ(j);
+
+	}
+
+	}
+
+	}
+
+	return false;
+
+	}
+
+
 	
 
 }
