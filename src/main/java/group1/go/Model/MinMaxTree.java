@@ -3,6 +3,7 @@ package group1.go.Model;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -16,12 +17,14 @@ public class MinMaxTree {
     private StateNode rootNode;
     private int depth;
     private Heuristic heuristic;
+    private Game AIgame;
 
     public MinMaxTree(State rootState, char AIPlayer, int depth, Heuristic heuristic) {
         this.AIPlayer = AIPlayer;
         this.enemyPlayer = (AIPlayer==Constants.WHITE)?Constants.BLACK:Constants.WHITE;
         this.depth = depth;
         this.heuristic = heuristic;
+        AIgame = new Game();
         rootNode = new StateNode(rootState, enemyPlayer);
     }
 
@@ -30,6 +33,7 @@ public class MinMaxTree {
         private ArrayList<StateNode> nextStates;
         private char player;
       	private int score;
+      	private TilesPosition move;
       	
         public StateNode(State state, char player) {
             this.state=state;
@@ -47,10 +51,10 @@ public class MinMaxTree {
     		this.pos = pos;
     		this.score = score;
 		}
-    }
-    
-    public TilesPosition getOptimalMove() {
-    	return getOptimalMoveBFS(rootNode, depth).pos;
+    	
+    	public State getState(State currentState){
+    		add(pos.i, pos.j, AIPlayer, currentState.clone());
+    	}
     }
     
     public TilesPosition getOptimalMoveDFS(StateNode state){
@@ -66,9 +70,24 @@ public class MinMaxTree {
     	return null;
     }
     
-    private Move completeScores(StateNode n) {
+    private int completeScores(StateNode n) {
     	if(n.nextStates.isEmpty())
-    		return 
+    		return n.score;
+    	Integer best=null, current;
+    	for(StateNode sn : n.nextStates) {
+    		if(best == null) {
+    			best = completeScores(sn);
+    		} else {
+    			current = completeScores(sn);
+    			if(current<best && n.player==enemyPlayer) {
+    				best=current;
+    			} else if(current>best && n.player==AIPlayer){
+    				best=current;
+    			}
+    		}
+    	}
+    	n.score = best;
+    	return best;
     }
     
     public Move getOptimalMoveBFS() {
@@ -89,24 +108,42 @@ public class MinMaxTree {
     		if(currentDepth == depth) {
     			currentNode.score = heuristic.calculate(currentNode.state, currentNode.player);
     		} else {
-    			for(i=0; i<Constants.BOARDSIZE; i++)
-    	        {
-    	            for(j=0; j<Constants.BOARDSIZE; j++)
-    	            {
-    	                if(GoRules.isPossibleMove(currentNode.state, new TilesPosition(i,j), (currentNode.player == enemyPlayer)?AIPlayer:enemyPlayer)) {
-    	                	nodePlayer = (currentNode.player == enemyPlayer)?AIPlayer:enemyPlayer;
-    	                	addedNode = new StateNode(GoRules.applyMove(currentNode.state, new TilesPosition(i,j), nodePlayer), nodePlayer);
-    	                	if(!generatedStates.contains(addedNode.state)) {
-	    	                	currentNode.nextStates.add(addedNode);
-	    	                	generatedStates.add(addedNode.state);
-	    	                	statesQ.offer(addedNode);
-    	                	}
-    	                }
-    	            }
-    	        }
+    			nodePlayer = (currentNode.player == enemyPlayer)?AIPlayer:enemyPlayer;
+    			List<TilesPosition> movements = AIgame.getMovements(nodePlayer);
+    			for(TilesPosition m : movements){
+    				addedNode = new StateNode(AIgame.applyMove(m,currentNode.state, nodePlayer), nodePlayer);
+    				if(!generatedStates.contains(addedNode.state)) {
+    					generatedStates.add(addedNode.state);
+    					currentNode.nextStates.add(addedNode);
+    					statesQ.offer(addedNode);
+    				}
+    			}
+//    			for(i=0; i<Constants.BOARDSIZE; i++)
+//    	        {
+//    	            for(j=0; j<Constants.BOARDSIZE; j++)
+//    	            {
+//    	                if(GoRules.isPossibleMove(currentNode.state, new TilesPosition(i,j), (currentNode.player == enemyPlayer)?AIPlayer:enemyPlayer)) {
+//    	                	nodePlayer = (currentNode.player == enemyPlayer)?AIPlayer:enemyPlayer;
+//    	                	addedNode = new StateNode(GoRules.applyMove(currentNode.state, new TilesPosition(i,j), nodePlayer), nodePlayer);
+//    	                	if(!generatedStates.contains(addedNode.state)) {
+//	    	                	currentNode.nextStates.add(addedNode);
+//	    	                	generatedStates.add(addedNode.state);
+//	    	                	statesQ.offer(addedNode);
+//    	                	}
+//    	                }
+//    	            }
+//    	        }
     		}
     	}
-        return completeScores(rootNode);
+        StateNode bestState = null;
+        for(StateNode st : rootNode.nextStates) {
+        	completeScores(st);
+        	if(bestState==null) {
+        		bestState = st;
+        	} else if(bestState.score<st.score) {
+        		bestState = st;
+        	}
+        }
     }
 
 }
