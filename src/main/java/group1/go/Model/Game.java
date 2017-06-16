@@ -35,11 +35,11 @@ public class Game {
 		}
 		
 		
-		Board nextBoard = currentBoard.clone();
-		nextBoard.add(i, j, currentPlayer);
-		System.out.println( "h" +  eat(new ArrayList<TilesPosition>(),i,j,nextBoard,false ));
-		//System.out.println("f" +eat(i, j,nextBoard).isEmpty());
-		if( eat(new ArrayList<TilesPosition>(),i,j,nextBoard,false ) && eat(i, j,nextBoard).isEmpty()){
+		Board auxBoard1 = currentBoard.clone();
+		Board auxBoard2 = currentBoard.clone();
+		auxBoard1.add(i, j, currentPlayer);
+		auxBoard2.add(i, j, currentPlayer);
+		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,false ) && eat(i, j,auxBoard2).isEmpty()){
 			return -2; //quiere suicidarse
 		}
 		
