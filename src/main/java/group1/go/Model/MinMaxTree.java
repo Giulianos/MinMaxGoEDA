@@ -96,12 +96,19 @@ public class MinMaxTree {
 	    	StateNode currentNode;
 	    	boolean didProcessRoot = false;
 	    	
+	    	int currDepth=0;
+	    	 char step= rootNode.player;
+	    	
 	    	while(!statesQ.isEmpty()) {
 	    		currentNode = statesQ.poll();
-	    		if(didProcessRoot) {
+	    		if(currDepth==depth) {
+	    			System.out.println("calculating heuristic");
 	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, currentNode.player));
 	    		} else {
-	    			didProcessRoot = true;
+	    			if( currentNode.player!=step){
+	    				currDepth++;
+	    				step=currentNode.player;
+	    			}
 	    			System.out.println("Call to neighbour processing...");
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){

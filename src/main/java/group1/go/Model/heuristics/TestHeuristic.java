@@ -14,7 +14,7 @@ public class TestHeuristic implements Heuristic{
 		int score=0;
 		boolean foundPlayer=false;
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
-			for(int j=0; i<=Constants.BOARDSIZE; j++) {
+			for(int j=0; j<=Constants.BOARDSIZE; j++) {
 				if(s.getBoard().get(i, j)==player) {
 					score+=foundPlayer?2:1; foundPlayer=true;
 				} else {

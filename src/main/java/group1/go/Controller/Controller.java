@@ -41,7 +41,7 @@ public class Controller {
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
 			game.endTurn();
-			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new RandomHeuristic());
+			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());
 			Move m= minMax.getOptimalMoveBFS();
 			game.add(m.getPosition().getI(), m.getPosition().getJ());
 			boardGUI.drawBoard(game.getState());
