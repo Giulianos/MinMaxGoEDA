@@ -61,5 +61,38 @@ public class BoardBitMapImpl implements Board {
 		BoardBitMapImpl newBoard = new BoardBitMapImpl(blackBoard, whiteBoard, blackCaptures, whiteCaptures); 
 		return newBoard;
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((blackBoard == null) ? 0 : blackBoard.hashCode());
+		result = prime * result + blackCaptures;
+		result = prime * result + ((whiteBoard == null) ? 0 : whiteBoard.hashCode());
+		result = prime * result + whiteCaptures;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BoardBitMapImpl other = (BoardBitMapImpl) obj;
+		if(blackBoard.equals(other.blackBoard) && whiteBoard.equals(other.whiteBoard)){
+			return true;
+		}
+		return false;
+	}
+	public boolean isFull() {
+		if(((blackBoard.getFirst30() == whiteBoard.getFirst30())&&(blackBoard.getSecond30()==whiteBoard.getSecond30())&&
+				(blackBoard.getThird30()==whiteBoard.getThird30())&&(blackBoard.getFourth30()==whiteBoard.getFourth30())&&
+				(blackBoard.getFifth30()==whiteBoard.getFifth30())&&(blackBoard.getSixth30()==whiteBoard.getSixth30()))){
+			return true;
+		}
+		return false;
+	}
+	
 
 }

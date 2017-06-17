@@ -111,6 +111,68 @@ public class BitBoard {
 	}
 	
 	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (fifth30 ^ (fifth30 >>> 32));
+		result = prime * result + (int) (first30 ^ (first30 >>> 32));
+		result = prime * result + (int) (fourth30 ^ (fourth30 >>> 32));
+		result = prime * result + (int) (second30 ^ (second30 >>> 32));
+		result = prime * result + (int) (sixth30 ^ (sixth30 >>> 32));
+		result = prime * result + (int) (third30 ^ (third30 >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		BitBoard other = (BitBoard) obj;
+		if (fifth30 != other.fifth30)
+			return false;
+		if (first30 != other.first30)
+			return false;
+		if (fourth30 != other.fourth30)
+			return false;
+		if (second30 != other.second30)
+			return false;
+		if (sixth30 != other.sixth30)
+			return false;
+		if (third30 != other.third30)
+			return false;
+		return true;
+	}
+
+	public long getFirst30() {
+		return first30;
+	}
+
+	public long getSecond30() {
+		return second30;
+	}
+
+	public long getThird30() {
+		return third30;
+	}
+
+	public long getFourth30() {
+		return fourth30;
+	}
+
+	public long getFifth30() {
+		return fifth30;
+	}
+
+	public long getSixth30() {
+		return sixth30;
+	}
+
 	public static void main(String[] args) {
 		long first64 = 0;
 		first64 = (first64|(1<<3));

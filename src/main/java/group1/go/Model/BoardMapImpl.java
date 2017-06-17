@@ -61,5 +61,12 @@ public class BoardMapImpl implements Board {
 	public char get(TilesPosition p) {
 		return get(p.i, p.j);
 	}
+
+	public boolean isFull() {
+		if(board.size() == 13*13){
+			return true;
+		}
+		return false;
+	}
 	
 }

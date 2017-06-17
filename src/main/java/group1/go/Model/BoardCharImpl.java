@@ -58,4 +58,13 @@ public class BoardCharImpl implements Board {
 		return  new BoardCharImpl(newBoard, whiteCaptures, blackCaptures);
 	}
 
+	public boolean isFull() {
+		for(int i=0; i<13*13; i++){
+			if(board[i/13][i%13] == Constants.EMPTY){
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

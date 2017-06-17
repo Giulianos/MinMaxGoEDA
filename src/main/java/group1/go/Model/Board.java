@@ -17,5 +17,7 @@ public interface Board {
 	public void remove(TilesPosition toRemove);
 	
 	public Board clone();
+	
+	public boolean isFull();
 
 }
