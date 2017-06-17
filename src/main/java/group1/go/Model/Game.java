@@ -78,14 +78,8 @@ public class Game {
 	public void startGame(){
 		Random rand = new Random();
 		int random = rand.nextInt() % 10;
-		if(random > 5){
 			currentPlayer = Constants.BLACK;
 			otherPlayer = Constants.WHITE;
-		}
-		if(random < 5){
-			otherPlayer = Constants.BLACK;
-			currentPlayer = Constants.WHITE;
-		}
 		currentState = new State();
 	}
 	
