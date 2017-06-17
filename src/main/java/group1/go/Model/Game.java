@@ -39,6 +39,7 @@ public class Game {
 		Board auxBoard2 = currentBoard.clone();
 		auxBoard1.add(i, j, currentPlayer);
 		auxBoard2.add(i, j, currentPlayer);
+		
 		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,false ) && eat(i, j,auxBoard2).isEmpty()){
 			return -2; //quiere suicidarse
 		}
@@ -133,6 +134,21 @@ public class Game {
 			cur = otherPlayer;
 			other = currentPlayer;
 		}
+		
+		if(j-1<0){
+			upC = cur;;
+		}
+		if(j+1 > Constants.BOARDSIZE){
+			downC = cur;
+		}
+		if(i-1<0){
+			leftC = cur;
+		}
+		if(i+1>Constants.BOARDSIZE){
+			rightC = cur;
+		}
+		
+		
 		board.add(i, j, cur);
 		if(upC == Constants.EMPTY || downC == Constants.EMPTY || leftC == Constants.EMPTY || rightC == Constants.EMPTY){
 			return false;
