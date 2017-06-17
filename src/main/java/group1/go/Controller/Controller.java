@@ -5,6 +5,12 @@ import java.awt.Point;
 import group1.go.GUI.BoardGUI;
 import group1.go.Model.Constants;
 import group1.go.Model.Game;
+import group1.go.Model.Heuristic;
+import group1.go.Model.MinMaxTree;
+import group1.go.Model.Move;
+import group1.go.Model.State;
+import group1.go.Model.heuristics.RandomHeuristic;
+import group1.go.Model.heuristics.TestHeuristic;
 
 public class Controller {
 
@@ -33,6 +39,11 @@ public class Controller {
 			break;
 		case 0:
 			game.add(i, j);
+			boardGUI.drawBoard(game.getState());
+			game.endTurn();
+			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new RandomHeuristic());
+			Move m= minMax.getOptimalMoveBFS();
+			game.add(m.getPosition().getI(), m.getPosition().getJ());
 			boardGUI.drawBoard(game.getState());
 			game.endTurn();
 		case -4:

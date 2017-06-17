@@ -17,6 +17,10 @@ public class Game {
 	char currentPlayer;
 	char otherPlayer;
 	
+	public char getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
 	
 	//machine()
 	

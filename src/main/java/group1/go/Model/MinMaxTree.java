@@ -76,6 +76,7 @@ public class MinMaxTree {
 					((BoardMapImpl)auxBoard).add(auxPosition, nodePlayer);
 					GoRules.applyMove(auxBoard, nodePlayer, auxPosition);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer);
+					auxState.move= new Move(auxPosition,nodePlayer);
 					retList.add(auxState);
 				}
 			}

@@ -7,7 +7,7 @@ import group1.go.Model.State;
 public class TestHeuristic implements Heuristic{
 
 	public int calculate(State s, char player) {
-		return calculate(s, player) - calculate(s, player==Constants.BLACK?Constants.WHITE:Constants.WHITE);
+		return calculate1(s, player) - calculate1(s, player==Constants.BLACK?Constants.WHITE:Constants.WHITE);
 	}
 
 	public int calculate1(State s, char player) {
