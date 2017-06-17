@@ -16,6 +16,8 @@ public class Game {
 	State pre_previousState;
 	char currentPlayer;
 	char otherPlayer;
+	boolean blackPass;
+	boolean whitePass;
 	
 	public char getCurrentPlayer() {
 		return currentPlayer;
