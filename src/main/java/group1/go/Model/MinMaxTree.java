@@ -18,6 +18,7 @@ public class MinMaxTree {
     private StateNode rootNode;
     private int depth;
     private Heuristic heuristic;
+    static int num = 0;
 
     public MinMaxTree(State rootState, char AIPlayer, int depth, Heuristic heuristic) {
         this.AIPlayer = AIPlayer;
@@ -63,6 +64,7 @@ public class MinMaxTree {
     }
 	
 	private List<StateNode> neighbourStates(StateNode n) {
+		System.out.println("Procesing neighbour states..." + num++);
 		StateNode auxState;
 		TilesPosition auxPosition;
 		Board auxBoard;
@@ -92,12 +94,15 @@ public class MinMaxTree {
 	    	statesQ.offer(rootNode);
 	
 	    	StateNode currentNode;
+	    	boolean didProcessRoot = false;
 	    	
 	    	while(!statesQ.isEmpty()) {
 	    		currentNode = statesQ.poll();
-	    		if(currentNode.level >= depth) {
+	    		if(didProcessRoot) {
 	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, currentNode.player));
 	    		} else {
+	    			didProcessRoot = true;
+	    			System.out.println("Call to neighbour processing...");
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){
 	    				if(!generatedStates.contains(n.state)) {

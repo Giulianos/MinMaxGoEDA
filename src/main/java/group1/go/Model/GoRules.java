@@ -27,7 +27,7 @@ public class GoRules {
 	static public boolean isSuicide(Board b, TilesPosition tp, char p) {
 		char enemy = p==Constants.WHITE?Constants.BLACK:Constants.WHITE;
 		//Clear visited
-		visited = clearedMatrix.clone();
+		boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
 		Queue<TilesPosition> bfsQueue = new LinkedList<TilesPosition>();
 		//Enqueue tile
 		bfsQueue.offer(tp);
@@ -134,8 +134,7 @@ public class GoRules {
 	 * @return The answer ;)
 	 * */
 	static public boolean isPossible(Board b, TilesPosition t, char p) {
-		boolean ret = isEmpty(b, t);// && !isSuicide(b, t, p);
-		return ret;
+		return isEmpty(b, t) && !isSuicide(b, t, p);
 	}
 	
 	static public void main(String[] args) {
