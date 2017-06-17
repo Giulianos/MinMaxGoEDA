@@ -54,5 +54,12 @@ public class BoardMapImpl implements Board {
 		return cloned;
 	}
 	
+	public void add(TilesPosition t, char player) {
+		add(t.i, t.j, player); //Better clone the TilesPosition passed
+	}
+
+	public char get(TilesPosition p) {
+		return get(p.i, p.j);
+	}
 	
 }

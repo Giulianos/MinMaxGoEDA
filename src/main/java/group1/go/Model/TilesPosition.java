@@ -1,6 +1,4 @@
 package group1.go.Model;
-import java.awt.Color;
-import java.awt.Point;
 
 public class TilesPosition {
 	
@@ -36,7 +34,22 @@ public class TilesPosition {
 		return ((o.i == this.i) && (o.j == this.j));
 		
 	}
-
+	
+	public boolean isTopBorder() {
+		return i==0;
+	}
+	
+	public boolean isLeftBorder() {
+		return j==0;
+	}
+	
+	public boolean isBottomBorder() {
+		return i==Constants.BOARDSIZE;
+	}
+	
+	public boolean isRightBorder() {
+		return j==Constants.BOARDSIZE;
+	}
 	
 	public int getI() {
 		return i;
