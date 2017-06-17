@@ -134,8 +134,10 @@ public class GoRules {
 	 * @return The answer ;)
 	 * */
 	static public boolean isPossible(Board b, TilesPosition t, char p) {
-		boolean ret = isEmpty(b, t);// && !isSuicide(b, t, p);
-		return ret;
+		boolean retEmpty = isEmpty(b, t);
+		boolean retSuicide = isSuicide(b, t, p);
+		System.out.println("isEmpty: " + retEmpty + ", is Suicide: " + retSuicide);
+		return retEmpty;// && !retSuicide;
 	}
 	
 	static public void main(String[] args) {
