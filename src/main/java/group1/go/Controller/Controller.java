@@ -26,6 +26,12 @@ public class Controller {
 	public void start(){
 		game.startGame();
 	}
+	
+	public void pass(){
+		if(game.pass()){
+			boardGUI.endGame();
+		}
+	}
 
 	public void touch(int i, int j) {
 		int rta = game.isposible(i, j);
@@ -40,12 +46,13 @@ public class Controller {
 		case 0:
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
-			game.endTurn();
 			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new RandomHeuristic());
 			Move m= minMax.getOptimalMoveBFS();
 			game.add(m.getPosition().getI(), m.getPosition().getJ());
 			boardGUI.drawBoard(game.getState());
-			game.endTurn();
+			if(game.endTurn()){
+				boardGUI.endGame();
+			};
 		case -4:
 			break;
 		}

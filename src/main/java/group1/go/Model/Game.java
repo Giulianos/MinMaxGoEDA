@@ -16,8 +16,7 @@ public class Game {
 	State pre_previousState;
 	char currentPlayer;
 	char otherPlayer;
-	boolean blackPass;
-	boolean whitePass;
+	boolean firstPass;
 	
 	public char getCurrentPlayer() {
 		return currentPlayer;
@@ -55,6 +54,9 @@ public class Game {
 	}
 	
 	public void add(int i ,int j){
+		if(firstPass){
+			firstPass = false; 
+		}
 		Board board = currentState.getBoard();
 		Board nextBoard = board.clone();
 		int blackTilesCapture = currentState.getBlackTilesCapture();
@@ -75,10 +77,29 @@ public class Game {
 		
 	}
 	
-	public void endTurn(){
+	public boolean endTurn(){
 		char aux = currentPlayer;
 		currentPlayer = otherPlayer;
 		otherPlayer = aux;
+		if(currentState.getBoard().isFull()){
+			endGame();
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean pass(){
+		if(firstPass){
+			endGame();
+			return true;
+		}
+		firstPass = true;
+		endTurn();
+		return false;
+	}
+	
+	public void endGame(){
+		
 	}
 	
 	public void startGame(){

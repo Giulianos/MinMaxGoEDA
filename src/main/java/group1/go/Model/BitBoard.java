@@ -149,6 +149,30 @@ public class BitBoard {
 		return true;
 	}
 
+	public long getFirst30() {
+		return first30;
+	}
+
+	public long getSecond30() {
+		return second30;
+	}
+
+	public long getThird30() {
+		return third30;
+	}
+
+	public long getFourth30() {
+		return fourth30;
+	}
+
+	public long getFifth30() {
+		return fifth30;
+	}
+
+	public long getSixth30() {
+		return sixth30;
+	}
+
 	public static void main(String[] args) {
 		long first64 = 0;
 		first64 = (first64|(1<<3));

@@ -44,6 +44,7 @@ public class BoardGUI extends JFrame {
 	private JLabel blackLabel;
 	private JLabel whiteLabel;
 	private JLabel moveLabel;
+	private JButton pass_btn;
 	/**
 	 * Launch the application.
 	 */
@@ -77,10 +78,15 @@ public class BoardGUI extends JFrame {
 		setContentPane(contentPane);
 		
 		//Inicializo los botones y los agrego
-		JButton pass_btn = new JButton("Pass");
+		pass_btn = new JButton("Pass");
 		pass_btn.setBounds(506, 30, 70, 40);
 		pass_btn.setOpaque(false);
 		pass_btn.setContentAreaFilled(false);
+		pass_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				controller.pass();
+			}
+		});
 		contentPane.add(pass_btn,0);
 		
 		JButton exit_btn = new JButton("Exit");
@@ -213,6 +219,13 @@ public class BoardGUI extends JFrame {
 
 	public void isSuicide() {
 		moveLabel.setText("suicide");
+		
+	}
+
+	public void endGame() {
+		tilesPanel.setEnabled(false);
+		pass_btn.setEnabled(false);
+		EndGameGUI endGame = new EndGameGUI(this);
 		
 	}
 }
