@@ -13,7 +13,7 @@ public class GoRules {
 	static public boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
 	
 	static public boolean isEmpty(Board b, TilesPosition p) {
-		return b.get(p) == Constants.EMPTY;
+		return b.get(p.i, p.j) == Constants.EMPTY;
 	}
 	
 	/* Checks if placing a tile in a position is suicide
@@ -37,7 +37,7 @@ public class GoRules {
 			current = bfsQueue.poll();
 			visited[current.i][current.j] = true;
 			//If an empty space is found, then it's not suicide
-			if(!current.equals(tp) && b.get(current)==Constants.EMPTY)
+			if(!current.equals(tp) && b.get(current.i,current.j)==Constants.EMPTY)
 				return false;
 			else {
 				if(current.i>0 && b.get(current.i-1, current.j)!=enemy && !visited[current.i-1][current.j])
@@ -68,22 +68,22 @@ public class GoRules {
 		int eaten = 0;
 		//Check if the move would been suicide for enemy in adjacent tiles
 		//Up
-		if(!t.isTopBorder() && b.get(auxTile=new TilesPosition(t.i-1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
+		if(!t.isTopBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i-1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
 			System.out.println("eating up!");
 		}
 		//Down
-		if(!t.isBottomBorder() && b.get(auxTile=new TilesPosition(t.i+1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
+		if(!t.isBottomBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i+1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
 			System.out.println("eating down!");
 		}
 		//Left
-		if(!t.isLeftBorder() && b.get(auxTile=new TilesPosition(t.i, t.j-1))==enemy && isSuicide(b, auxTile, enemy)) {
+		if(!t.isLeftBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i, t.j-1))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
 			System.out.println("eating left!");
 		}
 		//Right
-		if(!t.isRightBorder() && b.get(auxTile=new TilesPosition(t.i, t.j+1))==enemy && isSuicide(b, auxTile, enemy)) {
+		if(!t.isRightBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i, t.j+1))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
 			System.out.println("eating right!");
 		}
@@ -99,7 +99,7 @@ public class GoRules {
 	 * @return Quantity of tiles eaten
 	 * */
 	static public int eatTiles(Board b, TilesPosition t) {
-		char enemy = b.get(t);
+		char enemy = ((BoardMapImpl)b).get(t);
 		int eaten = 0;
 		Queue<TilesPosition> bfsQueue = new LinkedList<TilesPosition>();
 		//Enqueue tile
@@ -108,8 +108,8 @@ public class GoRules {
 		TilesPosition current;
 		while(!bfsQueue.isEmpty()) {
 			current = bfsQueue.poll();
-			if(b.get(current)==enemy) {
-				b.add(current, Constants.EMPTY);
+			if(((BoardMapImpl)b).get(current)==enemy) {
+				((BoardMapImpl)b).add(current, Constants.EMPTY);
 				eaten++;
 			}
 			if(!current.isTopBorder() && b.get(current.i-1, current.j)==enemy)

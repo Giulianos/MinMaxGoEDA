@@ -73,7 +73,7 @@ public class MinMaxTree {
 				auxPosition = new TilesPosition(i, j);
 				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
 					auxBoard = currentBoard.clone();
-					auxBoard.add(auxPosition, nodePlayer);
+					((BoardMapImpl)auxBoard).add(auxPosition, nodePlayer);
 					GoRules.applyMove(auxBoard, nodePlayer, auxPosition);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer);
 					retList.add(auxState);
