@@ -86,11 +86,11 @@ public class BoardBitMapImpl implements Board {
 		return false;
 	}
 	public boolean isFull() {
-		/*if(((blackBoard.getFirst30()|whiteBoard.getFirst30())|(blackBoard.getSecond30()|whiteBoard.getSecond30())|
-				(blackBoard.getThird30()()|whiteBoard.getThird30())|(blackBoard.getFourth30()|whiteBoard.getFourth30())|
-				(blackBoard.getFifth30()|whiteBoard.getFifth30())|(blackBoard.getSixth30()|whiteBoard.getSixth30())) == 0){
-			
-		}*/
+		if(((blackBoard.getFirst30() == whiteBoard.getFirst30())&&(blackBoard.getSecond30()==whiteBoard.getSecond30())&&
+				(blackBoard.getThird30()==whiteBoard.getThird30())&&(blackBoard.getFourth30()==whiteBoard.getFourth30())&&
+				(blackBoard.getFifth30()==whiteBoard.getFifth30())&&(blackBoard.getSixth30()==whiteBoard.getSixth30()))){
+			return true;
+		}
 		return false;
 	}
 	
