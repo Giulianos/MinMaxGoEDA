@@ -24,7 +24,7 @@ public class MinMaxTree {
         this.enemyPlayer = (AIPlayer==Constants.WHITE)?Constants.BLACK:Constants.WHITE;
         this.depth = depth;
         this.heuristic = heuristic;
-        rootNode = new StateNode(rootState, enemyPlayer);
+        rootNode = new StateNode(rootState, enemyPlayer, 0);
     }
 
     private static class StateNode {
@@ -32,8 +32,9 @@ public class MinMaxTree {
         private ArrayList<StateNode> nextStates;
         private char player;
       	private Move move;
+      	private int level;
       	
-        public StateNode(State state, char player) {
+        public StateNode(State state, char player, int level) {
             this.state=state;
             nextStates=new ArrayList<StateNode>();
             this.player = player;
@@ -75,7 +76,7 @@ public class MinMaxTree {
 					auxBoard = currentBoard.clone();
 					((BoardMapImpl)auxBoard).add(auxPosition, nodePlayer);
 					GoRules.applyMove(auxBoard, nodePlayer, auxPosition);
-					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer);
+					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
 					auxState.move= new Move(auxPosition,nodePlayer);
 					retList.add(auxState);
 				}
@@ -91,14 +92,12 @@ public class MinMaxTree {
 	    	statesQ.offer(rootNode);
 	
 	    	StateNode currentNode;
-	    	int currentDepth = 0;
 	    	
 	    	while(!statesQ.isEmpty()) {
 	    		currentNode = statesQ.poll();
-	    		if(currentDepth == depth) {
-	    			currentNode.move.rate(heuristic.calculate(currentNode.state, currentNode.player));
+	    		if(currentNode.level >= depth) {
+	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, currentNode.player));
 	    		} else {
-	    			currentDepth++;
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){
 	    				if(!generatedStates.contains(n.state)) {

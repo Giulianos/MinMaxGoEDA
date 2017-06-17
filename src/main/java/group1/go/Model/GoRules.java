@@ -70,22 +70,22 @@ public class GoRules {
 		//Up
 		if(!t.isTopBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i-1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			System.out.println("eating up!");
+			//System.out.println("eating up!");
 		}
 		//Down
 		if(!t.isBottomBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i+1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			System.out.println("eating down!");
+			//System.out.println("eating down!");
 		}
 		//Left
 		if(!t.isLeftBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i, t.j-1))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			System.out.println("eating left!");
+			//System.out.println("eating left!");
 		}
 		//Right
 		if(!t.isRightBorder() && ((BoardMapImpl)b).get(auxTile=new TilesPosition(t.i, t.j+1))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			System.out.println("eating right!");
+			//System.out.println("eating right!");
 		}
 		
 		return eaten;
@@ -134,7 +134,8 @@ public class GoRules {
 	 * @return The answer ;)
 	 * */
 	static public boolean isPossible(Board b, TilesPosition t, char p) {
-		return isEmpty(b, t) && !isSuicide(b, t, p);
+		boolean ret = isEmpty(b, t);// && !isSuicide(b, t, p);
+		return ret;
 	}
 	
 	static public void main(String[] args) {
