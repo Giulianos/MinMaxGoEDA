@@ -31,8 +31,8 @@ public class TilesPanel extends JPanel {
 		super.paintComponent(g);
 		 Graphics2D g2 = (Graphics2D) g;
 		if(board != null){
-		for(int i = 0; i<Constants.BOARDSIZE; i++){
-			for(int j = 0; j<Constants.BOARDSIZE; j++){
+		for(int i = 0; i<=Constants.BOARDSIZE; i++){
+			for(int j = 0; j<=Constants.BOARDSIZE; j++){
 				char tile = board.get(i, j);
 				if(tile != Constants.EMPTY){
 					if(tile == Constants.BLACK){
