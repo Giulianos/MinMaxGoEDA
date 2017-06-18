@@ -54,7 +54,7 @@ public class Controller {
 				if(game.endTurn()){
 					boardGUI.endGame();
 				}			}
-		case Constants.KO:
+		case Constants.KO:						boardGUI.KO();
 			break;
 		}
 	}
