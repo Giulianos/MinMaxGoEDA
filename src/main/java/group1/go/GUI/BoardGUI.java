@@ -208,6 +208,7 @@ public class BoardGUI extends JFrame {
 		blackLabel.setText(String.valueOf(state.getWhiteTilesCapture()));
 		whiteLabel.setText(String.valueOf(state.getBlackTilesCapture()));
 		moveLabel.setText("moved");
+		this.repaint();
 		
 		
 	}

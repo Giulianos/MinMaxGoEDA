@@ -36,7 +36,6 @@ public class Controller {
 	public void touch(int i, int j) {
 		int rta = game.isposible(i, j);
 		switch (rta){
-		
 		case Constants.SUICIDE:
 			boardGUI.isSuicide();
 			break;
@@ -47,7 +46,11 @@ public class Controller {
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
 			if(game.endTurn()){				boardGUI.endGame();			};
+<<<<<<< Updated upstream
 			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());
+=======
+			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 3, new TestHeuristic());
+>>>>>>> Stashed changes
 			Move m= minMax.getOptimalMoveBFS();
 			game.add(m.getPosition().getI(), m.getPosition().getJ());
 			boardGUI.drawBoard(game.getState());
