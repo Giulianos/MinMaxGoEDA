@@ -83,7 +83,7 @@ public class MinMaxTree {
     }
 	
 	private List<StateNode> neighbourStates(StateNode n) {
-		System.out.println("Procesing neighbour states..." + num++);
+		//System.out.println("Procesing neighbour states..." + num++);
 		StateNode auxState;
 		TilesPosition auxPosition;
 		Board auxBoard;
@@ -92,7 +92,7 @@ public class MinMaxTree {
 		List<StateNode> retList = new LinkedList<StateNode>();
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
-				System.out.println("trying");
+				//System.out.println("trying");
 				auxPosition = new TilesPosition(i, j);
 				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
 					auxBoard = currentBoard.clone();
@@ -121,15 +121,15 @@ public class MinMaxTree {
 	    	while(!statesQ.isEmpty()) {
 	    		currentNode = statesQ.poll();
 	    		if(currDepth==depth) {
-	    			System.out.println("calculating heuristic");
+	    			//System.out.println("calculating heuristic");
 	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, AIPlayer));
-	   	    		System.out.println("La heuristica es:" + currentNode.move.getScore() );
+	   	    		//System.out.println("La heuristica es:" + currentNode.move.getScore() );
 	    		} else {
 	    			if( currentNode.player!=step){
 	    				currDepth++;
 	    				step=currentNode.player;
 	    			}
-	    			System.out.println("Call to neighbour processing...");
+	    			//System.out.println("Call to neighbour processing...");
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){
 	    				if(!generatedStates.contains(n)) {

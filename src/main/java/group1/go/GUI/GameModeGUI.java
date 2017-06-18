@@ -27,7 +27,7 @@ public class GameModeGUI extends JFrame {
 	private JButton hard_btn;
 	
 	public GameModeGUI() {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 		setVisible(true);
 		setBounds(100, 100, 450, 300);
@@ -111,12 +111,14 @@ public class GameModeGUI extends JFrame {
 		start_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if((machineON&&dificutlSet) || pvp){
-					Game game = new Game();
+					
 					BoardGUI boardGUI = new BoardGUI();
 					Controller controller;
 					if(machineON){
+							Game game = new Game(true, MachinDificult);
 								controller = new Controller(game, boardGUI, MachinDificult, true);
 					}else{
+						Game game = new Game(false, MachinDificult);
 						controller = new Controller(game, boardGUI, MachinDificult, false);
 					}
 					boardGUI.setController(controller);

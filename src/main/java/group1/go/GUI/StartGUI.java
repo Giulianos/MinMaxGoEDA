@@ -76,6 +76,7 @@ public class StartGUI extends JFrame {
 		start_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				GameModeGUI gameMode = new GameModeGUI();
+				StartGUI.this.dispose();
 			}
 		});
 		start_btn.setBounds(102, 96, 234, 33);
