@@ -15,11 +15,11 @@ import group1.go.Model.heuristics.TestHeuristic;import group1.go.Model.heuristi
 public class Controller {
 
 	private Game game;
-	private BoardGUI boardGUI;
+	private BoardGUI boardGUI;		private int machineDificult;		private boolean isMachinePlaying;
 	
-	public Controller(Game game, BoardGUI boardGUI) {
+	public Controller(Game game, BoardGUI boardGUI, int machineDificult, boolean isMAchinePlaying) {
 		this.game = game;
-		this.boardGUI = boardGUI;
+		this.boardGUI = boardGUI;				this.machineDificult = machineDificult;				this.isMachinePlaying = isMAchinePlaying;
 		start();
 	}
 	
@@ -30,7 +30,7 @@ public class Controller {
 	public void pass(){
 		if(game.pass()){
 			boardGUI.endGame();
-		}		MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());		Move m= minMax.getOptimalMoveBFS();		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};
+		}		if(isMachinePlaying){			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());			Move m= minMax.getOptimalMoveBFS();			game.add(m.getPosition().getI(), m.getPosition().getJ());			boardGUI.drawBoard(game.getState());			if(game.endTurn()){				boardGUI.endGame();			}		}
 	}
 
 	public void touch(int i, int j) {
@@ -45,18 +45,15 @@ public class Controller {
 		case 0:
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
-			if(game.endTurn()){				boardGUI.endGame();			};
-<<<<<<< Updated upstream
-			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());
-=======
-			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 3, new TestHeuristic());
->>>>>>> Stashed changes
-			Move m= minMax.getOptimalMoveBFS();
-			game.add(m.getPosition().getI(), m.getPosition().getJ());
-			boardGUI.drawBoard(game.getState());
-			if(game.endTurn()){
-				boardGUI.endGame();
-			};
+			if(game.endTurn()){				boardGUI.endGame();			};						if(isMachinePlaying){
+
+				MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new TestHeuristic());
+				Move m= minMax.getOptimalMoveBFS();
+				game.add(m.getPosition().getI(), m.getPosition().getJ());
+				boardGUI.drawBoard(game.getState());
+				if(game.endTurn()){
+					boardGUI.endGame();
+				}			}
 		case -4:
 			break;
 		}

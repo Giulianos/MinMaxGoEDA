@@ -115,9 +115,9 @@ public class GameModeGUI extends JFrame {
 					BoardGUI boardGUI = new BoardGUI();
 					Controller controller;
 					if(machineON){
-								controller = new Controller(game, boardGUI);
+								controller = new Controller(game, boardGUI, MachinDificult, true);
 					}else{
-						controller = new Controller(game, boardGUI);
+						controller = new Controller(game, boardGUI, MachinDificult, false);
 					}
 					boardGUI.setController(controller);
 					GameModeGUI.this.dispose();
