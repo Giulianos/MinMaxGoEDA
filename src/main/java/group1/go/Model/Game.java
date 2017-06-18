@@ -33,11 +33,11 @@ public class Game {
 		
 		
 		if(tileAtPosition != Constants.EMPTY){
-			return -3; //error de que hay una ficha
+			return Constants.TILEINPOSITION; //error de que hay una ficha
 		}
 		
 		if(isKO(i,j)){
-			return -4;
+			return Constants.KO;
 		}
 		
 		
@@ -49,12 +49,12 @@ public class Game {
 		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,currentPlayer,false )){
 			clear();
 			if(eat(i, j,auxBoard2, currentPlayer).isEmpty()){
-			return -2; //quiere suicidarse
+			return Constants.SUICIDE; //quiere suicidarse
 			}
 		}
 		
 		
-		return 0; // no hay error
+		return Constants.VALID_MOVE; // no hay error
 	}
 	
 	public  void add(int i ,int j){

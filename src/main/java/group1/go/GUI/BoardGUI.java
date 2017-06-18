@@ -229,4 +229,9 @@ public class BoardGUI extends JFrame {
 		EndGameGUI endGame = new EndGameGUI(this);
 		
 	}
+
+	public void KO() {
+		moveLabel.setText("KO");
+		
+	}
 }

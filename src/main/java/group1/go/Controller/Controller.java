@@ -42,7 +42,7 @@ public class Controller {
 		case Constants.TILEINPOSITION:
 			boardGUI.tileInPosition();
 			break;
-		case 0:
+		case Constants.VALID_MOVE:
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
 			if(game.endTurn()){				boardGUI.endGame();			};						if(isMachinePlaying){
@@ -54,7 +54,7 @@ public class Controller {
 				if(game.endTurn()){
 					boardGUI.endGame();
 				}			}
-		case -4:
+		case Constants.KO:
 			break;
 		}
 	}
