@@ -164,12 +164,13 @@ public class BoardGUI extends JFrame {
 				int j = 0;
 				while(x>0){
 					x = x - deltaX;
-					i++;
+					j++;
 				}
 				while(y>0){
 					y = y - deltaY;
-					j++;
+					i++;
 				}
+				System.out.println(i +" "+ j);
 				controller.touch(i-1,j-1);
 				
 				

@@ -95,6 +95,7 @@ public class MinMaxTree {
 				//System.out.println("trying");
 				auxPosition = new TilesPosition(i, j);
 				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
+					System.out.println("Enter:"+ auxPosition.i + " " + auxPosition.j );
 					auxBoard = currentBoard.clone();
 					auxBoard=Game.add(i, j, auxBoard, nodePlayer);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
@@ -150,6 +151,7 @@ public class MinMaxTree {
 		    		bestState = st;
 		    	}
         }
+        System.out.println("Best move: " + bestState.move.getPosition().i + " " + bestState.move.getPosition().j);
         return bestState.move;
     }
 	

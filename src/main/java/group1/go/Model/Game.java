@@ -68,6 +68,7 @@ public class Game {
 		int whiteTilesCaputre = currentState.getWhiteTilesCapture(); 
 		nextBoard.add(i, j, currentPlayer);
 		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), currentPlayer);
+		System.out.println("to remove: " + toRemove.size());
 		nextBoard.remove(toRemove);
 		
 		if(otherPlayer == Constants.BLACK){
@@ -78,7 +79,7 @@ public class Game {
 		}
 		pre_previousState = previousState;
 		previousState = currentState;
-		currentState = new State(nextBoard, blackTilesCapture, whiteTilesCaputre);
+		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre);
 		
 	}
 	
@@ -141,6 +142,7 @@ public class Game {
 	}
 	
 	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
+	
 	public  static  ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
