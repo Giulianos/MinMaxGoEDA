@@ -2,7 +2,7 @@ package group1.go.Model;
 
 import java.util.Collection;
 
-public class BoardBitMapImpl implements Board {
+public class BoardBitMapImpl extends Board {
 
 	BitBoard blackBoard;
 	BitBoard whiteBoard;
@@ -34,7 +34,7 @@ public class BoardBitMapImpl implements Board {
 
 	public void add(int i, int j, char player) {
 		int index =  j*(Constants.BOARDSIZE+1) + i;
-		if(turn%2 == 0){
+		if(player==Constants.BLACK){
 			blackBoard.add(index);
 			return;
 		}
@@ -58,7 +58,7 @@ public class BoardBitMapImpl implements Board {
 	}
 
 	public Board clone() {
-		BoardBitMapImpl newBoard = new BoardBitMapImpl(blackBoard, whiteBoard, blackCaptures, whiteCaptures); 
+		BoardBitMapImpl newBoard = new BoardBitMapImpl(blackBoard.clone(), whiteBoard.clone(), blackCaptures, whiteCaptures); 
 		return newBoard;
 	}
 	@Override
@@ -77,7 +77,7 @@ public class BoardBitMapImpl implements Board {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!getClass().equals(obj.getClass()))
 			return false;
 		BoardBitMapImpl other = (BoardBitMapImpl) obj;
 		if(blackBoard.equals(other.blackBoard) && whiteBoard.equals(other.whiteBoard)){

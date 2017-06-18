@@ -17,6 +17,18 @@ public class BitBoard {
 		sixth30 = 0;
 	}
 	
+	public BitBoard clone(){
+		return new BitBoard(first30,second30, third30, fourth30, fifth30, sixth30);
+	}
+	private BitBoard( long first30,long second30, long third30, long fourth30, long fifth30, long sixth30){
+		this.first30=first30;
+		this.second30=second30;
+		this.third30=third30;
+		this.fourth30=fourth30;
+		this.fifth30=fifth30;
+		this.sixth30=sixth30;
+	}
+	
 	public boolean isInPosition(int index){
 		if(index < 31){
 			return (first30&(1<<index)) == (1<<index);
@@ -131,7 +143,7 @@ public class BitBoard {
 			return true;
 		if (obj == null)
 			return false;
-		if (getClass() != obj.getClass())
+		if (!getClass().equals(obj.getClass()))
 			return false;
 		BitBoard other = (BitBoard) obj;
 		if (fifth30 != other.fifth30)

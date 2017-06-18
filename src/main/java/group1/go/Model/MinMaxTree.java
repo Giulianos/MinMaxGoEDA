@@ -12,13 +12,14 @@ import java.util.Queue;
 
 public class MinMaxTree {
 	
-	private HashSet<State> generatedStates = new HashSet<State>();
+	private HashSet<StateNode> generatedStates = new HashSet<StateNode>();
     private char AIPlayer;
     private char enemyPlayer;
     private StateNode rootNode;
     private int depth;
     private Heuristic heuristic;
     static int num = 0;
+    private Game g;
 
     public MinMaxTree(State rootState, char AIPlayer, int depth, Heuristic heuristic) {
         this.AIPlayer = AIPlayer;
@@ -34,6 +35,22 @@ public class MinMaxTree {
         private char player;
       	private Move move;
       	private int level;
+      	
+      	@Override
+      	public int hashCode() {
+      		return state.board.hashCode();
+      	}
+      	
+      	@Override
+      	public boolean equals(Object obj) {
+      		if(obj==null) return false;
+      		if(obj==this) return true;
+      		
+      		if(!obj.getClass().equals(this.getClass())) return false;
+      		
+      		StateNode s= (StateNode) obj;
+      		return s.player==this.player && s.state.board.equals(this.state.board);
+      	}
       	
         public StateNode(State state, char player, int level) {
             this.state=state;
@@ -76,7 +93,7 @@ public class MinMaxTree {
 				auxPosition = new TilesPosition(i, j);
 				if(GoRules.isPossible(currentBoard, auxPosition, n.player)) {
 					auxBoard = currentBoard.clone();
-					((BoardMapImpl)auxBoard).add(auxPosition, n.player);
+					((Board)auxBoard).add(auxPosition, n.player);
 					GoRules.applyMove(auxBoard, n.player, auxPosition);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
 					auxState.move= new Move(auxPosition,n.player);
@@ -113,8 +130,8 @@ public class MinMaxTree {
 	    			System.out.println("Call to neighbour processing...");
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){
-	    				if(!generatedStates.contains(n.state)) {
-	    					generatedStates.add(n.state);
+	    				if(!generatedStates.contains(n)) {
+	    					generatedStates.add(n);
 	    					currentNode.nextStates.add(n);
 	    					statesQ.offer(n);
 	    				}

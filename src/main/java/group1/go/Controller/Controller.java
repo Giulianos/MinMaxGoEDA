@@ -30,7 +30,7 @@ public class Controller {
 	public void pass(){
 		if(game.pass()){
 			boardGUI.endGame();
-		}		MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new TestHeuristic());		Move m= minMax.getOptimalMoveBFS();		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};
+		}		MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 3, new TestHeuristic());		Move m= minMax.getOptimalMoveBFS();		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};
 	}
 
 	public void touch(int i, int j) {
@@ -46,14 +46,14 @@ public class Controller {
 		case 0:
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
-			if(game.endTurn()){				boardGUI.endGame();			};
-			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new TestHeuristic());
-			Move m= minMax.getOptimalMoveBFS();
-			game.add(m.getPosition().getI(), m.getPosition().getJ());
-			boardGUI.drawBoard(game.getState());
-			if(game.endTurn()){
-				boardGUI.endGame();
-			};
+			if(game.endTurn()){				boardGUI.endGame();			};//
+//			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());//
+//			Move m= minMax.getOptimalMoveBFS();//
+//			game.add(m.getPosition().getI(), m.getPosition().getJ());//
+//			boardGUI.drawBoard(game.getState());//
+//			if(game.endTurn()){//
+//				boardGUI.endGame();//
+//			};
 		case -4:
 			break;
 		}

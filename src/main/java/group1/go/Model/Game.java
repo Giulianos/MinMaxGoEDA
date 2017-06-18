@@ -23,9 +23,10 @@ public class Game {
 	}
 	
 	
+	
 	//machine()
 	
-	public int isposible(int i , int j){
+	public   int isposible(int i , int j){
 		
 		Board currentBoard = currentState.getBoard();
 		char tileAtPosition = currentBoard.get(i, j);
@@ -45,7 +46,7 @@ public class Game {
 		auxBoard1.add(i, j, currentPlayer);
 		auxBoard2.add(i, j, currentPlayer);
 		
-		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,false ) && eat(i, j,auxBoard2).isEmpty()){
+		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,currentPlayer,false ) && eat(i, j,auxBoard2, currentPlayer).isEmpty()){
 			return -2; //quiere suicidarse
 		}
 		
@@ -62,7 +63,7 @@ public class Game {
 		int blackTilesCapture = currentState.getBlackTilesCapture();
 		int whiteTilesCaputre = currentState.getWhiteTilesCapture(); 
 		nextBoard.add(i, j, currentPlayer);
-		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone());
+		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), currentPlayer);
 		nextBoard.remove(toRemove);
 		
 		if(otherPlayer == Constants.BLACK){
@@ -75,6 +76,15 @@ public class Game {
 		previousState = currentState;
 		currentState = new State(nextBoard, blackTilesCapture, whiteTilesCaputre);
 		
+	}
+	
+	private void clear(){
+		for(int i=0; i<=Constants.BOARDSIZE;i++){
+			for(int j=0; j<=Constants.BOARDSIZE;j++){
+				visited[i][j]=false;
+				
+			}
+		}
 	}
 	
 	public boolean endTurn(){
@@ -110,33 +120,37 @@ public class Game {
 		currentState = new State();
 	}
 	
-	
-	public ArrayList<TilesPosition> eat(int i, int j, Board board){
+	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
+	public   ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
+		clear();
+		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveDown = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveRight = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveLeft = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> rta = new ArrayList<TilesPosition>();
+		visited[i][j]=true;
 		
-		if((board.get(i-1, j)==otherPlayer)&&eat(toRemoveUp, i-1, j, board, true)){
+		if((board.get(i-1, j)==enemy)&&visited[i-1][j]==false &&eat(toRemoveUp, i-1, j, board,player, true)){
 			rta.addAll(toRemoveUp);
 		}
-		if((board.get(i+1, j)==otherPlayer)&&eat(toRemoveDown, i+1, j, board, true)){
+		if((board.get(i+1, j)==enemy)&&visited[i+1][j]==false &&eat(toRemoveDown, i+1, j, board,player, true)){
 			rta.addAll(toRemoveDown);
 		}
 
-		if((board.get(i, j-1)==otherPlayer)&&eat(toRemoveLeft, i, j-1, board, true)){
+		if((board.get(i, j-1)==enemy)&&visited[i][j-1]==false &&eat(toRemoveLeft, i, j-1, board,player, true)){
 			rta.addAll(toRemoveLeft);
 		}
-		if((board.get(i, j+1)==otherPlayer)&&eat(toRemoveRight, i, j+1, board, true)){
+		if((board.get(i, j+1)==enemy)&&visited[i][j+1]==false&&eat(toRemoveRight, i, j+1, board,player, true)){
 			rta.addAll(toRemoveRight);
 		}
 		return rta;
 		
 	}
 	
-	public boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board, boolean eaten){
-		
+	public  boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board,char playerToMove, boolean eaten){
+		clear();
+		char enemy= (playerToMove==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		char upC = board.get(i, j-1);
 		char downC = board.get(i, j+1);
 		char leftC = board.get(i-1, j);
@@ -148,12 +162,12 @@ public class Game {
 		char cur;
 		char other;
 		if(eaten){
-			cur = currentPlayer;
-			other = otherPlayer;
+			cur = playerToMove;
+			other = enemy;
 		}
 		else {
-			cur = otherPlayer;
-			other = currentPlayer;
+			cur = enemy;
+			other = playerToMove;
 		}
 		
 		if(j-1<0){
@@ -169,22 +183,22 @@ public class Game {
 			rightC = cur;
 		}
 		
-		
+		visited[i][j]=true;
 		board.add(i, j, cur);
 		if(upC == Constants.EMPTY || downC == Constants.EMPTY || leftC == Constants.EMPTY || rightC == Constants.EMPTY){
 			return false;
 		}
-		if ( upC == other){
-			up = eat(toRemove, i, j-1, board, eaten);
+		if ( upC == other &&visited[i][j-1]==false){
+			up = eat(toRemove, i, j-1, board,playerToMove, eaten);
 		}
-		if(downC == other){
-			down = eat(toRemove, i, j+1, board, eaten);
+		if(downC == other &&visited[i][j+1]==false){
+			down = eat(toRemove, i, j+1, board,playerToMove, eaten);
 		}
-		if(leftC == other){
-			left = eat(toRemove, i-1, j, board, eaten);
+		if(leftC == other&&visited[i-1][j]==false){
+			left = eat(toRemove, i-1, j, board, playerToMove,eaten);
 		}
-		if(rightC == other){
-			right = eat(toRemove, i+1, j, board, eaten);
+		if(rightC == other && visited[i+1][j]==false ){
+			right = eat(toRemove, i+1, j, board,playerToMove, eaten);
 		}
 		
 		boolean rta =  up && down && left && right;
@@ -204,12 +218,16 @@ public class Game {
 		HashMap<TilesPosition, Character> aux = getSorrounding(i, j);
 		int white = 0;
 		int black = 0;
+		int empty=0;
 		for(Entry<TilesPosition, Character> e: aux.entrySet()){
 			if(e.getValue() == Constants.WHITE){
 				white++;
 			}
 			if(e.getValue() == Constants.BLACK){
 				black++;
+			}
+			if(e.getValue() == Constants.EMPTY){
+				empty++;
 			}
 		}
 		System.out.println(aux.size());
@@ -219,7 +237,10 @@ public class Game {
 		if(color == Constants.WHITE){
 			return white;
 		}
-		return black + white;
+		if(color==Constants.EMPTY){
+			return empty;
+		}
+		return 4-aux.size();
 		
 	}
 	
@@ -229,27 +250,19 @@ public class Game {
 		char playerAux;
 		if(j-1 >= 0){
 			playerAux = board.get(i, j-1);
-			if(playerAux != Constants.EMPTY){
 				aux.put( new TilesPosition(i,j-1), playerAux);
-			}
 		}
 		if(i-1 >= 0){
 			playerAux = board.get(i-1, j);
-			if(playerAux != Constants.EMPTY){
 				aux.put( new TilesPosition(i-1,j), playerAux);
-			}
 		}
 		if(j+1 <= Constants.BOARDSIZE){
 			playerAux = board.get(i, j+1);
-			if(playerAux != Constants.EMPTY){
 				aux.put( new TilesPosition(i,j+1), playerAux);
-			}
 		}
 		if(i+1 <= Constants.BOARDSIZE){
 			playerAux = board.get(i+1, j);
-			if(playerAux != Constants.EMPTY){
 				aux.put( new TilesPosition(i+1,j), playerAux);
-			}
 		}
 		return aux;
 	}
@@ -264,16 +277,32 @@ public class Game {
 
 	if(blackko==null){
 
-	blackko= new PlayerKO(0,0,false);
+	blackko= new PlayerKO(-1,-1,false);
 
-	whiteko= new PlayerKO(0,0,false);
+	whiteko= new PlayerKO(-1,-1,false);
 
+	}
+	if(currentPlayer==Constants.BLACK){
+		if(blackko.getI()!=i ||blackko.getJ() !=j){
+			blackko.setI(-1);
+			blackko.setJ(-1);
+			blackko.setKo(false);
+		}
+	}
+	if(currentPlayer==Constants.WHITE){
+		if(whiteko.getI()!=i ||blackko.getJ() !=j){
+			whiteko.setI(-1);
+			whiteko.setJ(-1);
+			whiteko.setKo(false);
+		}
 	}
 
 
 	boolean flag = false;
 
-	int degree = getDegree(i,j,otherPlayer);
+	int otherdegree = getDegree(i,j,otherPlayer);
+	int myDegree= getDegree(i,j, currentPlayer);
+	int noMove= getDegree(i,j,Constants.NOMOVE);
 
 	if(currentState.board.get(i, j)!=Constants.EMPTY)
 
@@ -284,23 +313,16 @@ public class Game {
 
 	}
 
-	if(degree < 4)
+	if(otherdegree < 3 ||(otherdegree==3 && noMove!=1))
 
 	{
 
 	return false;
 
 	}
+	int sideCurr=getDegree(i+1,j,currentPlayer);
 
-	if(getDegree(i+1,j,currentPlayer) == 3)
-
-	{
-
-	flag = true;
-
-	}
-
-	else if(getDegree(i-1,j,currentPlayer) == 3)
+	if(sideCurr== 3 ||( sideCurr==2 && getDegree(i+1,j,Constants.NOMOVE)==1 ))
 
 	{
 
@@ -308,7 +330,7 @@ public class Game {
 
 	}
 
-	else if(getDegree(i,j+1,currentPlayer) == 3)
+	else if(getDegree(i-1,j,currentPlayer) == 3 || (getDegree(i-1,j,currentPlayer) == 2 && getDegree(i-1,j,Constants.NOMOVE)==1 ))
 
 	{
 
@@ -316,7 +338,15 @@ public class Game {
 
 	}
 
-	else if(getDegree(i,j-1,currentPlayer) == 3)
+	else if(getDegree(i,j+1,currentPlayer) == 3 || (getDegree(i,j+1,currentPlayer) == 2 && getDegree(i,j+1,Constants.NOMOVE)==1 ))
+
+	{
+
+	flag = true;
+
+	}
+
+	else if(getDegree(i,j-1,currentPlayer) == 3 || (getDegree(i,j-1,currentPlayer) == 2 && getDegree(i,j-1,Constants.NOMOVE)==1 ))
 
 	{
 

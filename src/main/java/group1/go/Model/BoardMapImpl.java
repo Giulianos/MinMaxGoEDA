@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class BoardMapImpl implements Board {
+public class BoardMapImpl extends Board {
 	
 	HashMap<TilesPosition,Character> board;
 	int blackTilesCapture; 

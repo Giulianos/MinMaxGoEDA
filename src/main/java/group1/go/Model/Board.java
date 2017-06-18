@@ -2,22 +2,26 @@ package group1.go.Model;
 
 import java.util.Collection;
 
-public interface Board {
+public abstract class Board {
 	
-	public char get(int i, int j);
+	public abstract char get(int i, int j);
 	
-	//public char get(TilesPosition p);
+	public char get(TilesPosition p){
+		return get(p.getI(), p.getJ());
+	}
 	
-	public void add(int i , int j, char player);
+	public abstract void add(int i , int j, char player);
 	
-	//public void add(TilesPosition t, char player);
+	public void add(TilesPosition t, char player){
+		add(t.getI(), t.getJ(), player);
+	}
 	
-	public  void remove(Collection<TilesPosition> toRemove );
+	public  abstract void remove(Collection<TilesPosition> toRemove );
 	
-	public void remove(TilesPosition toRemove);
+	public abstract void remove(TilesPosition toRemove);
 	
-	public Board clone();
+	public abstract Board clone();
 	
-	public boolean isFull();
+	public abstract boolean isFull();
 
 }

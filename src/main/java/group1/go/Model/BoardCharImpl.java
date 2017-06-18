@@ -2,7 +2,7 @@ package group1.go.Model;
 
 import java.util.Collection;
 
-public class BoardCharImpl implements Board {
+public class BoardCharImpl extends Board {
 
 	private char[][] board;
 	int blackCaptures;
