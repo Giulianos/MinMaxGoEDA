@@ -45,9 +45,12 @@ public class Game {
 		Board auxBoard2 = currentBoard.clone();
 		auxBoard1.add(i, j, currentPlayer);
 		auxBoard2.add(i, j, currentPlayer);
-		
-		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,currentPlayer,false ) && eat(i, j,auxBoard2, currentPlayer).isEmpty()){
+		clear();
+		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,currentPlayer,false )){
+			clear();
+			if(eat(i, j,auxBoard2, currentPlayer).isEmpty()){
 			return -2; //quiere suicidarse
+			}
 		}
 		
 		
@@ -55,6 +58,7 @@ public class Game {
 	}
 	
 	public void add(int i ,int j){
+		clear();
 		if(firstPass){
 			firstPass = false; 
 		}
@@ -122,7 +126,6 @@ public class Game {
 	
 	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
 	public   ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
-		clear();
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveDown = new ArrayList<TilesPosition>();
@@ -149,7 +152,6 @@ public class Game {
 	}
 	
 	public  boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board,char playerToMove, boolean eaten){
-		clear();
 		char enemy= (playerToMove==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		char upC = board.get(i, j-1);
 		char downC = board.get(i, j+1);
@@ -171,7 +173,7 @@ public class Game {
 		}
 		
 		if(j-1<0){
-			upC = cur;;
+			upC = cur;
 		}
 		if(j+1 > Constants.BOARDSIZE){
 			downC = cur;
@@ -433,6 +435,8 @@ public class Game {
 	}
 
 
-	
+	private boolean isAvailable(int i, int j){
+		return (i<=Constants.BOARDSIZE+1) && (j<=Constants.BOARDSIZE+1);
+	}
 
 }

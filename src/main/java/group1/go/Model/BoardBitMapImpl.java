@@ -22,6 +22,9 @@ public class BoardBitMapImpl extends Board {
 	}
 	
 	public char get(int i, int j) {
+		if(!this.isAvailable(i, j)){
+			return Constants.OUTOFBOUNDS;
+		}
 		int index = j*(Constants.BOARDSIZE+1) + i;
 		if(whiteBoard.isInPosition(index)){
 			return Constants.WHITE;
@@ -33,6 +36,9 @@ public class BoardBitMapImpl extends Board {
 	}
 
 	public void add(int i, int j, char player) {
+		if(!this.isAvailable(i, j)){
+			return ;
+		}
 		int index =  j*(Constants.BOARDSIZE+1) + i;
 		if(player==Constants.BLACK){
 			blackBoard.add(index);
@@ -44,14 +50,15 @@ public class BoardBitMapImpl extends Board {
 	public void remove(Collection<TilesPosition> toRemove) {
 		int index;
 		for(TilesPosition t: toRemove){
-			index = t.getJ()*(Constants.BOARDSIZE+1) + t.getI();
-			blackBoard.remove(index);
-			whiteBoard.remove(index);
+			remove(t);
 		}
 		
 	}
 
 	public void remove(TilesPosition toRemove) {
+		if(!this.isAvailable(toRemove.getI(), toRemove.getJ())){
+			return ;
+		}
 		int index = toRemove.getJ()*(Constants.BOARDSIZE+1) + toRemove.getI();
 		blackBoard.remove(index);
 		whiteBoard.remove(index);
@@ -92,6 +99,10 @@ public class BoardBitMapImpl extends Board {
 			return true;
 		}
 		return false;
+	}
+	
+	private boolean isAvailable(int i, int j){
+		return (i>=0)&&(j>=0) &&(i<=Constants.BOARDSIZE) && (j<=Constants.BOARDSIZE);
 	}
 	
 

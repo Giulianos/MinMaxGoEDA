@@ -30,6 +30,9 @@ public class BitBoard {
 	}
 	
 	public boolean isInPosition(int index){
+		if(index<0 ||index>=(Constants.BOARDSIZE+1)*(Constants.BOARDSIZE+1)){
+			return false;
+		}
 		if(index < 31){
 			return (first30&(1<<index)) == (1<<index);
 		}
@@ -56,6 +59,9 @@ public class BitBoard {
 	
 	
 	public void add(int index){
+		if(index<0 ||index>=(Constants.BOARDSIZE+1)*(Constants.BOARDSIZE+1)){
+			return;
+		}
 		if(index < 31){
 			first30 = (first30|(1<<index));
 			return;
@@ -86,6 +92,9 @@ public class BitBoard {
 	}
 
 	public void remove(int index){
+		if(index<0 ||index>=(Constants.BOARDSIZE+1)*(Constants.BOARDSIZE+1)){
+			return;
+		}
 		long l; 
 		if(index < 31){
 			l=(Long.MAX_VALUE<<(index+1))|(Long.MAX_VALUE>>(63-index));

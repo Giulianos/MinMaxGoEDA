@@ -75,7 +75,9 @@ public class MinMaxTree {
 	    				best=current;
 	    			}
 	    		}
-	    	}
+	 
+	    		}
+	    	
 	    	n.move.rate(best);
 	    	return best;
     }
@@ -150,6 +152,8 @@ public class MinMaxTree {
         }
         return bestState.move;
     }
+	
+	
 	
 }
 
