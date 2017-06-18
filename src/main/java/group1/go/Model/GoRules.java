@@ -110,6 +110,7 @@ public class GoRules {
 		//Do BFS eating enemies
 		TilesPosition current;
 		while(!bfsQueue.isEmpty()) {
+			System.out.println("eaaten");
 			current = bfsQueue.poll();
 			if(((Board)b).get(current)==enemy) {
 				((Board)b).add(current, Constants.EMPTY);

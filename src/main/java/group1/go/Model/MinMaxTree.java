@@ -26,7 +26,7 @@ public class MinMaxTree {
         this.enemyPlayer = (AIPlayer==Constants.WHITE)?Constants.BLACK:Constants.WHITE;
         this.depth = depth;
         this.heuristic = heuristic;
-        rootNode = new StateNode(rootState, enemyPlayer, 0);
+        rootNode = new StateNode(rootState, AIPlayer, 0);
     }
 
     private static class StateNode {
@@ -69,9 +69,9 @@ public class MinMaxTree {
 	    			best = completeScores(sn);
 	    		} else {
 	    			current = completeScores(sn);
-	    			if(current<best && n.player==enemyPlayer) {
+	    			if(current>best && n.player==enemyPlayer) {
 	    				best=current;
-	    			} else if(current>best && n.player==AIPlayer){
+	    			} else if(current<best && n.player==AIPlayer){
 	    				best=current;
 	    			}
 	    		}
@@ -92,13 +92,13 @@ public class MinMaxTree {
 		List<StateNode> retList = new LinkedList<StateNode>();
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
+				System.out.println("trying");
 				auxPosition = new TilesPosition(i, j);
-				if(GoRules.isPossible(currentBoard, auxPosition, n.player)) {
+				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
 					auxBoard = currentBoard.clone();
-					((Board)auxBoard).add(auxPosition, n.player);
-					GoRules.applyMove(auxBoard, n.player, auxPosition);
+					auxBoard=Game.add(i, j, auxBoard, nodePlayer);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
-					auxState.move= new Move(auxPosition,n.player);
+					auxState.move= new Move(auxPosition,nodePlayer);
 					retList.add(auxState);
 				}
 			}

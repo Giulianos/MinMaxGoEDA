@@ -47,13 +47,13 @@ public class Controller {
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
 			if(game.endTurn()){				boardGUI.endGame();			};
-//			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());//
-//			Move m= minMax.getOptimalMoveBFS();//
-//			game.add(m.getPosition().getI(), m.getPosition().getJ());//
-//			boardGUI.drawBoard(game.getState());//
-//			if(game.endTurn()){//
-//				boardGUI.endGame();//
-//			};
+			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());
+			Move m= minMax.getOptimalMoveBFS();
+			game.add(m.getPosition().getI(), m.getPosition().getJ());
+			boardGUI.drawBoard(game.getState());
+			if(game.endTurn()){
+				boardGUI.endGame();
+			};
 		case -4:
 			break;
 		}

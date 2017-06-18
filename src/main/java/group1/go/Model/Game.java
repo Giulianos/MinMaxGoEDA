@@ -16,7 +16,7 @@ public class Game {
 	State pre_previousState;
 	char currentPlayer;
 	char otherPlayer;
-	boolean firstPass;
+	static boolean firstPass;
 	
 	public char getCurrentPlayer() {
 		return currentPlayer;
@@ -57,7 +57,7 @@ public class Game {
 		return 0; // no hay error
 	}
 	
-	public void add(int i ,int j){
+	public  void add(int i ,int j){
 		clear();
 		if(firstPass){
 			firstPass = false; 
@@ -82,7 +82,23 @@ public class Game {
 		
 	}
 	
-	private void clear(){
+	public static Board add(int i ,int j, Board b , char p){
+		clear();
+		if(firstPass){
+			firstPass = false; 
+		}
+		Board board = b;
+		Board nextBoard = b.clone();
+		nextBoard.add(i, j, p);
+		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), p);
+		nextBoard.remove(toRemove);
+		
+		return nextBoard;
+		
+		
+	} 
+	
+	private static void clear(){
 		for(int i=0; i<=Constants.BOARDSIZE;i++){
 			for(int j=0; j<=Constants.BOARDSIZE;j++){
 				visited[i][j]=false;
@@ -125,7 +141,7 @@ public class Game {
 	}
 	
 	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
-	public   ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
+	public  static  ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
 		ArrayList<TilesPosition> toRemoveDown = new ArrayList<TilesPosition>();
@@ -151,7 +167,7 @@ public class Game {
 		
 	}
 	
-	public  boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board,char playerToMove, boolean eaten){
+	public static  boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board,char playerToMove, boolean eaten){
 		char enemy= (playerToMove==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		char upC = board.get(i, j-1);
 		char downC = board.get(i, j+1);
