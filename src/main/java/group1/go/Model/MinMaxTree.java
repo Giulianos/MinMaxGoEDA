@@ -20,6 +20,7 @@ public class MinMaxTree {
     private Heuristic heuristic;
     static int num = 0;
     private Game g;
+    private boolean poda;
 
     public MinMaxTree(State rootState, char AIPlayer, int depth, Heuristic heuristic) {
         this.AIPlayer = AIPlayer;
@@ -56,6 +57,7 @@ public class MinMaxTree {
             this.state=state;
             nextStates=new ArrayList<StateNode>();
             this.player = player;
+            this.level=level;
         }
 
     }
@@ -150,8 +152,73 @@ public class MinMaxTree {
 		    		bestState = st;
 		    	}
         }
+        if(bestState==null){
+        	return new Move(-1,-1,AIPlayer);
+        }
         return bestState.move;
     }
+	
+	public Move getOptimalMoveDFS(boolean poda){
+		this.poda=poda;
+		rootNode.move= new Move(null, rootNode.player);
+		Move m= getOptimalMoveDFS(rootNode, null);
+		System.out.println("los podados son:" +podados);
+		System.out.println("la heuristica ganadora es:" + m.getScore());
+		return m;
+	}
+	
+	static int podados=0;
+	
+	private Move getOptimalMoveDFS(StateNode n, Integer prev){
+		System.out.println(n.level);
+		if(n.level==depth){
+			n.move.rate(heuristic.calculate(n.state, AIPlayer));
+			return n.move;
+		}
+		Move best=null;
+		List<StateNode> neighbours = neighbourStates(n);
+		if(neighbours.isEmpty()){
+			n.move.rate(heuristic.calculate(n.state, AIPlayer));
+			return n.move;
+		}
+		for(StateNode nod : neighbours){
+			if(!generatedStates.contains(nod)) {
+				generatedStates.add(nod);
+				n.nextStates.add(nod);
+				Move aux= getOptimalMoveDFS(nod, (best==null)? null: best.getScore());
+				if(aux==null) continue; //hubo poda
+				
+				if(best==null){
+					best=aux;
+				}
+				if(aux.getScore()>best.getScore() && n.player==enemyPlayer) {
+    				best=aux;
+    			} else if(aux.getScore()<best.getScore() && n.player==AIPlayer){
+    				best=aux;
+    			}
+				if(prev!=null && poda){
+					if(n.player==enemyPlayer && best.getScore()<prev){
+						podados++;
+						n.move=null;
+						return null;
+					}else if(n.player==AIPlayer && best.getScore()>prev){
+						podados++;
+						n.move=null;
+						return null;
+					}
+				}
+			}
+		
+	}
+		if(best==null){
+			n.move=null;
+			return best;
+		}
+		System.out.println("el nodo es:" + n.level);
+		n.move.rate(best.getScore());
+		return best;
+	}
+	
 	
 	
 	

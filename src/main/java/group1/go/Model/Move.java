@@ -6,7 +6,11 @@ public class Move {
 	private int score; //For the ai to rate the move
 	
 	public Move(TilesPosition position, char player) {
+		if(position==null){
+			this.position=null;
+		}else{
 		this.position = new TilesPosition(position.i, position.j); //Better clone the position (might reduce performance)
+		}
 		this.player = player;
 	}
 	
