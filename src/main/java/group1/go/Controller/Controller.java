@@ -10,7 +10,7 @@ import group1.go.Model.MinMaxTree;
 import group1.go.Model.Move;
 import group1.go.Model.State;
 import group1.go.Model.heuristics.RandomHeuristic;
-import group1.go.Model.heuristics.TestHeuristic;
+import group1.go.Model.heuristics.TestHeuristic;import group1.go.Model.heuristics.TrivialHeuristic;
 
 public class Controller {
 
@@ -30,7 +30,7 @@ public class Controller {
 	public void pass(){
 		if(game.pass()){
 			boardGUI.endGame();
-		}		MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new RandomHeuristic());		Move m= minMax.getOptimalMoveBFS();		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};
+		}		MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new TestHeuristic());		Move m= minMax.getOptimalMoveBFS();		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};
 	}
 
 	public void touch(int i, int j) {
@@ -47,7 +47,7 @@ public class Controller {
 			game.add(i, j);
 			boardGUI.drawBoard(game.getState());
 			if(game.endTurn()){				boardGUI.endGame();			};
-			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new RandomHeuristic());
+			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 1, new TestHeuristic());
 			Move m= minMax.getOptimalMoveBFS();
 			game.add(m.getPosition().getI(), m.getPosition().getJ());
 			boardGUI.drawBoard(game.getState());

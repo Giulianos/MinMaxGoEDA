@@ -69,17 +69,17 @@ public class MinMaxTree {
 		TilesPosition auxPosition;
 		Board auxBoard;
 		Board currentBoard = n.state.board;
-		char nodePlayer = n.player==Constants.BLACK?Constants.WHITE:Constants.BLACK;
+		char nodePlayer = (n.player==Constants.BLACK)?Constants.WHITE:Constants.BLACK;
 		List<StateNode> retList = new LinkedList<StateNode>();
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
 				auxPosition = new TilesPosition(i, j);
-				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
+				if(GoRules.isPossible(currentBoard, auxPosition, n.player)) {
 					auxBoard = currentBoard.clone();
-					((BoardMapImpl)auxBoard).add(auxPosition, nodePlayer);
-					GoRules.applyMove(auxBoard, nodePlayer, auxPosition);
+					((BoardMapImpl)auxBoard).add(auxPosition, n.player);
+					GoRules.applyMove(auxBoard, n.player, auxPosition);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
-					auxState.move= new Move(auxPosition,nodePlayer);
+					auxState.move= new Move(auxPosition,n.player);
 					retList.add(auxState);
 				}
 			}
@@ -103,7 +103,8 @@ public class MinMaxTree {
 	    		currentNode = statesQ.poll();
 	    		if(currDepth==depth) {
 	    			System.out.println("calculating heuristic");
-	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, currentNode.player));
+	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, AIPlayer));
+	   	    		System.out.println("La heuristica es:" + currentNode.move.getScore() );
 	    		} else {
 	    			if( currentNode.player!=step){
 	    				currDepth++;
@@ -121,11 +122,12 @@ public class MinMaxTree {
 	    		}
 	    	}
         StateNode bestState = null;
+        
         for(StateNode st : rootNode.nextStates) {
 		    	completeScores(st);
 		    	if(bestState==null) {
 		    		bestState = st;
-		    	} else if(bestState.move.getScore()<st.move.getScore()) {
+		    	} else if(bestState.move.getScore()>st.move.getScore()) {
 		    		bestState = st;
 		    	}
         }
