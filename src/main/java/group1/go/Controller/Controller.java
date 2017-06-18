@@ -30,8 +30,7 @@ public class Controller {
 	public void pass(){
 		if(game.pass()){
 			boardGUI.endGame();
-		}		if(isMachinePlaying){			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());			Move m= minMax.getOptimalMoveBFS();			game.add(m.getPosition().getI(), m.getPosition().getJ());			boardGUI.drawBoard(game.getState());			if(game.endTurn()){				boardGUI.endGame();			}		}
-	}
+		}		if(isMachinePlaying){			machinePlay();			}		}
 
 	public void touch(int i, int j) {
 		int rta = game.isposible(i, j);
@@ -43,21 +42,11 @@ public class Controller {
 			boardGUI.tileInPosition();
 			break;
 		case Constants.VALID_MOVE:
-			game.add(i, j);
-			boardGUI.drawBoard(game.getState());
-			if(game.endTurn()){				boardGUI.endGame();			};						if(isMachinePlaying){
-
-				MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new TestHeuristic());
-				Move m= minMax.getOptimalMoveBFS();
-				game.add(m.getPosition().getI(), m.getPosition().getJ());
-				boardGUI.drawBoard(game.getState());
-				if(game.endTurn()){
-					boardGUI.endGame();
-				}			}
+			playerPlay(i, j);			if(isMachinePlaying){				machinePlay();			}						
 		case Constants.KO:						boardGUI.KO();
 			break;
 		}
-	}
+	}	public void machinePlay() {				MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new TestHeuristic());		Move m= minMax.getOptimalMoveBFS();		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}	}	private void playerPlay(int i, int j) {		game.add(i, j);		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};			}
 	
 	
 	

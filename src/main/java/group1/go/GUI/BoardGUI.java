@@ -172,6 +172,7 @@ public class BoardGUI extends JFrame {
 				}
 				controller.touch(i-1,j-1);
 				
+				
 			}
 
 			public void mouseEntered(MouseEvent arg0) {
