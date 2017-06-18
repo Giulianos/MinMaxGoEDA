@@ -56,7 +56,7 @@ public class StartGUI extends JFrame {
 		credits_btn.setBounds(102, 184, 234, 33);
 		credits_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
+				CreditsGUI credits = new CreditsGUI();
 			}
 		});
 		contentPane.setLayout(null);
@@ -66,7 +66,7 @@ public class StartGUI extends JFrame {
 		JButton rules_btn = new JButton("Rules");
 		rules_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Go_RulesGUI go = new Go_RulesGUI();
 			}
 		});
 		rules_btn.setBounds(102, 140, 234, 33);
