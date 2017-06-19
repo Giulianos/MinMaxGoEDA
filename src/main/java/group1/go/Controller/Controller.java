@@ -46,7 +46,7 @@ public class Controller {
 			boardGUI.drawBoard(game.getState());
 			if(game.endTurn()){				boardGUI.endGame();			};
 			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 2, new TestHeuristic());
-			Move m= minMax.getOptimalMoveDFS(false);			if(m.getPosition().getI()==-1){				if(game.pass()){					boardGUI.endGame();				}else{					return;				}			}
+			Move m= minMax.getOptimalMoveBFS();			if(m.getPosition().getI()==-1){				if(game.pass()){					boardGUI.endGame();				}else{					return;				}			}
 			game.add(m.getPosition().getI(), m.getPosition().getJ());
 			boardGUI.drawBoard(game.getState());
 			if(game.endTurn()){

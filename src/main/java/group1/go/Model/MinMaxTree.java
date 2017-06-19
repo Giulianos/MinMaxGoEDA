@@ -71,9 +71,9 @@ public class MinMaxTree {
 	    			best = completeScores(sn);
 	    		} else {
 	    			current = completeScores(sn);
-	    			if(current<best && n.player==enemyPlayer) {
+	    			if(current>best && n.player==enemyPlayer) {
 	    				best=current;
-	    			} else if(current>best && n.player==AIPlayer){
+	    			} else if(current<best && n.player==AIPlayer){
 	    				best=current;
 	    			}
 	    		}
@@ -115,7 +115,6 @@ public class MinMaxTree {
 	public Move getOptimalMoveBFS() {
     	
 	    	Queue<StateNode> statesQ = new LinkedList<StateNode>();
-	    	
 	    	statesQ.offer(rootNode);
 	
 	    	StateNode currentNode;
@@ -152,7 +151,7 @@ public class MinMaxTree {
 		    	completeScores(st);
 		    	if(bestState==null) {
 		    		bestState = st;
-		    	} else if(bestState.move.getScore()>st.move.getScore()) {
+		    	} else if(bestState.move.getScore()<st.move.getScore()) {
 		    		bestState = st;
 		    	}
         }
@@ -201,11 +200,11 @@ public class MinMaxTree {
     				best=aux;
     			}
 				if(prev!=null && poda){
-					if(n.player==enemyPlayer && best.getScore()<prev){
+					if(n.player==enemyPlayer && best.getScore()>prev){
 						podados++;
 						n.move=null;
 						return null;
-					}else if(n.player==AIPlayer && best.getScore()>prev){
+					}else if(n.player==AIPlayer && best.getScore()<prev){
 						podados++;
 						n.move=null;
 						return null;
