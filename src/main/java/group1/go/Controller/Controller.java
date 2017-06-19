@@ -46,7 +46,7 @@ public class Controller {
 		case Constants.KO:						boardGUI.KO();
 			break;
 		}
-	}	public void machinePlay() {				MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new TestHeuristic());		Move m= minMax.getOptimalMoveBFS();		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}	}	private void playerPlay(int i, int j) {		game.add(i, j);		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};			}
+	}	public void machinePlay() {				MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new TestHeuristic());		Move m= minMax.getOptimalMoveBFS();		System.out.println("FINISHED--------------------------------------------");		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}	}	private void playerPlay(int i, int j) {		game.add(i, j);		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};			}
 	
 	
 	

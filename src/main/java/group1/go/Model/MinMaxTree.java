@@ -104,6 +104,9 @@ public class MinMaxTree {
 				}
 			}
 		}
+		for(int i = 0; i<retList.size(); i++){
+			System.out.println(i + " RetList: " +retList.get(i).move.getPosition().i + " " + retList.get(i).move.getPosition().j);
+		}
 		return retList;
 	}
 	
