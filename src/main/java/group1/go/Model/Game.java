@@ -26,20 +26,20 @@ public class Game {
 	
 	//machine()
 	
-	public int countTerritory(Board board){
-		Board currentBoard = board.clone();
-		for(int i = 0; i < Constants.BOARDSIZE; i++){
-			for(int j = 0; j <Constants.BOARDSIZE; j++ ){
-				char tile = board.get(i, j);
-				if()
-			}
-			
-		}
-	}
-	
-	public HashSet<TilesPosition> countTerritory(Board Board, int i, int j, char player, char territory){
-		
-	}
+//	public int countTerritory(Board board){
+//		Board currentBoard = board.clone();
+//		for(int i = 0; i < Constants.BOARDSIZE; i++){
+//			for(int j = 0; j <Constants.BOARDSIZE; j++ ){
+//				char tile = board.get(i, j);
+//				if()
+//			}
+//			
+//		}
+//	}
+//	
+//	public HashSet<TilesPosition> countTerritory(Board Board, int i, int j, char player, char territory){
+//		
+//	}
 	
 	public   int isposible(int i , int j){
 		
