@@ -28,6 +28,7 @@ public class MinMaxTree {
         this.depth = depth;
         this.heuristic = heuristic;
         rootNode = new StateNode(rootState, enemyPlayer, 0);
+        rootNode.move = new Move(0, 0, enemyPlayer);
     }
 
     private static class StateNode {
@@ -63,20 +64,16 @@ public class MinMaxTree {
     }
 	
 	private int completeScores(StateNode n) {
-			boolean previousPassed = false;
-			int levelPassed = 0;
-			if(n.move.getPosition().getI() == -1)
-				if(previousPassed && (levelPassed == n.level-1)){
-					char winner = getWinner(); //funcion de agus
-					if(winner == AIPlayer){
-						n.move.rate(Constants.MAX_HEURISTIC_VALUE);
-					}else{
-						n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
-					}
+			if((n.move.getPosition().getI() == -2) && (n.move.getPosition().getJ() == -2)){
+				System.out.println("going to check if won");
+				n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);				/*char winner = getWinner(); //funcion de agus
+				if(winner == AIPlayer){
+					n.move.rate(Constants.MAX_HEURISTIC_VALUE);
 				}else{
-					previousPassed = true;
-					levelPassed = n.level;
-				}
+					n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
+				}*/
+			}
+			
 	    	if(n.nextStates.isEmpty()){
 	    		n.move.rate(heuristic.calculate(n.state, AIPlayer));
 	    		return n.move.getScore();
@@ -109,7 +106,12 @@ public class MinMaxTree {
 		char nodePlayer = (n.player==Constants.BLACK)?Constants.WHITE:Constants.BLACK;
 		List<StateNode> retList = new LinkedList<StateNode>();
 		auxState = new StateNode(n.state.clone(), nodePlayer, n.level+1);
-		auxState.move = new Move(new TilesPosition(-1, -1), nodePlayer);
+		if((n.move.getPosition().getI() == -1) && (n.move.getPosition().getJ() == -1)) {
+			auxState.move = new Move(new TilesPosition(-2, -2), nodePlayer);
+			System.out.println("Found end play");
+		} else {
+			auxState.move = new Move(new TilesPosition(-1, -1), nodePlayer);
+		}
 		retList.add(auxState);
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
@@ -171,7 +173,6 @@ public class MinMaxTree {
 		    	}
         }
         if(bestState==null){
-        	
         	System.out.println("no hay movimientos posibles");
         	return new Move(-1,-1,AIPlayer);
         }
