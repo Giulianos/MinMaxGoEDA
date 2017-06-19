@@ -137,7 +137,7 @@ public class GoRules {
 	 * @return The answer ;)
 	 * */
 	static public boolean isPossible(Board b, TilesPosition t, char p) {
-		return isEmpty(b, t) && !isSuicide(b, t, p==Constants.BLACK?Constants.WHITE:Constants.BLACK);
+		return isEmpty(b, t) && !isSuicide(b, t, p);
 	}
 	
 	static public void main(String[] args) {
