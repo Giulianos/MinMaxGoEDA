@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.stream.BaseStream;
 
 /**
  * Created by giulianoscaglioni on 30/5/17.
@@ -64,21 +65,23 @@ public class MinMaxTree {
     }
 	
 	private int completeScores(StateNode n) {
+		Integer best=null, current;
 			if((n.move.getPosition().getI() == -2) && (n.move.getPosition().getJ() == -2)){
 				System.out.println("going to check if won");
-				n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);				/*char winner = getWinner(); //funcion de agus
+				n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);				
+				/*char winner = getWinner(); //funcion de agus
 				if(winner == AIPlayer){
 					n.move.rate(Constants.MAX_HEURISTIC_VALUE);
 				}else{
 					n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
 				}*/
+				best = -1*Constants.MAX_HEURISTIC_VALUE;
 			}
 			
-	    	if(n.nextStates.isEmpty()){
+			else if(n.nextStates.isEmpty()){
 	    		n.move.rate(heuristic.calculate(n.state, AIPlayer));
 	    		return n.move.getScore();
 			}
-	    	Integer best=null, current;
 	    	for(StateNode sn : n.nextStates) {
 	    		if(best == null) {
 	    			best = completeScores(sn);
@@ -105,7 +108,11 @@ public class MinMaxTree {
 		Board currentBoard = n.state.board;
 		char nodePlayer = (n.player==Constants.BLACK)?Constants.WHITE:Constants.BLACK;
 		List<StateNode> retList = new LinkedList<StateNode>();
+		//agrega el caso en el que pase la AI
 		auxState = new StateNode(n.state.clone(), nodePlayer, n.level+1);
+		if((n.move.getPosition().getI() == -2) && (n.move.getPosition().getJ() == -2)) {
+			return retList; //es un nodo que termina el juego. No tiene neighbours
+		}
 		if((n.move.getPosition().getI() == -1) && (n.move.getPosition().getJ() == -1)) {
 			auxState.move = new Move(new TilesPosition(-2, -2), nodePlayer);
 			System.out.println("Found end play");
