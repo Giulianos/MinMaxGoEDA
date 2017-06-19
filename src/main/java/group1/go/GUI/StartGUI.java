@@ -75,10 +75,7 @@ public class StartGUI extends JFrame {
 		JButton start_btn = new JButton("Start");
 		start_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Game game = new Game();
-				BoardGUI boardGUI = new BoardGUI();
-				Controller controller = new Controller(game, boardGUI);
-				boardGUI.setController(controller);
+				GameModeGUI gameMode = new GameModeGUI();
 				StartGUI.this.dispose();
 			}
 		});

@@ -164,13 +164,15 @@ public class BoardGUI extends JFrame {
 				int j = 0;
 				while(x>0){
 					x = x - deltaX;
-					i++;
+					j++;
 				}
 				while(y>0){
 					y = y - deltaY;
-					j++;
+					i++;
 				}
+				System.out.println(i +" "+ j);
 				controller.touch(i-1,j-1);
+				
 				
 			}
 
@@ -208,6 +210,7 @@ public class BoardGUI extends JFrame {
 		blackLabel.setText(String.valueOf(state.getWhiteTilesCapture()));
 		whiteLabel.setText(String.valueOf(state.getBlackTilesCapture()));
 		moveLabel.setText("moved");
+		this.repaint();
 		
 		
 	}
@@ -226,6 +229,11 @@ public class BoardGUI extends JFrame {
 		tilesPanel.setEnabled(false);
 		pass_btn.setEnabled(false);
 		EndGameGUI endGame = new EndGameGUI(this);
+		
+	}
+
+	public void KO() {
+		moveLabel.setText("KO");
 		
 	}
 }

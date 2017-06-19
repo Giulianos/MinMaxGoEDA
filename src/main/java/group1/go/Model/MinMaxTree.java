@@ -27,7 +27,7 @@ public class MinMaxTree {
         this.enemyPlayer = (AIPlayer==Constants.WHITE)?Constants.BLACK:Constants.WHITE;
         this.depth = depth;
         this.heuristic = heuristic;
-        rootNode = new StateNode(rootState, AIPlayer, 0);
+        rootNode = new StateNode(rootState, enemyPlayer, 0);
     }
 
     private static class StateNode {
@@ -71,9 +71,9 @@ public class MinMaxTree {
 	    			best = completeScores(sn);
 	    		} else {
 	    			current = completeScores(sn);
-	    			if(current>best && n.player==enemyPlayer) {
+	    			if(current<best && n.player==enemyPlayer) {
 	    				best=current;
-	    			} else if(current<best && n.player==AIPlayer){
+	    			} else if(current>best && n.player==AIPlayer){
 	    				best=current;
 	    			}
 	    		}
@@ -85,7 +85,7 @@ public class MinMaxTree {
     }
 	
 	private List<StateNode> neighbourStates(StateNode n) {
-		System.out.println("Procesing neighbour states..." + num++);
+		//System.out.println("Procesing neighbour states..." + num++);
 		StateNode auxState;
 		TilesPosition auxPosition;
 		Board auxBoard;
@@ -94,9 +94,10 @@ public class MinMaxTree {
 		List<StateNode> retList = new LinkedList<StateNode>();
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
-				System.out.println("trying");
+				//System.out.println("trying");
 				auxPosition = new TilesPosition(i, j);
 				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
+					System.out.println("Enter:"+ auxPosition.i + " " + auxPosition.j );
 					auxBoard = currentBoard.clone();
 					auxBoard=Game.add(i, j, auxBoard, nodePlayer);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
@@ -104,6 +105,9 @@ public class MinMaxTree {
 					retList.add(auxState);
 				}
 			}
+		}
+		for(int i = 0; i<retList.size(); i++){
+			System.out.println(i + " RetList: " +retList.get(i).move.getPosition().i + " " + retList.get(i).move.getPosition().j);
 		}
 		return retList;
 	}
@@ -123,15 +127,15 @@ public class MinMaxTree {
 	    	while(!statesQ.isEmpty()) {
 	    		currentNode = statesQ.poll();
 	    		if(currDepth==depth) {
-	    			System.out.println("calculating heuristic");
+	    			//System.out.println("calculating heuristic");
 	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, AIPlayer));
-	   	    		System.out.println("La heuristica es:" + currentNode.move.getScore() );
+	   	    		//System.out.println("La heuristica es:" + currentNode.move.getScore() );
 	    		} else {
 	    			if( currentNode.player!=step){
 	    				currDepth++;
 	    				step=currentNode.player;
 	    			}
-	    			System.out.println("Call to neighbour processing...");
+	    			//System.out.println("Call to neighbour processing...");
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){
 	    				if(!generatedStates.contains(n)) {

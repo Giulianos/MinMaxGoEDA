@@ -41,8 +41,8 @@ public class TilesPanel extends JPanel {
 					else{
 						g2.setColor(Color.WHITE);
 					}
-					int x = (int) (firstPositionX + deltaX*i);
-					int y =  (int) (firstPositionY + deltaY*j);
+					int x = (int) (firstPositionX + deltaX*j);
+					int y =  (int) (firstPositionY + deltaY*i);
 					g2.fillOval(x, y, ovalWith, ovalHeight);
 				}
 			}

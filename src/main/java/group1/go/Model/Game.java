@@ -33,11 +33,11 @@ public class Game {
 		
 		
 		if(tileAtPosition != Constants.EMPTY){
-			return -3; //error de que hay una ficha
+			return Constants.TILEINPOSITION; //error de que hay una ficha
 		}
 		
 		if(isKO(i,j)){
-			return -4;
+			return Constants.KO;
 		}
 		
 		
@@ -49,12 +49,12 @@ public class Game {
 		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,currentPlayer,false )){
 			clear();
 			if(eat(i, j,auxBoard2, currentPlayer).isEmpty()){
-			return -2; //quiere suicidarse
+			return Constants.SUICIDE; //quiere suicidarse
 			}
 		}
 		
 		
-		return 0; // no hay error
+		return Constants.VALID_MOVE; // no hay error
 	}
 	
 	public  void add(int i ,int j){
@@ -68,6 +68,7 @@ public class Game {
 		int whiteTilesCaputre = currentState.getWhiteTilesCapture(); 
 		nextBoard.add(i, j, currentPlayer);
 		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), currentPlayer);
+		System.out.println("to remove: " + toRemove.size());
 		nextBoard.remove(toRemove);
 		
 		if(otherPlayer == Constants.BLACK){
@@ -78,7 +79,7 @@ public class Game {
 		}
 		pre_previousState = previousState;
 		previousState = currentState;
-		currentState = new State(nextBoard, blackTilesCapture, whiteTilesCaputre);
+		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre);
 		
 	}
 	
@@ -141,6 +142,7 @@ public class Game {
 	}
 	
 	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
+	
 	public  static  ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();

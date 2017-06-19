@@ -9,7 +9,10 @@ public class Constants {
 	public final static char OUTOFBOUNDS=4;
 	public final static int BOARDSIZE = 12;
 	public final static int SUICIDE = -2;
-	public final static int TILEINPOSITION = -3; 
+	public final static int TILEINPOSITION = -3;
+	public final static int KO = -4;
+	public final static int VALID_MOVE = 0;
+	
 	
 	
 }
