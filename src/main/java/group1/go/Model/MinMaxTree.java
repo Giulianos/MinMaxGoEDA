@@ -63,6 +63,20 @@ public class MinMaxTree {
     }
 	
 	private int completeScores(StateNode n) {
+			boolean previousPassed = false;
+			int levelPassed = 0;
+			if(n.move.getPosition().getI() == -1)
+				if(previousPassed && (levelPassed == n.level-1)){
+					char winner = getWinner(); //funcion de agus
+					if(winner == AIPlayer){
+						n.move.rate(Constants.MAX_HEURISTIC_VALUE);
+					}else{
+						n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
+					}
+				}else{
+					previousPassed = true;
+					levelPassed = n.level;
+				}
 	    	if(n.nextStates.isEmpty()){
 	    		n.move.rate(heuristic.calculate(n.state, AIPlayer));
 	    		return n.move.getScore();
@@ -80,7 +94,7 @@ public class MinMaxTree {
 	    			}
 	    		}
 	 
-	    		}
+	   		}
 	    	
 	    	n.move.rate(best);
 	    	return best;
@@ -94,6 +108,9 @@ public class MinMaxTree {
 		Board currentBoard = n.state.board;
 		char nodePlayer = (n.player==Constants.BLACK)?Constants.WHITE:Constants.BLACK;
 		List<StateNode> retList = new LinkedList<StateNode>();
+		auxState = new StateNode(n.state.clone(), nodePlayer, n.level+1);
+		auxState.move = new Move(new TilesPosition(-1, -1), nodePlayer);
+		retList.add(auxState);
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
 				//System.out.println("trying");
@@ -154,6 +171,8 @@ public class MinMaxTree {
 		    	}
         }
         if(bestState==null){
+        	
+        	System.out.println("no hay movimientos posibles");
         	return new Move(-1,-1,AIPlayer);
         }
         System.out.println("La heuristica ganadora es :" + bestState.move.getScore());

@@ -14,6 +14,7 @@ public class Constants {
 	public final static int TILEINPOSITION = -3;
 	public final static int KO = -4;
 	public final static int VALID_MOVE = 0;
+	public final static int MAX_HEURISTIC_VALUE = 1000;
 	
 	
 	
