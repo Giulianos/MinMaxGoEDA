@@ -17,6 +17,8 @@ public class Game {
 	char currentPlayer;
 	char otherPlayer;
 	static boolean firstPass;
+	int blackTerritory;
+	int whiteTerritory;
 	
 	public char getCurrentPlayer() {
 		return currentPlayer;
@@ -26,20 +28,90 @@ public class Game {
 	
 	//machine()
 	
-//	public int countTerritory(Board board){
-//		Board currentBoard = board.clone();
-//		for(int i = 0; i < Constants.BOARDSIZE; i++){
-//			for(int j = 0; j <Constants.BOARDSIZE; j++ ){
-//				char tile = board.get(i, j);
-//				if()
-//			}
-//			
-//		}
-//	}
-//	
-//	public HashSet<TilesPosition> countTerritory(Board Board, int i, int j, char player, char territory){
-//		
-//	}
+	public void countTerritory(Board board){
+		Board currentBoard = board.clone();
+		HashSet<TilesPosition> whiteTerritory = new HashSet<TilesPosition>();
+		HashSet<TilesPosition> blackTerritory = new HashSet<TilesPosition>();
+		for(int i = 0; i < Constants.BOARDSIZE; i++){
+			for(int j = 0; j <Constants.BOARDSIZE; j++ ){
+				char tile = board.get(i, j);
+				if(tile == Constants.EMPTY){
+					TilesPosition aux = new TilesPosition(i, j);
+					if(!whiteTerritory.contains(aux) && !blackTerritory.contains(aux)){
+						System.out.println("Enter");
+						if(!whiteTerritory.contains(aux)){
+						countTerritory(currentBoard.clone(), i, j, Constants.WHITE, whiteTerritory);
+						}
+						if(!blackTerritory.contains(aux)){
+							countTerritory(currentBoard.clone(), i, j, Constants.BLACK, blackTerritory);
+						}
+					}
+				}
+			}
+		}
+		this.blackTerritory = blackTerritory.size();
+		this.whiteTerritory = whiteTerritory.size();
+		System.out.println("White: " + this.whiteTerritory);
+		System.out.println("Black: " + this.blackTerritory);
+		return;
+
+	}
+
+	
+
+	public int countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
+		board.add(i, j,player);
+		char enemy =  (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
+		char upC = board.get(i, j-1);
+		char downC = board.get(i, j+1);
+		char leftC = board.get(i-1, j);
+		char rightC = board.get(i+1, j);
+		if(j-1<0){
+			return 3;
+		}
+		if(j+1 > Constants.BOARDSIZE){
+			downC = player;
+		}
+		if(i-1<0){
+			leftC = player;
+		}
+		if(i+1>Constants.BOARDSIZE){
+			rightC = player;
+		}
+		if(upC == enemy || downC == enemy || leftC == enemy || rightC == enemy){
+			System.out.println("FALSE " + i + " " + j );
+			return false;
+		}
+		if(upC != player){
+			if(!countTerritory(board,i,j-1,player,set)){
+				return false;
+			}
+		}
+		if(downC != player){
+			if(!countTerritory(board,i,j+1,player,set)){
+				return false;
+			}
+		}
+		if(rightC != player){
+			if(!countTerritory(board,i+1,j,player,set)){
+				return false;
+			}
+		}
+		if(leftC != player){
+			if(!countTerritory(board,i-1,j,player,set)){
+				return false;
+			}
+		}
+		System.out.println("ADD " + i + " " + j );
+		TilesPosition t = new TilesPosition(i, j);
+		if(!set.contains(t)){
+			set.add(t);
+		}
+		
+		return true;
+	}
+
+	
 	
 	public   int isposible(int i , int j){
 		
@@ -95,7 +167,7 @@ public class Game {
 		pre_previousState = previousState;
 		previousState = currentState;
 		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre);
-		
+		countTerritory(nextBoard.clone());
 	}
 	
 	public static Board add(int i ,int j, Board b , char p){
