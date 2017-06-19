@@ -26,7 +26,7 @@ public class MinMaxTree {
         this.enemyPlayer = (AIPlayer==Constants.WHITE)?Constants.BLACK:Constants.WHITE;
         this.depth = depth;
         this.heuristic = heuristic;
-        rootNode = new StateNode(rootState, AIPlayer, 0);
+        rootNode = new StateNode(rootState, enemyPlayer, 0);
     }
 
     private static class StateNode {
@@ -69,9 +69,9 @@ public class MinMaxTree {
 	    			best = completeScores(sn);
 	    		} else {
 	    			current = completeScores(sn);
-	    			if(current>best && n.player==enemyPlayer) {
+	    			if(current<best && n.player==enemyPlayer) {
 	    				best=current;
-	    			} else if(current<best && n.player==AIPlayer){
+	    			} else if(current>best && n.player==AIPlayer){
 	    				best=current;
 	    			}
 	    		}
