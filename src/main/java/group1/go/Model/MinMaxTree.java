@@ -63,8 +63,10 @@ public class MinMaxTree {
     }
 	
 	private int completeScores(StateNode n) {
-	    	if(n.nextStates.isEmpty())
+	    	if(n.nextStates.isEmpty()){
+	    		n.move.rate(heuristic.calculate(n.state, AIPlayer));
 	    		return n.move.getScore();
+			}
 	    	Integer best=null, current;
 	    	for(StateNode sn : n.nextStates) {
 	    		if(best == null) {
@@ -123,7 +125,7 @@ public class MinMaxTree {
 	    		currentNode = statesQ.poll();
 	    		if(currDepth==depth) {
 	    			//System.out.println("calculating heuristic");
-	   	    		currentNode.move.rate(heuristic.calculate(currentNode.state, AIPlayer));
+	   	    		//currentNode.move.rate(heuristic.calculate(currentNode.state, AIPlayer));
 	   	    		//System.out.println("La heuristica es:" + currentNode.move.getScore() );
 	    		} else {
 	    			if( currentNode.player!=step){
@@ -154,13 +156,15 @@ public class MinMaxTree {
         if(bestState==null){
         	return new Move(-1,-1,AIPlayer);
         }
+        System.out.println("La heuristica ganadora es :" + bestState.move.getScore());
         return bestState.move;
     }
 	
-	public Move getOptimalMoveDFS(boolean poda){
-		this.poda=poda;
+	public Move getOptimalMoveDFS(boolean pod){
+		this.poda=pod;
 		rootNode.move= new Move(null, rootNode.player);
 		Move m= getOptimalMoveDFS(rootNode, null);
+		System.out.println(m.getPlayer()==Constants.BLACK);
 		System.out.println("los podados son:" +podados);
 		System.out.println("la heuristica ganadora es:" + m.getScore());
 		return m;
@@ -185,14 +189,16 @@ public class MinMaxTree {
 				generatedStates.add(nod);
 				n.nextStates.add(nod);
 				Move aux= getOptimalMoveDFS(nod, (best==null)? null: best.getScore());
-				if(aux==null) continue; //hubo poda
+				if(aux==null) {
+					continue; //hubo poda
+				}
 				
 				if(best==null){
 					best=aux;
 				}
-				if(aux.getScore()>best.getScore() && n.player==enemyPlayer) {
+				if(aux.getScore()>best.getScore() && (n.player==enemyPlayer)) {
     				best=aux;
-    			} else if(aux.getScore()<best.getScore() && n.player==AIPlayer){
+    			} else if(aux.getScore()<best.getScore() && (n.player==AIPlayer)){
     				best=aux;
     			}
 				if(prev!=null && poda){
@@ -213,9 +219,14 @@ public class MinMaxTree {
 			n.move=null;
 			return best;
 		}
-		//System.out.println("el nodo es:" + n.level);
 		n.move.rate(best.getScore());
-		return best;
+		if(n.level==0){
+			return best;
+		}
+		//System.out.println("el nodo es:" + n.level);
+		
+		//System.out.println("La igualdad" +(best.getScore()==n.move.getScore()));
+		return n.move;
 	}
 	
 	
