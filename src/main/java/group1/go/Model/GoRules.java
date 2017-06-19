@@ -110,7 +110,6 @@ public class GoRules {
 		//Do BFS eating enemies
 		TilesPosition current;
 		while(!bfsQueue.isEmpty()) {
-			System.out.println("eaaten");
 			current = bfsQueue.poll();
 			if(((Board)b).get(current)==enemy) {
 				((Board)b).add(current, Constants.EMPTY);
@@ -138,9 +137,7 @@ public class GoRules {
 	 * @return The answer ;)
 	 * */
 	static public boolean isPossible(Board b, TilesPosition t, char p) {
-		System.out.println("Empty: " + isEmpty(b, t));
-		System.out.println("Suicide: " + isSuicide(b, t, p));
-		return isEmpty(b, t) && !isSuicide(b, t, p);
+		return isEmpty(b, t) && !isSuicide(b, t, p==Constants.BLACK?Constants.WHITE:Constants.BLACK);
 	}
 	
 	static public void main(String[] args) {

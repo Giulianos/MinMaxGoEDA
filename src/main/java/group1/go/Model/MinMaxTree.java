@@ -97,7 +97,6 @@ public class MinMaxTree {
 				//System.out.println("trying");
 				auxPosition = new TilesPosition(i, j);
 				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
-					System.out.println("Enter:"+ auxPosition.i + " " + auxPosition.j );
 					auxBoard = currentBoard.clone();
 					auxBoard=Game.add(i, j, auxBoard, nodePlayer);
 					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
@@ -105,9 +104,6 @@ public class MinMaxTree {
 					retList.add(auxState);
 				}
 			}
-		}
-		for(int i = 0; i<retList.size(); i++){
-			System.out.println(i + " RetList: " +retList.get(i).move.getPosition().i + " " + retList.get(i).move.getPosition().j);
 		}
 		return retList;
 	}
@@ -173,7 +169,7 @@ public class MinMaxTree {
 	static int podados=0;
 	
 	private Move getOptimalMoveDFS(StateNode n, Integer prev){
-		System.out.println(n.level);
+		//System.out.println(n.level);
 		if(n.level==depth){
 			n.move.rate(heuristic.calculate(n.state, AIPlayer));
 			return n.move;
@@ -217,7 +213,7 @@ public class MinMaxTree {
 			n.move=null;
 			return best;
 		}
-		System.out.println("el nodo es:" + n.level);
+		//System.out.println("el nodo es:" + n.level);
 		n.move.rate(best.getScore());
 		return best;
 	}
