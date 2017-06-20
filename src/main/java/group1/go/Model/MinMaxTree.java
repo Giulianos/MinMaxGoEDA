@@ -207,12 +207,8 @@ public class MinMaxTree {
 		    	}
         }
         if(bestState==null){
-        	System.out.println("no hay movimientos posibles");
         	return new Move(-2,-2,AIPlayer);
         }
-        System.out.println("La heuristica ganadora es :" + bestState.move.getScore());
-        System.out.println(bestState.move.getPosition().getI());
-        System.out.println("los podados son:" +podados);
         rootNode.move=new Move(-1,-1,AIPlayer); //dummy node
         rootNode.move.setChosen(true);
         if(generateDOT) treeGenerator();
@@ -225,7 +221,6 @@ public class MinMaxTree {
 		rootNode.move= new Move(1,1, rootNode.player);
 		rootNode.move.setChosen(true);
 		Move m= getOptimalMoveDFS(rootNode,pass, null);
-		System.out.println("los podados son:" + podados);
 		if(m==null){ //la maquina dice paso
 			return new Move(-2,-2, AIPlayer);
 		}

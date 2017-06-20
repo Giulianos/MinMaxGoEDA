@@ -21,10 +21,13 @@ public class Game {
 	private static boolean firstPass;
 	private static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
 	
-	public char getCurrentPlayer() {
-		return currentPlayer;
-	}
 	
+	
+	/*
+	 * @param int i,j 
+	 * add to the board the current player to the position i,j
+	 * also remove from the board, the tiles that the player "eat" when putting the tile in i,j
+	 */
 	public  void add(int i ,int j){
 		clear();
 		if(firstPass){
@@ -36,7 +39,6 @@ public class Game {
 		int whiteTilesCaputre = currentState.getWhiteTilesCapture(); 
 		nextBoard.add(i, j, currentPlayer);
 		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), currentPlayer);
-		System.out.println("to remove: " + toRemove.size());
 		nextBoard.remove(toRemove);
 		
 		if(otherPlayer == Constants.BLACK){
@@ -50,6 +52,11 @@ public class Game {
 		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre,0,0);
 	}
 	
+	/*
+	 * end the turn by changing the current player 
+	 * it calculates if the current board is full;
+	 * @return true is the board is full and the game ended
+	 */
 	public boolean endTurn(){
 		char aux = currentPlayer;
 		currentPlayer = otherPlayer;
@@ -61,6 +68,11 @@ public class Game {
 		return false;
 	}
 	
+	/*
+	 * validate if is the second time in a row that this method is called and there for 
+	 * the game ended. If it's the first time then it ends the turn
+	 *@return true if the player before passed and the game ended 
+	 */
 	public boolean pass(){
 		if(firstPass){
 			endGame();
@@ -71,10 +83,16 @@ public class Game {
 		return false;
 	}
 	
+	/*
+	 * this method is call when the game end, and counts the territory of the current state
+	 */
 	public void endGame(){
 		countTerritory(currentState);
 	}
 	
+	/*
+	 * this method set up the players and state 
+	 */
 	public void startGame(){
 		currentPlayer = Constants.BLACK;
 		otherPlayer = Constants.WHITE;
@@ -82,7 +100,12 @@ public class Game {
 		this.firstPass=false;
 	}
 	
-	
+	/*
+	 * this methods calculates the tiles that are "eaten" by putting a tile of player
+	 * in the position i, j
+	 * @param  board the board to analyze the tiles that are eaten
+	 * @return the ArrayList of the positions that are eaten
+	 */
 	public  static  ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		ArrayList<TilesPosition> toRemoveUp = new ArrayList<TilesPosition>();
@@ -109,6 +132,12 @@ public class Game {
 		
 	}
 	
+	/*
+	 * @param toRemove the array where the method will put all the tiles that are eaten
+	 * @param eaten if eaten is false then the playerToMove is the one that is being eaten
+	 * 				 if it is true then is the on that eats 
+	 * @return true if the tiles that are in toRemove, are surrounded by tiles of curr    
+	 */
 	public static  boolean eat(ArrayList<TilesPosition> toRemove, int i, int j, Board board,char playerToMove, boolean eaten){
 		char enemy= (playerToMove==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
 		char upC = board.get(i, j-1);
@@ -170,12 +199,13 @@ public class Game {
 		
 	}
 
-	//te dice cuales fichas tiene alrededor
-	//@param color si le pasas white te dice las que estan alrededor de color white
+	/*
+	 * this methods show you how man tiles of player surround the position i,j
+	 */
 	
-	private int getDegree(int i, int j, char color) {
+	private int getDegree(int i, int j, char player) {
 		
-		HashMap<TilesPosition, Character> aux = getSorrounding(i, j);
+		HashMap<TilesPosition, Character> aux = getSurrounding(i, j);
 		int white = 0;
 		int black = 0;
 		int empty=0;
@@ -190,21 +220,25 @@ public class Game {
 				empty++;
 			}
 		}
-		System.out.println(aux.size());
-		if(color == Constants.BLACK){
+		
+		if(player == Constants.BLACK){
 			return black;
 		}
-		if(color == Constants.WHITE){
+		if(player == Constants.WHITE){
 			return white;
 		}
-		if(color==Constants.EMPTY){
+		if(player==Constants.EMPTY){
 			return empty;
 		}
 		return 4-aux.size();
 		
 	}
 	
-	private HashMap<TilesPosition, Character> getSorrounding(int i, int j){
+	/*
+	 * this method calculate all tiles that are around the position i,j
+	 * @return HashMap with all the positions and tiles that surrounds the position i,j 
+	 */
+	private HashMap<TilesPosition, Character> getSurrounding(int i, int j){
 		Board board = currentState.getBoard();
 		HashMap<TilesPosition, Character> aux = new HashMap<TilesPosition, Character>();
 		char playerAux;
@@ -230,7 +264,14 @@ public class Game {
 	public State getState(){
 		return currentState;
 	}
+	
+	public char getCurrentPlayer() {
+		return currentPlayer;
+	}
 
+	/*
+	 * @return true if putting a tile in the position i,j generates a KO movment
+	 */
 	public boolean isKO(int i, int j){
 	
 		if(blackko==null){
@@ -327,7 +368,6 @@ public class Game {
 	
 	public static Board add(int i ,int j, Board b , char p){
 		clear();
-		Board board = b;
 		Board nextBoard = b.clone();
 		nextBoard.add(i, j, p);
 		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), p);
@@ -335,7 +375,12 @@ public class Game {
 		return nextBoard;
 	} 
 	
-	
+	/*
+	 * this method counts the white territory and black territory given a state;
+	 * it calls countTerritory for every position that is empty and that is not a white or 
+	 * black territory
+	 * It set the territories of the given state 
+	 */
 	public static void countTerritory(State state){
 		Board currentBoard = state.getBoard().clone();
 		HashSet<TilesPosition> whiteTerritory = new HashSet<TilesPosition>();
@@ -346,20 +391,17 @@ public class Game {
 				if(tile == Constants.EMPTY){
 					TilesPosition aux = new TilesPosition(i, j);
 					if(!whiteTerritory.contains(aux) && !blackTerritory.contains(aux)){
-						System.out.println("Enter" + i +" " + j);
 						if(!whiteTerritory.contains(aux)){
 							clear();
 							HashSet<TilesPosition> whiteAux = new HashSet<TilesPosition>();
 							if(countTerritory(currentBoard.clone(), i, j, Constants.WHITE, whiteAux)){
 								whiteTerritory.addAll(whiteAux);
-								System.out.println("white");
 							}
 						}
 						if(!blackTerritory.contains(aux)){
 							clear();
 							HashSet<TilesPosition>blackAux = new HashSet<TilesPosition>();
 							if(countTerritory(currentBoard.clone(), i, j, Constants.BLACK, blackAux)){
-								System.out.println("black");
 								blackTerritory.addAll(blackAux);
 							}
 						}
@@ -374,7 +416,15 @@ public class Game {
 	}
 
 	
-
+	/*
+	 * @param set the set will contain the position of all the tiles in the territory
+	 * In case the method returns false, the tiles in set do not form a territory and therefore 
+	 * should be discarded
+	 * this method uses a BFS algorithm to know if the tiles and all the surroundings are
+	 * a territory
+	 * in the case there is an enemy tile in the territory of player it finished looking
+	 * @return true if the position and its surrounding is a territory from player
+	 */
 	public static boolean countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
 		Queue<TilesPosition> queue = new LinkedList<TilesPosition>();
 		queue.offer(new TilesPosition(i, j));
@@ -409,6 +459,11 @@ public class Game {
 		return true;
 	}
 	
+	/*
+	 * return the outcome putting a tile of currentPlayer in the position
+	 * i,j (if it is a valid move or a KO, etc..)
+	 * @return the out come of the move given by the class Constans
+	 */
 	public   int isposible(int i , int j){
 		
 		Board currentBoard = currentState.getBoard();
