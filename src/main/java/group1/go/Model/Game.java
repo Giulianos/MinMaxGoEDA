@@ -163,9 +163,6 @@ public class Game {
 	
 	public static Board add(int i ,int j, Board b , char p){
 		clear();
-		if(firstPass){
-			firstPass = false; 
-		}
 		Board board = b;
 		Board nextBoard = b.clone();
 		nextBoard.add(i, j, p);
@@ -185,7 +182,9 @@ public class Game {
 			}
 		}
 	}
-	
+	public static boolean isFirstPass() {
+		return firstPass;
+	}
 	public boolean endTurn(){
 		char aux = currentPlayer;
 		currentPlayer = otherPlayer;
@@ -217,6 +216,7 @@ public class Game {
 			currentPlayer = Constants.BLACK;
 			otherPlayer = Constants.WHITE;
 		currentState = new State();
+		this.firstPass=false;
 	}
 	
 	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
