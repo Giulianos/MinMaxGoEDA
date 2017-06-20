@@ -55,7 +55,17 @@ public class Controller {
 				boardGUI.endGame();
 			};
 		}
-	}	private void machineVs(){		MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new squareHeuristic());		Move m= minMax.getOptimalMoveBFS();		if(m.getPosition().getI()==-1){			if(game.pass()){				boardGUI.endGame();			}else{				return;			}		}		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}		minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new squareHeuristic());		m= minMax.getOptimalMoveDFS(true);		if(m.getPosition().getI()==-1){			if(game.pass()){				boardGUI.endGame();			}else{				return;			}		}		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}			}	public void machinePlay() {				MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new squareHeuristic());		Move m= minMax.getOptimalMoveBFS();		if(m.getPosition().getI()==-1){			if(game.pass()){				boardGUI.endGame();			}else{				return;			}		}		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}	}	private void playerPlay(int i, int j) {		game.add(i, j);		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};			}
+	}	private void machineVs(){		MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new squareHeuristic());		Move m= minMax.getOptimalMoveBFS();		if(m.getPosition().getI()==-1){			if(game.pass()){				boardGUI.endGame();			}else{				return;			}		}		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}		minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new squareHeuristic());		m= minMax.getOptimalMoveDFS(true);		if(m.getPosition().getI()==-1){			if(game.pass()){				boardGUI.endGame();			}else{				return;			}		}		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}			}
+
+//			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), 3, new squareHeuristic());////
+//			Move m= minMax.getOptimalMoveDFS(false);//			if(m.getPosition().getI()==-1){//				if(game.pass()){////					boardGUI.endGame();////				}else{//					return;//				}//			}////
+//			game.add(m.getPosition().getI(), m.getPosition().getJ());////
+//			boardGUI.drawBoard(game.getState());////
+//			if(game.endTurn()){////
+//				boardGUI.endGame();////
+//			};//
+//		}////
+//	}		public void machinePlay() {				MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), machineDificult, new squareHeuristic());		Move m= minMax.getOptimalMoveDFS(true);		if(m.getPosition().getI()==-1){			if(game.pass()){				boardGUI.endGame();			}else{				return;			}		}		game.add(m.getPosition().getI(), m.getPosition().getJ());		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		}	}	private void playerPlay(int i, int j) {		game.add(i, j);		boardGUI.drawBoard(game.getState());		if(game.endTurn()){			boardGUI.endGame();		};			}
 	
 	
 	

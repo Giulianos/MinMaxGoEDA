@@ -7,7 +7,8 @@ import group1.go.Model.State;
 
 public class squareHeuristic implements Heuristic{
 	public int calculate(State s, char player) {
-		return calculate1(s, player) - calculate1(s, player==Constants.BLACK?Constants.WHITE:Constants.BLACK);
+		int a=calculate1(s, player==Constants.BLACK?Constants.WHITE:Constants.BLACK);
+		return calculate1(s, player) - a;
 	}
 
 	public int calculate1(State s, char player) {

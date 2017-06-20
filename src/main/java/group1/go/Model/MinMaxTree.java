@@ -109,17 +109,17 @@ public class MinMaxTree {
 		char nodePlayer = (n.player==Constants.BLACK)?Constants.WHITE:Constants.BLACK;
 		List<StateNode> retList = new LinkedList<StateNode>();
 		//agrega el caso en el que pase la AI
-		auxState = new StateNode(n.state.clone(), nodePlayer, n.level+1);
-		if((n.move.getPosition().getI() == -2) && (n.move.getPosition().getJ() == -2)) {
-			return retList; //es un nodo que termina el juego. No tiene neighbours
-		}
-		if((n.move.getPosition().getI() == -1) && (n.move.getPosition().getJ() == -1)) {
-			auxState.move = new Move(new TilesPosition(-2, -2), nodePlayer);
-			System.out.println("Found end play");
-		} else {
-			auxState.move = new Move(new TilesPosition(-1, -1), nodePlayer);
-		}
-		retList.add(auxState);
+	//	auxState = new StateNode(n.state.clone(), nodePlayer, n.level+1);
+//		if((n.move.getPosition().getI() == -2) && (n.move.getPosition().getJ() == -2)) {
+//			return retList; //es un nodo que termina el juego. No tiene neighbours
+//		}
+//		if((n.move.getPosition().getI() == -1) && (n.move.getPosition().getJ() == -1)) {
+//			auxState.move = new Move(new TilesPosition(-2, -2), nodePlayer);
+//			System.out.println("Found end play");
+//		} else {
+//			auxState.move = new Move(new TilesPosition(-1, -1), nodePlayer);
+//		}
+	//	retList.add(auxState);
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
 				//System.out.println("trying");
@@ -132,6 +132,11 @@ public class MinMaxTree {
 					retList.add(auxState);
 				}
 			}
+		}
+		if(n.state.board.tilesCardinal()>=100){
+			StateNode repeat= new StateNode(n.state.clone(), nodePlayer, n.level+1);
+			repeat.move= new Move(-2,-2, nodePlayer);
+			retList.add(repeat);
 		}
 		return retList;
 	}
@@ -149,15 +154,11 @@ public class MinMaxTree {
 	    	
 	    	while(!statesQ.isEmpty()) {
 	    		currentNode = statesQ.poll();
-	    		if(currDepth==depth) {
+	    		if(currentNode.level==depth) {
 	    			//System.out.println("calculating heuristic");
 	   	    		//currentNode.move.rate(heuristic.calculate(currentNode.state, AIPlayer));
 	   	    		//System.out.println("La heuristica es:" + currentNode.move.getScore() );
 	    		} else {
-	    			if( currentNode.player!=step){
-	    				currDepth++;
-	    				step=currentNode.player;
-	    			}
 	    			//System.out.println("Call to neighbour processing...");
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){
@@ -188,12 +189,25 @@ public class MinMaxTree {
     }
 	
 	public Move getOptimalMoveDFS(boolean pod){
+		if(rootNode.state.board.tilesCardinal()<=5){
+			depth=1;
+		}else if(rootNode.state.board.tilesCardinal()<=30){
+			depth=2;
+		} else if(rootNode.state.board.tilesCardinal()<=40){
+			depth=3;
+		}else{
+			
+		}
 		this.poda=pod;
 		rootNode.move= new Move(null, rootNode.player);
 		Move m= getOptimalMoveDFS(rootNode, null);
+		if(m==null){ //la maquina dice paso
+			return new Move(-1,-1, AIPlayer);
+		}
 		System.out.println(m.getPlayer()==Constants.BLACK);
 		System.out.println("los podados son:" +podados);
 		System.out.println("la heuristica ganadora es:" + m.getScore());
+		
 		return m;
 	}
 	
