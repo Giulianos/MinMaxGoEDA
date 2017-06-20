@@ -25,6 +25,4 @@ public class TrivialHeuristic implements Heuristic {
 		return score;
 	}
 	
-	
-
 }

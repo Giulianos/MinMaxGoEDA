@@ -6,9 +6,9 @@ import java.util.Iterator;
 
 public class BoardMapImpl extends Board {
 	
-	HashMap<TilesPosition,Character> board;
-	int blackTilesCapture; 
-	int whiteTilesCapture;
+	private HashMap<TilesPosition,Character> board;
+	private int blackTilesCapture; 
+	private int whiteTilesCapture;
 	
 	
 	public BoardMapImpl(HashMap<TilesPosition,Character> board, int blackTilesCapture, int whiteTilesCapture){

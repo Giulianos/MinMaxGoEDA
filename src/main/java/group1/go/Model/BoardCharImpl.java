@@ -5,8 +5,8 @@ import java.util.Collection;
 public class BoardCharImpl extends Board {
 
 	private char[][] board;
-	int blackCaptures;
-	int whiteCaptures;
+	private int blackCaptures;
+	private int whiteCaptures;
 	
 	public BoardCharImpl(char[][] board, int whiteCaptures, int blackCaptures){
 		this.board = board;

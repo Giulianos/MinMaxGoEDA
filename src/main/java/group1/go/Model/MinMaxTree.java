@@ -34,8 +34,6 @@ public class MinMaxTree {
         rootNode.move = new Move(0, 0, enemyPlayer);
     }
     
-    
-    
     private static class StateNode {
         private State state;
         private ArrayList<StateNode> nextStates;
@@ -332,63 +330,30 @@ public class MinMaxTree {
 		
 		getDOT(rootNode);
 		t.close();
-		
-		
 	}
 	
-	
-	
-	
-	public void getDOT(StateNode current)
+	public void getDOT(StateNode current){
 
-	{
-
-
-		if(current.level == 0)
-
-		{
-
-
+		if(current.level == 0){
 			t.drawNode(0, "START", "square", "red");
-
 		}
-
-		else
-
-		{
+		else{
 			boolean score=true;
 			String color= "white";
 			if(current.move.isPoda()){
 				color="grey";
 				score=false;
-			}else if(current.move.isChosen()){
+			}
+			else if(current.move.isChosen()){
 				color="red";
 			}
-			
-			
-
 			t.drawNode(current.id, "\""+current.move.getPosition().toString()+" "+((score)?current.move.getScore():"PODA")+"\"",current.level%2==0? "square" : "box", color);
-
 		}
-
-
-		for(StateNode s : current.nextStates)
-
-		{
-
-
+		
+		for(StateNode s : current.nextStates){
 			t.drawArc(current.id, s.id);
-
 			getDOT(s);
-
-
 		}
-
-
 	}
-	
-	
-	
-	
 }
 

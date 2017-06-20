@@ -1,12 +1,12 @@
 package group1.go.Model;
 
 public class BitBoard {
-	long first30;
-	long second30;
-	long third30;
-	long fourth30;
-	long fifth30;
-	long sixth30;
+	private long first30;
+	private long second30;
+	private long third30;
+	private long fourth30;
+	private long fifth30;
+	private long sixth30;
 	
 	public BitBoard(){
 		first30 = 0;
@@ -194,53 +194,7 @@ public class BitBoard {
 		return sixth30;
 	}
 
-	public static void main(String[] args) {
-		long first64 = 0;
-		first64 = (first64|(1<<3));
-		System.out.println(Long.toBinaryString(first64));
-		first64 = (first64|(1<<6));
-		System.out.println(Long.toBinaryString(first64));
-		boolean rta = (first64&(1<<7)) == (1<<7);
-		System.out.println(rta);
-		System.out.println(Long.toBinaryString(first64&(1<<4)));
-		System.out.println(Long.toBinaryString(first64&(1<<3)));
-		first64 = (first64|(1<<3));
-		first64 = (first64|(1<<6));
-		long numb = Long.MAX_VALUE;
-		System.out.println(Long.toBinaryString(numb>>(63-4)));
-		System.out.println(Long.toBinaryString((numb<<(4))|(numb>>(63-3))));
-		System.out.println(Long.toBinaryString((numb<<(4))));
-		long l = (numb<<(4))|(numb>>(63-3));
-		System.out.println("aca va la posta");
-		System.out.println(Long.toBinaryString(l));
-		System.out.println(Long.toBinaryString(first64));
-		System.out.println(Long.toBinaryString(first64&l));
-		System.out.println(Long.toBinaryString(-1<<36));
-		System.out.println(Long.toBinaryString((1<<30)));
-		long unsinged = ((-1<<30)^(-1<<31))^0;
-		System.out.println(Long.toBinaryString((unsinged)));
-
-		/*
-		BitBoard bit = new BitBoard();
-		bit.add(89);
-		bit.add(0);
-		bit.add(3);
-		bit.add(64);
-		bit.add(128);
-		bit.add(178);
-		bit.add(190);
-		bit.add(145);
-		bit.add(5);
-		bit.add(7);
-		bit.add(1);
-		bit.add(2);
-		
-		System.out.println(Long.toBinaryString(bit.first64));
-		System.out.println(Long.toBinaryString(bit.second64));
-		System.out.println(Long.toBinaryString(bit.third64));
-		System.out.println(Long.toBinaryString(Long.MAX_VALUE));
-		System.out.println(bit.isInPosition(89));*/
-	}
+	
 	
 	
 }

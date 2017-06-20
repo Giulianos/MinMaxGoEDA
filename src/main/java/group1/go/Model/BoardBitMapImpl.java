@@ -4,11 +4,10 @@ import java.util.Collection;
 
 public class BoardBitMapImpl extends Board {
 
-	BitBoard blackBoard;
-	BitBoard whiteBoard;
-	int blackCaptures;
-	int whiteCaptures;
-	private static int turn = 0;
+	private BitBoard blackBoard;
+	private BitBoard whiteBoard;
+	private int blackCaptures;
+	private int whiteCaptures;
 	
 	public BoardBitMapImpl(){
 		blackBoard = new BitBoard();
@@ -48,7 +47,6 @@ public class BoardBitMapImpl extends Board {
 	}
 
 	public void remove(Collection<TilesPosition> toRemove) {
-		int index;
 		for(TilesPosition t: toRemove){
 			remove(t);
 		}
@@ -92,6 +90,7 @@ public class BoardBitMapImpl extends Board {
 		}
 		return false;
 	}
+	
 	public boolean isFull() {
 		if(((blackBoard.getFirst30() == whiteBoard.getFirst30())&&(blackBoard.getSecond30()==whiteBoard.getSecond30())&&
 				(blackBoard.getThird30()==whiteBoard.getThird30())&&(blackBoard.getFourth30()==whiteBoard.getFourth30())&&

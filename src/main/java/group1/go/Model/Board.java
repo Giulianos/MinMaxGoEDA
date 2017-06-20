@@ -23,6 +23,7 @@ public abstract class Board {
 	public abstract Board clone();
 	
 	public abstract boolean isFull();
+	
 	public int tilesCardinal(){
 		int sum=0;
 		for(int i=0; i<=Constants.BOARDSIZE; i++){

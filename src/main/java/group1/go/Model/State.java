@@ -15,26 +15,21 @@ public class State {
 		return blackTerritory;
 	}
 
-
 	public void setBlackTerritory(int blackTerritory) {
 		this.blackTerritory = blackTerritory;
 	}
-
 
 	public int getWhiteTerritory() {
 		return whiteTerritory;
 	}
 
-
 	public void setWhiteTerritory(int whiteTerritory) {
 		this.whiteTerritory = whiteTerritory;
 	}
 
-
 	public int getBlackTilesCapture() {
 		return blackTilesCapture;
 	}
-
 
 	public int getWhiteTilesCapture() {
 		return whiteTilesCapture;

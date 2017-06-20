@@ -73,22 +73,18 @@ public class GoRules {
 		//Up
 		if(!t.isTopBorder() && ((Board)b).get(auxTile=new TilesPosition(t.i-1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			//System.out.println("eating up!");
 		}
 		//Down
 		if(!t.isBottomBorder() && ((Board)b).get(auxTile=new TilesPosition(t.i+1, t.j))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			//System.out.println("eating down!");
 		}
 		//Left
 		if(!t.isLeftBorder() && ((Board)b).get(auxTile=new TilesPosition(t.i, t.j-1))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			//System.out.println("eating left!");
 		}
 		//Right
 		if(!t.isRightBorder() && ((Board)b).get(auxTile=new TilesPosition(t.i, t.j+1))==enemy && isSuicide(b, auxTile, enemy)) {
 			eaten+=eatTiles(b, auxTile);
-			//System.out.println("eating right!");
 		}
 		
 		return eaten;
@@ -138,50 +134,6 @@ public class GoRules {
 	 * */
 	static public boolean isPossible(Board b, TilesPosition t, char p) {
 		return isEmpty(b, t) && !isSuicide(b, t, p);
-	}
-	
-	static public void main(String[] args) {
-		Board b = new BoardMapImpl();
-		
-		for(int i=0; i<=Constants.BOARDSIZE; i++)
-			b.add(4, i, Constants.WHITE);
-		for(int i=0; i<=Constants.BOARDSIZE; i++)
-			b.add(6, i, Constants.WHITE);
-		
-		//Print board
-		for(int i=0; i<=Constants.BOARDSIZE; i++) {
-			for(int j=0; j<=Constants.BOARDSIZE; j++) {
-				switch(b.get(i, j)) {
-				case Constants.EMPTY: System.out.print("[ ]"); break;
-				case Constants.WHITE: System.out.print("[o]"); break;
-				case Constants.BLACK: System.out.print("[x]"); break;
-				}
-			}
-			System.out.println("");
-		}
-		
-		System.out.println(isSuicide(b,new TilesPosition(5,5), Constants.BLACK));
-		
-		for(int i=0; i<Constants.BOARDSIZE; i++)
-			b.add(5, i, Constants.BLACK);
-		
-		b.add(5, 12, Constants.WHITE);
-		applyMove(b, Constants.WHITE, new TilesPosition(5, 12));
-		
-		//Print board
-		for(int i=0; i<=Constants.BOARDSIZE; i++) {
-			for(int j=0; j<=Constants.BOARDSIZE; j++) {
-				switch(b.get(i, j)) {
-				case Constants.EMPTY: System.out.print("[ ]"); break;
-				case Constants.WHITE: System.out.print("[o]"); break;
-				case Constants.BLACK: System.out.print("[x]"); break;
-				}
-			}
-			System.out.println("");
-		}
-		
-		System.out.println(isSuicide(b,new TilesPosition(5,11), Constants.BLACK));
-		
 	}
 	
 }
