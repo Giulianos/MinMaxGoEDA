@@ -112,6 +112,7 @@ public class MinMaxTree {
 	    		}
 	 
 	   		}
+	    	n.move.setChosen(true);
 	    	n.move.rate(best);
 	    	return best;
 			
@@ -207,6 +208,9 @@ public class MinMaxTree {
         System.out.println("La heuristica ganadora es :" + bestState.move.getScore());
         System.out.println(bestState.move.getPosition().getI());
         System.out.println("los podados son:" +podados);
+        rootNode.move=new Move(-1,-1,AIPlayer); //dummy node
+        rootNode.move.setChosen(true);
+        
         return bestState.move;
     }
 	
@@ -214,6 +218,7 @@ public class MinMaxTree {
 		optimizeDepth();
 		this.poda=pod;
 		rootNode.move= new Move(null, rootNode.player);
+		rootNode.move.setChosen(true);
 		Move m= getOptimalMoveDFS(rootNode,pass, null);
 		if(m==null){ //la maquina dice paso
 			return new Move(-2,-2, AIPlayer);
@@ -286,6 +291,7 @@ public class MinMaxTree {
 			return best;
 		}
 		n.move.rate(best.getScore());
+		n.move.setChosen(true);
 		if(n.level==0){
 			return best;
 		}
