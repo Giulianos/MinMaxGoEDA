@@ -2,7 +2,9 @@ package group1.go.GUI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.PointerInfo;
@@ -47,7 +49,8 @@ public class BoardGUI extends JFrame {
 	private JLabel whiteTextLabel;
 	private JButton pass_btn;
 	private JButton showTerritory_btn;
-	private boolean territoryDisplay = false;;
+	private boolean territoryDisplay = false;
+	private State lastDrawState;
 	/**
 	 * Launch the application.
 	 */
@@ -116,6 +119,9 @@ public class BoardGUI extends JFrame {
 		});
 		contentPane.add(menu_btn,0);
 		showTerritory_btn = new JButton("Captures");
+		showTerritory_btn.setHorizontalTextPosition(SwingConstants.LEFT);
+		showTerritory_btn.setFont(showTerritory_btn.getFont().deriveFont(11.0f));
+		showTerritory_btn.setMargin(new Insets(0, 0,0,0));
 		showTerritory_btn.setBounds(506, 240, 70, 40);
 		showTerritory_btn.setOpaque(false);
 		showTerritory_btn.setContentAreaFilled(false);
@@ -124,9 +130,17 @@ public class BoardGUI extends JFrame {
 				if(territoryDisplay){
 					showTerritory_btn.setText("Captures");
 					territoryDisplay = false;
+					if(lastDrawState != null){
+						blackLabel.setText(String.valueOf(lastDrawState.getWhiteTilesCapture()));
+						whiteLabel.setText(String.valueOf(lastDrawState.getBlackTilesCapture()));
+					}
 				}else{
 					territoryDisplay = true;
 					showTerritory_btn.setText("Territory");
+					if(lastDrawState != null){
+						blackLabel.setText(String.valueOf(lastDrawState.getBlackTerritory()));
+						whiteLabel.setText(String.valueOf(lastDrawState.getWhiteTerritory()));
+					}
 				}
 				
 			}
@@ -218,6 +232,7 @@ public class BoardGUI extends JFrame {
 	}
 	
 	public void drawBoard(State state){
+		lastDrawState = state;
 		tilesPanel.drawBoard(state.getBoard());
 		if(territoryDisplay){
 			Game.countTerritory(state);

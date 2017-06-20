@@ -4,6 +4,13 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/*
+ * This board uses a hashMap of TilesPositions and Character as a board.
+ * The HashMap only contains black or white tiles and if the HashMap do not have the tile then is an
+ * empty space.
+ * This implementation try to save memory space in the early stages of the game where the map is almost empty
+ */
+
 public class BoardMapImpl extends Board {
 	
 	private HashMap<TilesPosition,Character> board;

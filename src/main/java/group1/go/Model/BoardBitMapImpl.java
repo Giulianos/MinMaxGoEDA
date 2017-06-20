@@ -2,6 +2,14 @@ package group1.go.Model;
 
 import java.util.Collection;
 
+/*
+ * This board uses to BitBoards as a board. One BitBoard is for the white tiles and
+ * the other one is for the black tiles. 
+ * It transform the int i,j of the methods into an index as the BitBoard uses and index to access the 
+ * elements
+ * This board try to save space by using BitBoards to represent the board. 
+ */
+
 public class BoardBitMapImpl extends Board {
 
 	private BitBoard blackBoard;
@@ -10,6 +18,7 @@ public class BoardBitMapImpl extends Board {
 	private int whiteCaptures;
 	
 	public BoardBitMapImpl(){
+		
 		blackBoard = new BitBoard();
 		whiteBoard = new BitBoard();
 	}

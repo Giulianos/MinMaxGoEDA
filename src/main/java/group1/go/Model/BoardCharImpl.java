@@ -2,6 +2,10 @@ package group1.go.Model;
 
 import java.util.Collection;
 
+/*
+ * this board uses an Array of Arrays (Matrix) as a board. 
+ * The matrix is always full with characters.
+ */
 public class BoardCharImpl extends Board {
 
 	private char[][] board;

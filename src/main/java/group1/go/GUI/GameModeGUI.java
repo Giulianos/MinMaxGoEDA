@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.JLabel;
 
 public class GameModeGUI extends JFrame {
 
@@ -25,6 +26,7 @@ public class GameModeGUI extends JFrame {
 	private boolean pvp = false;
 	private boolean dificutlSet = false;
 	private JButton set_btn;
+	private JLabel info_lbl;
 	private JTextField machieneDificult;
 	
 	public GameModeGUI() {
@@ -38,12 +40,13 @@ public class GameModeGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton machine_btn = new JButton("IA - ON");
+		JButton machine_btn = new JButton("Machine");
 		machine_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				set_btn.setVisible(true);
 				set_btn.setEnabled(true);
 				machieneDificult.setVisible(true);
+				info_lbl.setVisible(true);
 				machineON = true;
 				pvp = false;
 			}
@@ -51,12 +54,13 @@ public class GameModeGUI extends JFrame {
 		machine_btn.setBounds(47, 64, 109, 48);
 		contentPane.add(machine_btn);
 		
-		JButton pvp_btn = new JButton(" P v P");
+		JButton pvp_btn = new JButton("Two Players");
 		pvp_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				set_btn.setVisible(false);
 				set_btn.setEnabled(false);
 				machieneDificult.setVisible(false);
+				info_lbl.setVisible(false);
 				machineON = false;
 				pvp= true;
 				
@@ -66,14 +70,22 @@ public class GameModeGUI extends JFrame {
 		pvp_btn.setBounds(247, 64, 109, 48);
 		contentPane.add(pvp_btn);
 		
-		set_btn = new JButton("set");
+		set_btn = new JButton("Set Dificulty");
 		set_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(Integer.parseInt(machieneDificult.getText()) < 10 && Integer.parseInt(machieneDificult.getText()) > 0){
-					dificutlSet = true;
-					MachinDificult = Integer.parseInt(machieneDificult.getText());
+				try {
+					int number = Integer.parseInt(machieneDificult.getText());
+					if(number < 10 && number > 0){
+						dificutlSet = true;
+						MachinDificult = number;
+					}
+						else{
+							info_lbl.setText("<html>Set a valid number<br> between 1 and 10<html>");
+						}
 				}
-				
+				catch (Exception e) {
+					info_lbl.setText("<html>Set a valid number<br> between 1 and 10<html>");
+				}
 			}
 		});
 		set_btn.setBounds(47, 138, 109, 23);
@@ -108,6 +120,11 @@ public class GameModeGUI extends JFrame {
 		machieneDificult.setBounds(47, 172, 109, 20);
 		contentPane.add(machieneDificult);
 		machieneDificult.setColumns(10);
+		
+		info_lbl = new JLabel("<html>Choose the diffculty<br>between 1 and 10<html>");
+		info_lbl.setBounds(47, 203, 109, 48);
+		info_lbl.setVisible(false);
+		contentPane.add(info_lbl);
 		machieneDificult.setVisible(false);
 	}
 }

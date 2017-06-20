@@ -1,5 +1,14 @@
 package group1.go.Model;
 
+
+/*
+ * This class emulates a board with 6 longs.
+ * It uses the first 31 bits of the long to determine whether a tile is at the position index
+ * or not. 
+ * The index 0 correspond to the least significant byte of the long and the index 31 to the most
+ * significant byte. 
+ * If there is a 1 at the position index then there is an object at that position.
+ */
 public class BitBoard {
 	private long first30;
 	private long second30;
