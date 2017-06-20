@@ -28,8 +28,26 @@ public class Game {
 	
 	
 	
+	
+	
 	//machine()
 	
+	public int getBlackTerritory() {
+		return blackTerritory;
+	}
+
+
+
+
+
+	public int getWhiteTerritory() {
+		return whiteTerritory;
+	}
+
+
+
+
+
 	public void countTerritory(Board board){
 		Board currentBoard = board.clone();
 		HashSet<TilesPosition> whiteTerritory = new HashSet<TilesPosition>();
@@ -63,8 +81,6 @@ public class Game {
 		}
 		this.blackTerritory = blackTerritory.size();
 		this.whiteTerritory = whiteTerritory.size();
-		System.out.println("White: " + whiteTerritory.size());
-		System.out.println("Black: " + blackTerritory.size());
 		return;
 
 	}
@@ -72,7 +88,6 @@ public class Game {
 	
 
 	public boolean countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
-		
 		Queue<TilesPosition> queue = new LinkedList<TilesPosition>();
 		queue.offer(new TilesPosition(i, j));
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
@@ -160,7 +175,7 @@ public class Game {
 		pre_previousState = previousState;
 		previousState = currentState;
 		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre);
-		countTerritory(nextBoard.clone());
+
 	}
 	
 	public static Board add(int i ,int j, Board b , char p){
@@ -209,7 +224,7 @@ public class Game {
 	}
 	
 	public void endGame(){
-		
+		countTerritory(currentState.board);
 	}
 	
 	public void startGame(){

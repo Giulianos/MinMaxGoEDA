@@ -14,6 +14,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 public class GameModeGUI extends JFrame {
 
@@ -22,9 +24,8 @@ public class GameModeGUI extends JFrame {
 	private boolean machineON = false;
 	private boolean pvp = false;
 	private boolean dificutlSet = false;
-	private JButton easy_btn;
-	private JButton medium_btn;
-	private JButton hard_btn;
+	private JButton set_btn;
+	private JTextField machieneDificult;
 	
 	public GameModeGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,12 +41,9 @@ public class GameModeGUI extends JFrame {
 		JButton machine_btn = new JButton("IA - ON");
 		machine_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				easy_btn.setVisible(true);
-				easy_btn.setEnabled(true);
-				medium_btn.setEnabled(true);
-				medium_btn.setVisible(true);
-				hard_btn.setVisible(true);
-				hard_btn.setEnabled(true);
+				set_btn.setVisible(true);
+				set_btn.setEnabled(true);
+				machieneDificult.setVisible(true);
 				machineON = true;
 				pvp = false;
 			}
@@ -56,12 +54,9 @@ public class GameModeGUI extends JFrame {
 		JButton pvp_btn = new JButton(" P v P");
 		pvp_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				easy_btn.setVisible(false);
-				easy_btn.setEnabled(false);
-				medium_btn.setEnabled(false);
-				medium_btn.setVisible(false);
-				hard_btn.setVisible(false);
-				hard_btn.setEnabled(false);
+				set_btn.setVisible(false);
+				set_btn.setEnabled(false);
+				machieneDificult.setVisible(false);
 				machineON = false;
 				pvp= true;
 				
@@ -71,41 +66,20 @@ public class GameModeGUI extends JFrame {
 		pvp_btn.setBounds(247, 64, 109, 48);
 		contentPane.add(pvp_btn);
 		
-		easy_btn = new JButton("easy");
-		easy_btn.addActionListener(new ActionListener() {
+		set_btn = new JButton("set");
+		set_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MachinDificult = 1;
-				dificutlSet = true;
+				if(Integer.parseInt(machieneDificult.getText()) < 10 && Integer.parseInt(machieneDificult.getText()) > 0){
+					dificutlSet = true;
+					MachinDificult = Integer.parseInt(machieneDificult.getText());
+				}
+				
 			}
 		});
-		easy_btn.setBounds(47, 138, 109, 23);
-		easy_btn.setVisible(false);
-		easy_btn.setEnabled(false);
-		contentPane.add(easy_btn);
-		
-		medium_btn = new JButton("Medium");
-		medium_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				MachinDificult = 2;
-				dificutlSet = true;
-			}
-		});
-		medium_btn.setEnabled(false);
-		medium_btn.setVisible(false);
-		medium_btn.setBounds(47, 172, 109, 23);
-		contentPane.add(medium_btn);
-		
-		hard_btn = new JButton("Hard");
-		hard_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				MachinDificult = 3;
-				dificutlSet = true;
-			}
-		});
-		hard_btn.setBounds(47, 207, 109, 23);
-		hard_btn.setVisible(false);
-		hard_btn.setEnabled(false);
-		contentPane.add(hard_btn);
+		set_btn.setBounds(47, 138, 109, 23);
+		set_btn.setVisible(false);
+		set_btn.setEnabled(false);
+		contentPane.add(set_btn);
 		
 		JButton start_btn = new JButton("START");
 		start_btn.addActionListener(new ActionListener() {
@@ -129,5 +103,11 @@ public class GameModeGUI extends JFrame {
 		});
 		start_btn.setBounds(268, 172, 88, 58);
 		contentPane.add(start_btn);
+		
+		machieneDificult = new JTextField("1-10 Dificutlty");
+		machieneDificult.setBounds(47, 172, 109, 20);
+		contentPane.add(machieneDificult);
+		machieneDificult.setColumns(10);
+		machieneDificult.setVisible(false);
 	}
 }

@@ -22,6 +22,7 @@ import javax.swing.border.EmptyBorder;
 import group1.go.Controller.Controller;
 import group1.go.Model.Board;
 import group1.go.Model.Constants;
+import group1.go.Model.Game;
 import group1.go.Model.State;
 
 import javax.swing.ImageIcon;
@@ -44,7 +45,11 @@ public class BoardGUI extends JFrame {
 	private JLabel blackLabel;
 	private JLabel whiteLabel;
 	private JLabel moveLabel;
+	private JLabel blackTextLabel;
+	private JLabel whiteTextLabel;
 	private JButton pass_btn;
+	private JButton showTerritory_btn;
+	private boolean territoryDisplay = false;;
 	/**
 	 * Launch the application.
 	 */
@@ -112,20 +117,46 @@ public class BoardGUI extends JFrame {
 			}
 		});
 		contentPane.add(menu_btn,0);
+		showTerritory_btn = new JButton("Captures");
+		showTerritory_btn.setBounds(506, 240, 70, 40);
+		showTerritory_btn.setOpaque(false);
+		showTerritory_btn.setContentAreaFilled(false);
+		showTerritory_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(territoryDisplay){
+					showTerritory_btn.setText("Captures");
+					territoryDisplay = false;
+				}else{
+					territoryDisplay = true;
+					showTerritory_btn.setText("Territory");
+				}
+				
+			}
+		});
+		contentPane.add(showTerritory_btn,0);
+		
 		
 		//seteo el cartel de blackTiles
+		blackTextLabel = new JLabel("Black");
+		blackTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		blackTextLabel.setBounds(516, 290 ,50 , 10);
+		contentPane.add(blackTextLabel, 6);
 		blackLabel = new JLabel("0");
 		blackLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		blackLabel.setBounds(516, 240, 50, 40);
+		blackLabel.setBounds(516, 310, 50, 40);
 		blackLabel.setBackground(Color.BLACK);
 		blackLabel.setOpaque(true);
 		blackLabel.setForeground(Color.WHITE);
 		contentPane.add(blackLabel, 4);
 		
 		//seteo el cartel de whiteTiles 
+		whiteTextLabel = new JLabel("White");
+		whiteTextLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		whiteTextLabel.setBounds(516, 360 ,50 , 10);
+		contentPane.add(whiteTextLabel, 5);
 		whiteLabel = new JLabel("0");
 		whiteLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		whiteLabel.setBounds(516, 310, 50, 40);
+		whiteLabel.setBounds(516, 380, 50, 40);
 		whiteLabel.setBackground(Color.WHITE);
 		whiteLabel.setOpaque(true);
 		whiteLabel.setForeground(Color.BLACK);
@@ -134,7 +165,7 @@ public class BoardGUI extends JFrame {
 		//seteo el moveLabel
 		moveLabel = new JLabel("<html>Make a <br>move!!</html>");
 		moveLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		moveLabel.setBounds(506, 380, 70, 40);
+		moveLabel.setBounds(506, 450, 70, 40);
 		contentPane.add(moveLabel, 5);
 		//Seteo el background
 		backGroundLabel.setIcon(backgroundImg);
@@ -205,10 +236,17 @@ public class BoardGUI extends JFrame {
 		
 	}
 	
-	public void drawBoard(State state){
-		tilesPanel.drawBoard(state.getBoard());
-		blackLabel.setText(String.valueOf(state.getWhiteTilesCapture()));
-		whiteLabel.setText(String.valueOf(state.getBlackTilesCapture()));
+	public void drawBoard(Game game){
+		tilesPanel.drawBoard(game.getState().getBoard());
+		if(territoryDisplay){
+			game.countTerritory(game.getState().getBoard());
+			blackLabel.setText(String.valueOf(game.getBlackTerritory()));
+			whiteLabel.setText(String.valueOf(game.getWhiteTerritory()));
+		}else{
+			blackLabel.setText(String.valueOf(game.getState().getWhiteTilesCapture()));
+			whiteLabel.setText(String.valueOf(game.getState().getBlackTilesCapture()));
+		}
+		
 		moveLabel.setText("moved");
 		this.repaint();
 		
@@ -225,10 +263,10 @@ public class BoardGUI extends JFrame {
 		
 	}
 
-	public void endGame() {
+	public void endGame(int blackScore, int whiteScore) {
 		tilesPanel.setEnabled(false);
 		pass_btn.setEnabled(false);
-		EndGameGUI endGame = new EndGameGUI(this);
+		EndGameGUI endGame = new EndGameGUI(blackScore, whiteScore, this);
 		
 	}
 

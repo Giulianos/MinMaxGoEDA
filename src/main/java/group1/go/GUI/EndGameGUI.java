@@ -16,7 +16,15 @@ public class EndGameGUI extends JFrame {
 
 	private JPanel contentPane;
 	private BoardGUI board;
-
+	private int blackScore;
+	private int whiteScore;
+	
+	public EndGameGUI(int blackScore, int whiteScore, BoardGUI boardGUI){
+		this.blackScore = blackScore;
+		this.whiteScore = whiteScore;
+		this.board = boardGUI;
+		run();
+	}
 	public void run() {
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,13 +54,24 @@ public class EndGameGUI extends JFrame {
 		menu_btn.setBounds(242, 183, 139, 48);
 		contentPane.add(menu_btn);
 		
-		JLabel lblNewLabel = new JLabel("Someone WON");
-		lblNewLabel.setBounds(126, 66, 159, 48);
-		contentPane.add(lblNewLabel);
-	}
-
-	public EndGameGUI(BoardGUI boardGUI) {
-		this.board = boardGUI;
-		run();
+		JLabel win_lbl = new JLabel();
+		win_lbl.setBounds(127, 11, 159, 48);
+		contentPane.add(win_lbl);
+		
+		JLabel score_lbl = new JLabel();
+		score_lbl.setBounds(127, 87, 159, 48);
+		contentPane.add(score_lbl);
+		
+		if(blackScore>whiteScore){
+			win_lbl.setText("Black Won");
+		}
+		else if(blackScore<whiteScore){
+			win_lbl.setText("White Won");
+		}
+		else{
+			win_lbl.setText("It's a Tie");
+		}
+		score_lbl.setText("Black Score: " + blackScore + " White Score: " + whiteScore);
+	
 	}
 }
