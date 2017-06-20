@@ -8,19 +8,19 @@ import group1.go.Model.State;
 public class squareHeuristic implements Heuristic{
 	
 	public int calculate(State s, char player) {
-		int a=calculate1(s, player==Constants.BLACK?Constants.WHITE:Constants.BLACK);
-		return calculate1(s, player) - a;
+		return calculate1(s, player) ;
 	}
 
 	public int calculate1(State s, char player) {
 		int score=0;
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
-		boolean foundPlayer=false;
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
 				if(s.getBoard().get(i, j)==player) {
 					score+=getSorround(s,i,j, player);
-				} 
+				}else if(s.getBoard().get(i, j)==enemy) {
+					score-=getSorround(s,i,j, enemy);
+				}
 			}
 		}
 		return score;
