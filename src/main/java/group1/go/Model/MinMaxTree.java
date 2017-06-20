@@ -67,9 +67,6 @@ public class MinMaxTree {
         }
 
     }
-    private boolean wins(State s, char player){
-    	return true;
-    }
 	
 	private int completeScores(StateNode n, boolean pass,  Integer prev) {
 		Integer best=null, current;
@@ -77,7 +74,7 @@ public class MinMaxTree {
 		boolean currPass=false;
 			if((n.move.getPosition().getI() == -2) ){
 				if(pass){
-					if(wins(n.state, AIPlayer)){
+					if(Game.isWinner(n.state, AIPlayer)){
 						n.move.rate(Constants.MAX_HEURISTIC_VALUE);
 					}else{
 						n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
@@ -243,7 +240,7 @@ public class MinMaxTree {
 		boolean currPass=false;
 		if(n.move.getPosition().getI()==-2){
 			if(pass){
-				if(wins(n.state, AIPlayer)){
+				if(Game.isWinner(n.state, AIPlayer)){
 					n.move.rate(Constants.MAX_HEURISTIC_VALUE);
 				}else{
 					n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
