@@ -29,6 +29,7 @@ public class Move {
 		this.position = new TilesPosition(i, j);
 		this.player = player;
 		this.score=null;
+		this.poda=false;
 	}
 	
 	public void rate(int score) {

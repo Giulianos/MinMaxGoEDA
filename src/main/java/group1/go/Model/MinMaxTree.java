@@ -75,6 +75,7 @@ public class MinMaxTree {
 	
 	private int completeScores(StateNode n, boolean pass,  Integer prev) {
 		Integer best=null, current;
+		StateNode better=null;
 		boolean currPass=false;
 			if((n.move.getPosition().getI() == -2) ){
 				if(pass){
@@ -95,30 +96,33 @@ public class MinMaxTree {
 	    	for(StateNode sn : n.nextStates) {
 	    		if(best == null) {
 	    			best = completeScores(sn,currPass,(best==null)? null: best);
+	    			better=sn;
 	    		} else {
 	    			current = completeScores(sn, currPass,(best==null)? null: best);
 	    			if(current>best && n.player==enemyPlayer) {
 	    				best=current;
+	    				better=sn;
 	    			} else if(current<best && n.player==AIPlayer){
 	    				best=current;
+	    				better=sn;
 	    			}
 	    			if(prev!=null && poda){
 						if((n.player==enemyPlayer) && best>prev){
 							podados++;
-							n.move.setPoda(true);
-							n.move.rate(best);
-							return best;
+							sn.move.setPoda(true);
+							sn.move.rate(best);
+							continue;
 						}else if((n.player==AIPlayer )&& best<prev){
 							podados++;
-							n.move.setPoda(true);
-							n.move.rate(best);
-							return best;
+							sn.move.setPoda(true);
+							sn.move.rate(best);
+							continue;
 						}
 					}
 	    		}
 	 
 	   		}
-	    	n.move.setChosen(true);
+	    	better.move.setChosen(true);
 	    	n.move.rate(best);
 	    	return best;
 			
@@ -226,6 +230,7 @@ public class MinMaxTree {
 		rootNode.move= new Move(1,1, rootNode.player);
 		rootNode.move.setChosen(true);
 		Move m= getOptimalMoveDFS(rootNode,pass, null);
+		System.out.println("los podados son:" + podados);
 		if(m==null){ //la maquina dice paso
 			return new Move(-2,-2, AIPlayer);
 		}
@@ -257,6 +262,7 @@ public class MinMaxTree {
 			return n.move;
 		}
 		Move best=null;
+		StateNode better=null;
 		List<StateNode> neighbours = neighbourStates(n);
 		if(neighbours.isEmpty()){
 			n.move.rate(heuristic.calculate(n.state, AIPlayer));
@@ -286,11 +292,14 @@ public class MinMaxTree {
 				
 				if(best==null){
 					best=aux;
+					better=nod;
 				}
 				if(aux.getScore()>best.getScore() && (n.player==enemyPlayer)) {
     				best=aux;
+    				better=nod;
     			} else if(aux.getScore()<best.getScore() && (n.player==AIPlayer)){
     				best=aux;
+    				better=nod;
     			}
 				
 			}
@@ -301,7 +310,7 @@ public class MinMaxTree {
 			return best;
 		}
 		n.move.rate(best.getScore());
-		n.move.setChosen(true);
+		better.move.setChosen(true);
 		if(n.level==0){
 			return best;
 		}
@@ -347,14 +356,18 @@ public class MinMaxTree {
 		else
 
 		{
+			boolean score=true;
 			String color= "white";
 			if(current.move.isPoda()){
 				color="grey";
+				score=false;
 			}else if(current.move.isChosen()){
 				color="red";
 			}
+			
+			
 
-			t.drawNode(current.id, "\""+current.move.getPosition().toString()+" "+current.move.getScore()+"\"",current.level%2==0? "square" : "box", color);
+			t.drawNode(current.id, "\""+current.move.getPosition().toString()+" "+((score)?current.move.getScore():"PODA")+"\"",current.level%2==0? "square" : "box", color);
 
 		}
 
