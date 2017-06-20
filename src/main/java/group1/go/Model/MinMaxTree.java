@@ -72,7 +72,6 @@ public class MinMaxTree {
 		boolean currPass=false;
 			if((n.move.getPosition().getI() == -2) ){
 				if(pass){
-					System.out.println("going to check if won");
 					if(wins(n.state, AIPlayer)){
 						n.move.rate(Constants.MAX_HEURISTIC_VALUE);
 					}else{
@@ -99,13 +98,11 @@ public class MinMaxTree {
 	    			}
 	    			if(prev!=null && poda){
 						if((n.player==enemyPlayer) && best>prev){
-							System.out.println("PODA");
 							podados++;
 							n.move.setPoda(true);
 							n.move.rate(best);
 							return best;
 						}else if((n.player==AIPlayer )&& best<prev){
-							System.out.println("PODA");
 							podados++;
 							n.move.setPoda(true);
 							n.move.rate(best);
@@ -115,9 +112,6 @@ public class MinMaxTree {
 	    		}
 	 
 	   		}
-	    	if(best==null){
-	    		System.out.println("nodo null --> color" + (n.player==Constants.BLACK) + "");
-	    	}
 	    	n.move.rate(best);
 	    	return best;
 			
@@ -143,7 +137,7 @@ public class MinMaxTree {
 				}
 			}
 		}
-		if(n.state.board.tilesCardinal()>=10){
+		if(n.state.board.tilesCardinal()>=100){
 			StateNode repeat= new StateNode(n.state.clone(), nodePlayer, n.level+1);
 			repeat.move= new Move(-2,-2, nodePlayer);
 			retList.add(repeat);
