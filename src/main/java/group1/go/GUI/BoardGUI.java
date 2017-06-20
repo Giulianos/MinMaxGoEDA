@@ -198,7 +198,6 @@ public class BoardGUI extends JFrame {
 					y = y - deltaY;
 					i++;
 				}
-				System.out.println(i +" "+ j);
 				controller.touch(i-1,j-1);
 				
 			}
