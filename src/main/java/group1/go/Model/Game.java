@@ -3,7 +3,9 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
@@ -32,18 +34,26 @@ public class Game {
 		Board currentBoard = board.clone();
 		HashSet<TilesPosition> whiteTerritory = new HashSet<TilesPosition>();
 		HashSet<TilesPosition> blackTerritory = new HashSet<TilesPosition>();
-		for(int i = 0; i < Constants.BOARDSIZE; i++){
-			for(int j = 0; j <Constants.BOARDSIZE; j++ ){
+		for(int i = 0; i <= Constants.BOARDSIZE; i++){
+			for(int j = 0; j <=Constants.BOARDSIZE; j++ ){
 				char tile = board.get(i, j);
 				if(tile == Constants.EMPTY){
 					TilesPosition aux = new TilesPosition(i, j);
 					if(!whiteTerritory.contains(aux) && !blackTerritory.contains(aux)){
-						System.out.println("Enter");
+						System.out.println("Enter" + i +" " + j);
 						if(!whiteTerritory.contains(aux)){
-						countTerritory(currentBoard.clone(), i, j, Constants.WHITE, whiteTerritory);
+							HashSet<TilesPosition> whiteAux = new HashSet<TilesPosition>();
+							if(countTerritory(currentBoard.clone(), i, j, Constants.WHITE, whiteAux)){
+								whiteTerritory.addAll(whiteAux);
+								System.out.println("white");
+							}
 						}
 						if(!blackTerritory.contains(aux)){
-							countTerritory(currentBoard.clone(), i, j, Constants.BLACK, blackTerritory);
+							HashSet<TilesPosition>blackAux = new HashSet<TilesPosition>();
+							if(countTerritory(currentBoard.clone(), i, j, Constants.BLACK, blackAux)){
+								System.out.println("black");
+								blackTerritory.addAll(blackAux);
+							}
 						}
 					}
 				}
@@ -51,67 +61,48 @@ public class Game {
 		}
 		this.blackTerritory = blackTerritory.size();
 		this.whiteTerritory = whiteTerritory.size();
-		System.out.println("White: " + this.whiteTerritory);
-		System.out.println("Black: " + this.blackTerritory);
+		System.out.println("White: " + blackTerritory.size());
+		System.out.println("Black: " + whiteTerritory.size());
 		return;
 
 	}
 
 	
 
-	public int countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
-		board.add(i, j,player);
-		char enemy =  (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
-		char upC = board.get(i, j-1);
-		char downC = board.get(i, j+1);
-		char leftC = board.get(i-1, j);
-		char rightC = board.get(i+1, j);
-		if(j-1<0){
-			return 3;
-		}
-		if(j+1 > Constants.BOARDSIZE){
-			downC = player;
-		}
-		if(i-1<0){
-			leftC = player;
-		}
-		if(i+1>Constants.BOARDSIZE){
-			rightC = player;
-		}
-		if(upC == enemy || downC == enemy || leftC == enemy || rightC == enemy){
-			System.out.println("FALSE " + i + " " + j );
-			return false;
-		}
-		if(upC != player){
-			if(!countTerritory(board,i,j-1,player,set)){
-				return false;
-			}
-		}
-		if(downC != player){
-			if(!countTerritory(board,i,j+1,player,set)){
-				return false;
-			}
-		}
-		if(rightC != player){
-			if(!countTerritory(board,i+1,j,player,set)){
-				return false;
-			}
-		}
-		if(leftC != player){
-			if(!countTerritory(board,i-1,j,player,set)){
-				return false;
-			}
-		}
-		System.out.println("ADD " + i + " " + j );
-		TilesPosition t = new TilesPosition(i, j);
-		if(!set.contains(t)){
-			set.add(t);
-		}
+	public boolean countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
 		
+		Queue<TilesPosition> queue = new LinkedList<TilesPosition>();
+		queue.offer(new TilesPosition(i, j));
+		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
+		while(!queue.isEmpty()){
+			TilesPosition current = queue.poll();
+			if(visited[current.getI()][current.getJ()]){
+				continue;
+			}
+			visited[current.getI()][current.getJ()] = true;
+			char position = board.get(current);
+			if(position == enemy){
+				return false;
+			}
+			if(position == player){
+				continue;
+			}
+			if(j-1>0){
+				queue.offer(new TilesPosition(i,j-1));
+			}
+			if(j+1 < Constants.BOARDSIZE){
+				queue.offer(new TilesPosition(i,j+1));
+			}
+			if(i-1>0){
+				queue.offer(new TilesPosition(i-1,j));
+			}
+			if(i+1<Constants.BOARDSIZE){
+				queue.offer(new TilesPosition(i+1,j));
+			}
+			set.add(current);
+		}
 		return true;
 	}
-
-	
 	
 	public   int isposible(int i , int j){
 		
