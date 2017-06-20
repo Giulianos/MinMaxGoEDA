@@ -102,11 +102,13 @@ public class MinMaxTree {
 							System.out.println("PODA");
 							podados++;
 							n.move.setPoda(true);
+							n.move.rate(best);
 							return best;
 						}else if((n.player==AIPlayer )&& best<prev){
 							System.out.println("PODA");
 							podados++;
 							n.move.setPoda(true);
+							n.move.rate(best);
 							return best;
 						}
 					}
@@ -197,7 +199,7 @@ public class MinMaxTree {
         StateNode bestState = null;
         
         for(StateNode st : rootNode.nextStates) {
-        		completeScores(st, pass,null);
+        		completeScores(st, pass,(bestState==null)? null: bestState.move.getScore());
 		    	if(bestState==null) {
 		    		bestState = st;
 		    	} else if(bestState.move.getScore()<st.move.getScore()) {
