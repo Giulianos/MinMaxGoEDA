@@ -82,6 +82,13 @@ public class Game {
 		this.firstPass=false;
 	}
 	
+	public void startGame(char currentPlayer, Board board){
+		this.currentPlayer = currentPlayer;
+		otherPlayer = currentPlayer==Constants.BLACK?Constants.WHITE:Constants.BLACK;
+		currentState = new State(board, 0, 0, 0, 0);
+		this.firstPass=false;
+	}
+	
 	
 	public  static  ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
