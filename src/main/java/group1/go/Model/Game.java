@@ -11,147 +11,18 @@ import java.util.Set;
 
 public class Game {
 	
-	static PlayerKO whiteko;
-	static PlayerKO blackko;
-	State currentState;
-	State previousState;
-	State pre_previousState;
-	char currentPlayer;
-	char otherPlayer;
-	static boolean firstPass;
-	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
+	private static PlayerKO whiteko;
+	private static PlayerKO blackko;
+	private State currentState;
+	private State previousState;
+	private State pre_previousState;
+	private char currentPlayer;
+	private char otherPlayer;
+	private static boolean firstPass;
+	private static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
 	
 	public char getCurrentPlayer() {
 		return currentPlayer;
-	}
-	
-	
-	
-	
-	
-	//machine()
-	
-	
-
-	public static boolean isWinner(State state, char player){
-		countTerritory(state);
-		int blackScore = state.getBlackTerritory() + state.getBlackTilesCapture();
-		int whiteScore =  state.getWhiteTerritory() + state.getWhiteTilesCapture();
-		if(player == Constants.BLACK){
-			if(blackScore > whiteScore){
-				return true;
-			}
-		}
-		if(player == Constants.WHITE){
-			if(whiteScore > blackScore){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static void countTerritory(State state){
-		Board currentBoard = state.getBoard().clone();
-		HashSet<TilesPosition> whiteTerritory = new HashSet<TilesPosition>();
-		HashSet<TilesPosition> blackTerritory = new HashSet<TilesPosition>();
-		for(int i = 0; i <= Constants.BOARDSIZE; i++){
-			for(int j = 0; j <=Constants.BOARDSIZE; j++ ){
-				char tile = currentBoard.get(i, j);
-				if(tile == Constants.EMPTY){
-					TilesPosition aux = new TilesPosition(i, j);
-					if(!whiteTerritory.contains(aux) && !blackTerritory.contains(aux)){
-						System.out.println("Enter" + i +" " + j);
-						if(!whiteTerritory.contains(aux)){
-							clear();
-							HashSet<TilesPosition> whiteAux = new HashSet<TilesPosition>();
-							if(countTerritory(currentBoard.clone(), i, j, Constants.WHITE, whiteAux)){
-								whiteTerritory.addAll(whiteAux);
-								System.out.println("white");
-							}
-						}
-						if(!blackTerritory.contains(aux)){
-							clear();
-							HashSet<TilesPosition>blackAux = new HashSet<TilesPosition>();
-							if(countTerritory(currentBoard.clone(), i, j, Constants.BLACK, blackAux)){
-								System.out.println("black");
-								blackTerritory.addAll(blackAux);
-							}
-						}
-					}
-				}
-			}
-		}
-		state.setBlackTerritory(blackTerritory.size());
-		state.setWhiteTerritory( whiteTerritory.size());
-		return;
-
-	}
-
-	
-
-	public static boolean countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
-		Queue<TilesPosition> queue = new LinkedList<TilesPosition>();
-		queue.offer(new TilesPosition(i, j));
-		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
-		while(!queue.isEmpty()){
-			TilesPosition current = queue.poll();
-			if(visited[current.getI()][current.getJ()]){
-				continue;
-			}
-			visited[current.getI()][current.getJ()] = true;
-			char position = board.get(current);
-			if(position == enemy){
-				return false;
-			}
-			if(position == player){
-				continue;
-			}
-			if(current.getJ()-1>0){
-				queue.offer(new TilesPosition(current.getI(),current.getJ()-1));
-			}
-			if(current.getJ()+1 < Constants.BOARDSIZE){
-				queue.offer(new TilesPosition(current.getI(),current.getJ()+1));
-			}
-			if(current.getI()-1>0){
-				queue.offer(new TilesPosition(current.getI()-1,current.getJ()));
-			}
-			if(current.getI()+1<Constants.BOARDSIZE){
-				queue.offer(new TilesPosition(current.getI()+1,current.getJ()));
-			}
-			set.add(current);
-		}
-		return true;
-	}
-	
-	public   int isposible(int i , int j){
-		
-		Board currentBoard = currentState.getBoard();
-		char tileAtPosition = currentBoard.get(i, j);
-		
-		
-		if(tileAtPosition != Constants.EMPTY){
-			return Constants.TILEINPOSITION; //error de que hay una ficha
-		}
-		
-		if(isKO(i,j)){
-			return Constants.KO;
-		}
-		
-		
-		Board auxBoard1 = currentBoard.clone();
-		Board auxBoard2 = currentBoard.clone();
-		auxBoard1.add(i, j, currentPlayer);
-		auxBoard2.add(i, j, currentPlayer);
-		clear();
-		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,currentPlayer,false )){
-			clear();
-			if(eat(i, j,auxBoard2, currentPlayer).isEmpty()){
-			return Constants.SUICIDE; //quiere suicidarse
-			}
-		}
-		
-		
-		return Constants.VALID_MOVE; // no hay error
 	}
 	
 	public  void add(int i ,int j){
@@ -177,33 +48,8 @@ public class Game {
 		pre_previousState = previousState;
 		previousState = currentState;
 		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre,0,0);
-
 	}
 	
-	public static Board add(int i ,int j, Board b , char p){
-		clear();
-		Board board = b;
-		Board nextBoard = b.clone();
-		nextBoard.add(i, j, p);
-		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), p);
-		nextBoard.remove(toRemove);
-		
-		return nextBoard;
-		
-		
-	} 
-	
-	private static void clear(){
-		for(int i=0; i<=Constants.BOARDSIZE;i++){
-			for(int j=0; j<=Constants.BOARDSIZE;j++){
-				visited[i][j]=false;
-				
-			}
-		}
-	}
-	public static boolean isFirstPass() {
-		return firstPass;
-	}
 	public boolean endTurn(){
 		char aux = currentPlayer;
 		currentPlayer = otherPlayer;
@@ -384,171 +230,234 @@ public class Game {
 	public State getState(){
 		return currentState;
 	}
+
+	public boolean isKO(int i, int j){
 	
-	public boolean isKO(int i, int j)
-
-	{
-
-	if(blackko==null){
-
-	blackko= new PlayerKO(-1,-1,false);
-
-	whiteko= new PlayerKO(-1,-1,false);
-
-	}
-	if(currentPlayer==Constants.BLACK){
-		if(blackko.getI()!=i ||blackko.getJ() !=j){
-			blackko.setI(-1);
-			blackko.setJ(-1);
-			blackko.setKo(false);
+		if(blackko==null){
+			blackko= new PlayerKO(-1,-1,false);
+			whiteko= new PlayerKO(-1,-1,false);
 		}
-	}
-	if(currentPlayer==Constants.WHITE){
-		if(whiteko.getI()!=i ||blackko.getJ() !=j){
-			whiteko.setI(-1);
-			whiteko.setJ(-1);
-			whiteko.setKo(false);
+		if(currentPlayer==Constants.BLACK){
+			if(blackko.getI()!=i ||blackko.getJ() !=j){
+				blackko.setI(-1);
+				blackko.setJ(-1);
+				blackko.setKo(false);
+			}
 		}
+		if(currentPlayer==Constants.WHITE){
+			if(whiteko.getI()!=i ||blackko.getJ() !=j){
+				whiteko.setI(-1);
+				whiteko.setJ(-1);
+				whiteko.setKo(false);
+			}
+		}
+		
+		boolean flag = false;
+	
+		int otherdegree = getDegree(i,j,otherPlayer);
+		int myDegree= getDegree(i,j, currentPlayer);
+		int noMove= getDegree(i,j,Constants.NOMOVE);
+	
+		if(currentState.board.get(i, j)!=Constants.EMPTY){
+			return false;
+		}
+		if(otherdegree < 3 ||(otherdegree==3 && noMove!=1)){
+			return false;
+		}
+		int sideCurr=getDegree(i+1,j,currentPlayer);
+	
+		if(sideCurr== 3 ||( sideCurr==2 && getDegree(i+1,j,Constants.NOMOVE)==1 )){
+			flag = true;
+		}
+		else if(getDegree(i-1,j,currentPlayer) == 3 || (getDegree(i-1,j,currentPlayer) == 2 && getDegree(i-1,j,Constants.NOMOVE)==1 )){
+			flag = true;
+		}
+		else if(getDegree(i,j+1,currentPlayer) == 3 || (getDegree(i,j+1,currentPlayer) == 2 && getDegree(i,j+1,Constants.NOMOVE)==1 )){
+			flag = true;
+		}
+		else if(getDegree(i,j-1,currentPlayer) == 3 || (getDegree(i,j-1,currentPlayer) == 2 && getDegree(i,j-1,Constants.NOMOVE)==1 )){
+			flag = true;
+		}
+		if(currentPlayer == Constants.BLACK){
+			if(!flag){
+				blackko.setKo(false);
+			}
+			else{
+				if(blackko.ko()){
+					return true;
+				}
+				else{
+					blackko.setKo(true);
+					blackko.setI(i);
+					blackko.setJ(j);
+				}
+			}
+		}
+		else{
+			if(!flag){
+				whiteko.setKo(false);
+			}
+			else{
+				if(whiteko.ko()){
+					return true;
+				}
+				else{
+					whiteko.setKo(true);
+					whiteko.setI(i);
+					whiteko.setJ(j);
+				}
+			}
+		}
+		return false;
 	}
-
-
-	boolean flag = false;
-
-	int otherdegree = getDegree(i,j,otherPlayer);
-	int myDegree= getDegree(i,j, currentPlayer);
-	int noMove= getDegree(i,j,Constants.NOMOVE);
-
-	if(currentState.board.get(i, j)!=Constants.EMPTY)
-
-	{
-
-
-	return false;
-
-	}
-
-	if(otherdegree < 3 ||(otherdegree==3 && noMove!=1))
-
-	{
-
-	return false;
-
-	}
-	int sideCurr=getDegree(i+1,j,currentPlayer);
-
-	if(sideCurr== 3 ||( sideCurr==2 && getDegree(i+1,j,Constants.NOMOVE)==1 ))
-
-	{
-
-	flag = true;
-
-	}
-
-	else if(getDegree(i-1,j,currentPlayer) == 3 || (getDegree(i-1,j,currentPlayer) == 2 && getDegree(i-1,j,Constants.NOMOVE)==1 ))
-
-	{
-
-	flag = true;
-
-	}
-
-	else if(getDegree(i,j+1,currentPlayer) == 3 || (getDegree(i,j+1,currentPlayer) == 2 && getDegree(i,j+1,Constants.NOMOVE)==1 ))
-
-	{
-
-	flag = true;
-
-	}
-
-	else if(getDegree(i,j-1,currentPlayer) == 3 || (getDegree(i,j-1,currentPlayer) == 2 && getDegree(i,j-1,Constants.NOMOVE)==1 ))
-
-	{
-
-	flag = true;
-
-	}
-
-	System.out.println(flag);
-
-	if(currentPlayer == Constants.BLACK)
-
-	{
-
-	if(!flag){
-
-	blackko.setKo(false);
-
-	}else{
-
-	if(blackko.ko())
-
-	{
-
-	return true;
-
-	}
-
-	else
-
-	{
-
-	System.out.println("entra black");
-
-	blackko.setKo(true);
-
-	blackko.setI(i);
-
-	blackko.setJ(j);
-
-	}
-
-	}
-
-	}
-
-	else 
-
-	{
-
-	if(!flag){
-
-	whiteko.setKo(false);
-
-	}else{
-
-	if(whiteko.ko())
-
-	{
-
-	return true;
-
-	}
-
-	else
-
-	{
-
-	System.out.println("entra white");
-
-	whiteko.setKo(true);
-
-	whiteko.setI(i);
-
-	whiteko.setJ(j);
-
-	}
-
-	}
-
-	}
-
-	return false;
-
-	}
-
 
 	private boolean isAvailable(int i, int j){
 		return (i<=Constants.BOARDSIZE+1) && (j<=Constants.BOARDSIZE+1);
 	}
+	public static boolean isFirstPass() {
+		return firstPass;
+	}
+	private static void clear(){
+		for(int i=0; i<=Constants.BOARDSIZE;i++){
+			for(int j=0; j<=Constants.BOARDSIZE;j++){
+				visited[i][j]=false;
+			}
+		}
+	}
+	
+	public static Board add(int i ,int j, Board b , char p){
+		clear();
+		Board board = b;
+		Board nextBoard = b.clone();
+		nextBoard.add(i, j, p);
+		ArrayList<TilesPosition> toRemove = eat(i,j,nextBoard.clone(), p);
+		nextBoard.remove(toRemove);
+		return nextBoard;
+	} 
+	
+	
+	public static void countTerritory(State state){
+		Board currentBoard = state.getBoard().clone();
+		HashSet<TilesPosition> whiteTerritory = new HashSet<TilesPosition>();
+		HashSet<TilesPosition> blackTerritory = new HashSet<TilesPosition>();
+		for(int i = 0; i <= Constants.BOARDSIZE; i++){
+			for(int j = 0; j <=Constants.BOARDSIZE; j++ ){
+				char tile = currentBoard.get(i, j);
+				if(tile == Constants.EMPTY){
+					TilesPosition aux = new TilesPosition(i, j);
+					if(!whiteTerritory.contains(aux) && !blackTerritory.contains(aux)){
+						System.out.println("Enter" + i +" " + j);
+						if(!whiteTerritory.contains(aux)){
+							clear();
+							HashSet<TilesPosition> whiteAux = new HashSet<TilesPosition>();
+							if(countTerritory(currentBoard.clone(), i, j, Constants.WHITE, whiteAux)){
+								whiteTerritory.addAll(whiteAux);
+								System.out.println("white");
+							}
+						}
+						if(!blackTerritory.contains(aux)){
+							clear();
+							HashSet<TilesPosition>blackAux = new HashSet<TilesPosition>();
+							if(countTerritory(currentBoard.clone(), i, j, Constants.BLACK, blackAux)){
+								System.out.println("black");
+								blackTerritory.addAll(blackAux);
+							}
+						}
+					}
+				}
+			}
+		}
+		state.setBlackTerritory(blackTerritory.size());
+		state.setWhiteTerritory( whiteTerritory.size());
+		return;
+
+	}
+
+	
+
+	public static boolean countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
+		Queue<TilesPosition> queue = new LinkedList<TilesPosition>();
+		queue.offer(new TilesPosition(i, j));
+		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
+		while(!queue.isEmpty()){
+			TilesPosition current = queue.poll();
+			if(visited[current.getI()][current.getJ()]){
+				continue;
+			}
+			visited[current.getI()][current.getJ()] = true;
+			char position = board.get(current);
+			if(position == enemy){
+				return false;
+			}
+			if(position == player){
+				continue;
+			}
+			if(current.getJ()-1>0){
+				queue.offer(new TilesPosition(current.getI(),current.getJ()-1));
+			}
+			if(current.getJ()+1 < Constants.BOARDSIZE){
+				queue.offer(new TilesPosition(current.getI(),current.getJ()+1));
+			}
+			if(current.getI()-1>0){
+				queue.offer(new TilesPosition(current.getI()-1,current.getJ()));
+			}
+			if(current.getI()+1<Constants.BOARDSIZE){
+				queue.offer(new TilesPosition(current.getI()+1,current.getJ()));
+			}
+			set.add(current);
+		}
+		return true;
+	}
+	
+	public   int isposible(int i , int j){
+		
+		Board currentBoard = currentState.getBoard();
+		char tileAtPosition = currentBoard.get(i, j);
+		
+		
+		if(tileAtPosition != Constants.EMPTY){
+			return Constants.TILEINPOSITION; //error de que hay una ficha
+		}
+		
+		if(isKO(i,j)){
+			return Constants.KO;
+		}
+		
+		
+		Board auxBoard1 = currentBoard.clone();
+		Board auxBoard2 = currentBoard.clone();
+		auxBoard1.add(i, j, currentPlayer);
+		auxBoard2.add(i, j, currentPlayer);
+		clear();
+		if( eat(new ArrayList<TilesPosition>(),i,j,auxBoard1,currentPlayer,false )){
+			clear();
+			if(eat(i, j,auxBoard2, currentPlayer).isEmpty()){
+			return Constants.SUICIDE; //quiere suicidarse
+			}
+		}
+		
+		
+		return Constants.VALID_MOVE; // no hay error
+	}
+	
+	public static boolean isWinner(State state, char player){
+		countTerritory(state);
+		int blackScore = state.getBlackTerritory() + state.getBlackTilesCapture();
+		int whiteScore =  state.getWhiteTerritory() + state.getWhiteTilesCapture();
+		if(player == Constants.BLACK){
+			if(blackScore > whiteScore){
+				return true;
+			}
+		}
+		if(player == Constants.WHITE){
+			if(whiteScore > blackScore){
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+	
 
 }
