@@ -4,6 +4,14 @@ public class Move {
 	private TilesPosition position;
 	private char player;
 	private Integer score; //For the ai to rate the move
+	private boolean poda;
+	private boolean chosen;
+	public void setPoda(boolean poda) {
+		this.poda = poda;
+	}
+	public void setChosen(boolean chosen) {
+		this.chosen = chosen;
+	}
 	
 	public Move(TilesPosition position, char player) {
 		if(position==null){
@@ -12,6 +20,8 @@ public class Move {
 		this.position = new TilesPosition(position.i, position.j); //Better clone the position (might reduce performance)
 		}
 		this.player = player;
+		this.poda=false;
+		this.chosen=false;
 	}
 	
 	public Move(int i, int j, char player) {

@@ -67,7 +67,7 @@ public class MinMaxTree {
     	return true;
     }
 	
-	private int completeScores(StateNode n, boolean pass) {
+	private int completeScores(StateNode n, boolean pass,  Integer prev) {
 		Integer best=null, current;
 		boolean currPass=false;
 			if((n.move.getPosition().getI() == -2) ){
@@ -78,13 +78,6 @@ public class MinMaxTree {
 					}else{
 						n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
 					}
-				
-				/*char winner = getWinner(); //funcion de agus
-				if(winner == AIPlayer){
-					n.move.rate(Constants.MAX_HEURISTIC_VALUE);
-				}else{
-					n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
-				}*/
 				return n.move.getScore();
 			}else {
 				currPass=true;
@@ -96,14 +89,27 @@ public class MinMaxTree {
 			}
 	    	for(StateNode sn : n.nextStates) {
 	    		if(best == null) {
-	    			best = completeScores(sn,currPass);
+	    			best = completeScores(sn,currPass,(best==null)? null: best);
 	    		} else {
-	    			current = completeScores(sn, currPass);
+	    			current = completeScores(sn, currPass,(best==null)? null: best);
 	    			if(current>best && n.player==enemyPlayer) {
 	    				best=current;
 	    			} else if(current<best && n.player==AIPlayer){
 	    				best=current;
 	    			}
+	    			if(prev!=null && poda){
+						if((n.player==enemyPlayer) && best>prev){
+							System.out.println("PODA");
+							podados++;
+							n.move.setPoda(true);
+							return best;
+						}else if((n.player==AIPlayer )&& best<prev){
+							System.out.println("PODA");
+							podados++;
+							n.move.setPoda(true);
+							return best;
+						}
+					}
 	    		}
 	 
 	   		}
@@ -116,28 +122,15 @@ public class MinMaxTree {
     }
 	
 	private List<StateNode> neighbourStates(StateNode n) {
-		//System.out.println("Procesing neighbour states..." + num++);
+		
 		StateNode auxState;
 		TilesPosition auxPosition;
 		Board auxBoard;
 		Board currentBoard = n.state.board;
 		char nodePlayer = (n.player==Constants.BLACK)?Constants.WHITE:Constants.BLACK;
 		List<StateNode> retList = new LinkedList<StateNode>();
-		//agrega el caso en el que pase la AI
-	//	auxState = new StateNode(n.state.clone(), nodePlayer, n.level+1);
-//		if((n.move.getPosition().getI() == -2) && (n.move.getPosition().getJ() == -2)) {
-//			return retList; //es un nodo que termina el juego. No tiene neighbours
-//		}
-//		if((n.move.getPosition().getI() == -1) && (n.move.getPosition().getJ() == -1)) {
-//			auxState.move = new Move(new TilesPosition(-2, -2), nodePlayer);
-//			System.out.println("Found end play");
-//		} else {
-//			auxState.move = new Move(new TilesPosition(-1, -1), nodePlayer);
-//		}
-	//	retList.add(auxState);
 		for(int i=0; i<=Constants.BOARDSIZE; i++) {
 			for(int j=0; j<=Constants.BOARDSIZE; j++) {
-				//System.out.println("trying");
 				auxPosition = new TilesPosition(i, j);
 				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
 					auxBoard = currentBoard.clone();
@@ -155,26 +148,42 @@ public class MinMaxTree {
 		}
 		return retList;
 	}
-	
-	public Move getOptimalMoveBFS(boolean pass) {
+	private void optimizeDepth(){
+		if(rootNode.state.board.tilesCardinal()<=5 &&depth>=1){
+			depth=1;
+		}else if(rootNode.state.board.tilesCardinal()<=30&&depth>=2){
+			depth=2;
+		} else if(rootNode.state.board.tilesCardinal()<=40&&depth>=3){
+			depth=3;
+		}else if(rootNode.state.board.tilesCardinal()<=50&&depth>=4){
+			depth=4;
+		}else if(rootNode.state.board.tilesCardinal()<=60&&depth>=5){
+			depth=5;
+		}else if(rootNode.state.board.tilesCardinal()<=70&&depth>=6){
+			depth=6;
+		}else if(rootNode.state.board.tilesCardinal()<=80&&depth>=7){
+			depth=7;
+		}else if(rootNode.state.board.tilesCardinal()<=90&&depth>=8){
+			depth=8;
+		}else if(rootNode.state.board.tilesCardinal()<=100&&depth>=9){
+			depth=9;
+		}else if(rootNode.state.board.tilesCardinal()<=110&&depth>=10){
+			depth=10;
+		}
+	}
+	public Move getOptimalMoveBFS(boolean pass, boolean pod, boolean timer, long timemilis) {
+			optimizeDepth();
+			this.poda=pod;
+			long init= System.currentTimeMillis();
     	
 	    	Queue<StateNode> statesQ = new LinkedList<StateNode>();
 	    	statesQ.offer(rootNode);
 	
 	    	StateNode currentNode;
-	    	boolean didProcessRoot = false;
 	    	
-	    	int currDepth=0;
-	    	 char step= rootNode.player;
-	    	
-	    	while(!statesQ.isEmpty()) {
+	    	while(!statesQ.isEmpty() &&(!timer || System.currentTimeMillis()-init<timemilis-Constants.DELTA)) {
 	    		currentNode = statesQ.poll();
-	    		if(currentNode.level==depth) {
-	    			//System.out.println("calculating heuristic");
-	   	    		//currentNode.move.rate(heuristic.calculate(currentNode.state, AIPlayer));
-	   	    		//System.out.println("La heuristica es:" + currentNode.move.getScore() );
-	    		} else {
-	    			//System.out.println("Call to neighbour processing...");
+	    		if(currentNode.level<depth) {
 	    			List<StateNode> neighbours = neighbourStates(currentNode);
 	    			for(StateNode n : neighbours){
 	    				if(!generatedStates.contains(n)) {
@@ -188,7 +197,7 @@ public class MinMaxTree {
         StateNode bestState = null;
         
         for(StateNode st : rootNode.nextStates) {
-        		completeScores(st, pass);
+        		completeScores(st, pass,null);
 		    	if(bestState==null) {
 		    		bestState = st;
 		    	} else if(bestState.move.getScore()<st.move.getScore()) {
@@ -201,36 +210,40 @@ public class MinMaxTree {
         }
         System.out.println("La heuristica ganadora es :" + bestState.move.getScore());
         System.out.println(bestState.move.getPosition().getI());
+        System.out.println("los podados son:" +podados);
         return bestState.move;
     }
 	
-	public Move getOptimalMoveDFS(boolean pod){
-		if(rootNode.state.board.tilesCardinal()<=5){
-			depth=1;
-		}else if(rootNode.state.board.tilesCardinal()<=30){
-			depth=2;
-		} else if(rootNode.state.board.tilesCardinal()<=40){
-			depth=3;
-		}else{
-			
-		}
+	public Move getOptimalMoveDFS(boolean pod, boolean pass){
+		optimizeDepth();
 		this.poda=pod;
 		rootNode.move= new Move(null, rootNode.player);
-		Move m= getOptimalMoveDFS(rootNode, null);
+		Move m= getOptimalMoveDFS(rootNode,pass, null);
 		if(m==null){ //la maquina dice paso
 			return new Move(-2,-2, AIPlayer);
 		}
-		System.out.println(m.getPlayer()==Constants.BLACK);
-		System.out.println("los podados son:" +podados);
-		System.out.println("la heuristica ganadora es:" + m.getScore());
 		
 		return m;
 	}
 	
 	static int podados=0;
 	
-	private Move getOptimalMoveDFS(StateNode n, Integer prev){
-		//System.out.println(n.level);
+	private Move getOptimalMoveDFS(StateNode n,  boolean pass, Integer prev){
+		boolean currPass=false;
+		if(n.move.getPosition().getI()==-2){
+			if(pass){
+				if(wins(n.state, AIPlayer)){
+					n.move.rate(Constants.MAX_HEURISTIC_VALUE);
+				}else{
+					n.move.rate(-1*Constants.MAX_HEURISTIC_VALUE);
+				}
+			
+			return n.move;
+		}else {
+			currPass=true;
+		}
+			
+		}
 		if(n.level==depth){
 			n.move.rate(heuristic.calculate(n.state, AIPlayer));
 			return n.move;
@@ -245,7 +258,7 @@ public class MinMaxTree {
 			if(!generatedStates.contains(nod)) {
 				generatedStates.add(nod);
 				n.nextStates.add(nod);
-				Move aux= getOptimalMoveDFS(nod, (best==null)? null: best.getScore());
+				Move aux= getOptimalMoveDFS(nod,currPass, (best==null)? null: best.getScore());
 				if(aux==null) {
 					continue; //hubo poda
 				}
@@ -261,11 +274,11 @@ public class MinMaxTree {
 				if(prev!=null && poda){
 					if(n.player==enemyPlayer && best.getScore()>prev){
 						podados++;
-						n.move=null;
+						n.move.setPoda(true);;
 						return null;
 					}else if(n.player==AIPlayer && best.getScore()<prev){
 						podados++;
-						n.move=null;
+						n.move.setPoda(true);;
 						return null;
 					}
 				}
@@ -280,9 +293,6 @@ public class MinMaxTree {
 		if(n.level==0){
 			return best;
 		}
-		//System.out.println("el nodo es:" + n.level);
-		
-		//System.out.println("La igualdad" +(best.getScore()==n.move.getScore()));
 		return n.move;
 	}
 	
