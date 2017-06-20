@@ -37,8 +37,6 @@ public class BoardGUI extends JFrame {
 	private Controller controller;
 	private JLayeredPane contentPane;
 	private ImageIcon backgroundImg = new ImageIcon("go_board.png");
-	//private ImageIcon backgroundImg = new ImageIcon("C:/Users/agust/Downloads/go_board.png");
-	//private ImageIcon btnBackground = new ImageIcon("C:/Users/agust/Downloads/btn_board.png");
 	private JLabel backGroundLabel = new JLabel();
 	private JPanel backGroundPanel = new JPanel();
 	private TilesPanel tilesPanel = new TilesPanel();
@@ -184,11 +182,10 @@ public class BoardGUI extends JFrame {
 
 			public void mouseClicked(MouseEvent arg0) {
 				Point point = tilesPanel.getMousePosition();
-				
+
 				if((point.getX()> (deltaX*13)+ firstPositionX) || (point.getY()> (deltaY*13)+ firstPositionY) ){
 					return;
 				}
-				
 				double x = point.getX();
 				int i = 0;
 				double y = point.getY();
@@ -204,31 +201,16 @@ public class BoardGUI extends JFrame {
 				System.out.println(i +" "+ j);
 				controller.touch(i-1,j-1);
 				
-				
 			}
-
 			public void mouseEntered(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-
 			public void mouseExited(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-
 			public void mousePressed(MouseEvent arg0) {
-			
 			}
-
 			public void mouseReleased(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-				
 			}
-			
 		});
-		
-		
 	}
 
 	public void setController(Controller controller) {
@@ -263,6 +245,11 @@ public class BoardGUI extends JFrame {
 		
 	}
 
+	public void KO() {
+		moveLabel.setText("KO");
+		
+	}
+	
 	public void endGame(int blackScore, int whiteScore) {
 		tilesPanel.setEnabled(false);
 		pass_btn.setEnabled(false);
@@ -270,8 +257,5 @@ public class BoardGUI extends JFrame {
 		
 	}
 
-	public void KO() {
-		moveLabel.setText("KO");
-		
-	}
+	
 }

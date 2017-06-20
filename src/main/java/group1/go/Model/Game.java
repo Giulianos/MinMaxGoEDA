@@ -19,7 +19,7 @@ public class Game {
 	char currentPlayer;
 	char otherPlayer;
 	static boolean firstPass;
-	
+	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
 	
 	public char getCurrentPlayer() {
 		return currentPlayer;
@@ -230,15 +230,12 @@ public class Game {
 	}
 	
 	public void startGame(){
-		Random rand = new Random();
-		int random = rand.nextInt() % 10;
-			currentPlayer = Constants.BLACK;
-			otherPlayer = Constants.WHITE;
+		currentPlayer = Constants.BLACK;
+		otherPlayer = Constants.WHITE;
 		currentState = new State();
 		this.firstPass=false;
 	}
 	
-	static boolean visited[][] = new boolean[Constants.BOARDSIZE+1][Constants.BOARDSIZE+1];
 	
 	public  static  ArrayList<TilesPosition> eat(int i, int j, Board board, char player){
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
