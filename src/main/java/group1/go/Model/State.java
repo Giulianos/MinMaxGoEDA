@@ -19,7 +19,7 @@ public class State {
 	}
 
 	public State(){
-		board = new BoardMapImpl();
+		board = new BoardBitMapImpl();
 		blackTilesCapture = 0;
 		whiteTilesCapture = 0;
 	}

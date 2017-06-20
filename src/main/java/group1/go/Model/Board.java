@@ -23,5 +23,14 @@ public abstract class Board {
 	public abstract Board clone();
 	
 	public abstract boolean isFull();
+	public int tilesCardinal(){
+		int sum=0;
+		for(int i=0; i<=Constants.BOARDSIZE; i++){
+			for(int j=0; j<=Constants.BOARDSIZE; j++){
+				if(get(i, j)==Constants.WHITE|| get(i, j)==Constants.BLACK) sum++;
+			}
+		}
+		return sum;
+	}
 
 }
