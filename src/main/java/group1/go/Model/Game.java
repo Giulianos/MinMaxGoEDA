@@ -19,8 +19,7 @@ public class Game {
 	char currentPlayer;
 	char otherPlayer;
 	static boolean firstPass;
-	int blackTerritory;
-	int whiteTerritory;
+	
 	
 	public char getCurrentPlayer() {
 		return currentPlayer;
@@ -32,29 +31,32 @@ public class Game {
 	
 	//machine()
 	
-	public int getBlackTerritory() {
-		return blackTerritory;
+	
+
+	public static boolean isWinner(State state, char player){
+		countTerritory(state);
+		int blackScore = state.getBlackTerritory() + state.getBlackTilesCapture();
+		int whiteScore =  state.getWhiteTerritory() + state.getWhiteTilesCapture();
+		if(player == Constants.BLACK){
+			if(blackScore > whiteScore){
+				return true;
+			}
+		}
+		if(player == Constants.WHITE){
+			if(whiteScore > blackScore){
+				return true;
+			}
+		}
+		return false;
 	}
 
-
-
-
-
-	public int getWhiteTerritory() {
-		return whiteTerritory;
-	}
-
-
-
-
-
-	public void countTerritory(Board board){
-		Board currentBoard = board.clone();
+	public static void countTerritory(State state){
+		Board currentBoard = state.getBoard().clone();
 		HashSet<TilesPosition> whiteTerritory = new HashSet<TilesPosition>();
 		HashSet<TilesPosition> blackTerritory = new HashSet<TilesPosition>();
 		for(int i = 0; i <= Constants.BOARDSIZE; i++){
 			for(int j = 0; j <=Constants.BOARDSIZE; j++ ){
-				char tile = board.get(i, j);
+				char tile = currentBoard.get(i, j);
 				if(tile == Constants.EMPTY){
 					TilesPosition aux = new TilesPosition(i, j);
 					if(!whiteTerritory.contains(aux) && !blackTerritory.contains(aux)){
@@ -79,15 +81,15 @@ public class Game {
 				}
 			}
 		}
-		this.blackTerritory = blackTerritory.size();
-		this.whiteTerritory = whiteTerritory.size();
+		state.setBlackTerritory(blackTerritory.size());
+		state.setWhiteTerritory( whiteTerritory.size());
 		return;
 
 	}
 
 	
 
-	public boolean countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
+	public static boolean countTerritory(Board board, int i, int j, char player, HashSet<TilesPosition> set){
 		Queue<TilesPosition> queue = new LinkedList<TilesPosition>();
 		queue.offer(new TilesPosition(i, j));
 		char enemy= (player==Constants.BLACK)? Constants.WHITE: Constants.BLACK;
@@ -174,7 +176,7 @@ public class Game {
 		}
 		pre_previousState = previousState;
 		previousState = currentState;
-		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre);
+		currentState = new State(nextBoard.clone(), blackTilesCapture, whiteTilesCaputre,0,0);
 
 	}
 	
@@ -224,7 +226,7 @@ public class Game {
 	}
 	
 	public void endGame(){
-		countTerritory(currentState.board);
+		countTerritory(currentState);
 	}
 	
 	public void startGame(){

@@ -132,7 +132,7 @@ public class MinMaxTree {
 				if(GoRules.isPossible(currentBoard, auxPosition, nodePlayer)) {
 					auxBoard = currentBoard.clone();
 					auxBoard=Game.add(i, j, auxBoard, nodePlayer);
-					auxState = new StateNode(new State(auxBoard, 0, 0), nodePlayer, n.level+1);
+					auxState = new StateNode(new State(auxBoard, 0, 0, 0 ,0), nodePlayer, n.level+1);
 					auxState.move= new Move(auxPosition,nodePlayer);
 					retList.add(auxState);
 				}

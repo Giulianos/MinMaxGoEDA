@@ -92,7 +92,7 @@ public class BoardGUI extends JFrame {
 				controller.pass();
 			}
 		});
-		contentPane.add(pass_btn,0);
+		contentPane.add(pass_btn,1);
 		
 		JButton exit_btn = new JButton("Exit");
 		exit_btn.setBounds(506, 170, 70, 40);
@@ -147,7 +147,7 @@ public class BoardGUI extends JFrame {
 		blackLabel.setBackground(Color.BLACK);
 		blackLabel.setOpaque(true);
 		blackLabel.setForeground(Color.WHITE);
-		contentPane.add(blackLabel, 4);
+		contentPane.add(blackLabel, 6);
 		
 		//seteo el cartel de whiteTiles 
 		whiteTextLabel = new JLabel("White");
@@ -160,7 +160,7 @@ public class BoardGUI extends JFrame {
 		whiteLabel.setBackground(Color.WHITE);
 		whiteLabel.setOpaque(true);
 		whiteLabel.setForeground(Color.BLACK);
-		contentPane.add(whiteLabel, 4);
+		contentPane.add(whiteLabel, 7);
 		
 		//seteo el moveLabel
 		moveLabel = new JLabel("<html>Make a <br>move!!</html>");
@@ -179,7 +179,7 @@ public class BoardGUI extends JFrame {
 		
 		tilesPanel.setBounds(0, 0,backgroundImg.getIconWidth(), backgroundImg.getIconHeight());
 		tilesPanel.setOpaque(false);
-		contentPane.add(tilesPanel, 3);
+		contentPane.add(tilesPanel, 4);
 		tilesPanel.addMouseListener(new MouseListener(){
 
 			public void mouseClicked(MouseEvent arg0) {
@@ -236,15 +236,15 @@ public class BoardGUI extends JFrame {
 		
 	}
 	
-	public void drawBoard(Game game){
-		tilesPanel.drawBoard(game.getState().getBoard());
+	public void drawBoard(State state){
+		tilesPanel.drawBoard(state.getBoard());
 		if(territoryDisplay){
-			game.countTerritory(game.getState().getBoard());
-			blackLabel.setText(String.valueOf(game.getBlackTerritory()));
-			whiteLabel.setText(String.valueOf(game.getWhiteTerritory()));
+			Game.countTerritory(state);
+			blackLabel.setText(String.valueOf(state.getBlackTerritory()));
+			whiteLabel.setText(String.valueOf(state.getWhiteTerritory()));
 		}else{
-			blackLabel.setText(String.valueOf(game.getState().getWhiteTilesCapture()));
-			whiteLabel.setText(String.valueOf(game.getState().getBlackTilesCapture()));
+			blackLabel.setText(String.valueOf(state.getWhiteTilesCapture()));
+			whiteLabel.setText(String.valueOf(state.getBlackTilesCapture()));
 		}
 		
 		moveLabel.setText("moved");
