@@ -42,6 +42,7 @@ public class Game {
 					if(!whiteTerritory.contains(aux) && !blackTerritory.contains(aux)){
 						System.out.println("Enter" + i +" " + j);
 						if(!whiteTerritory.contains(aux)){
+							clear();
 							HashSet<TilesPosition> whiteAux = new HashSet<TilesPosition>();
 							if(countTerritory(currentBoard.clone(), i, j, Constants.WHITE, whiteAux)){
 								whiteTerritory.addAll(whiteAux);
@@ -49,6 +50,7 @@ public class Game {
 							}
 						}
 						if(!blackTerritory.contains(aux)){
+							clear();
 							HashSet<TilesPosition>blackAux = new HashSet<TilesPosition>();
 							if(countTerritory(currentBoard.clone(), i, j, Constants.BLACK, blackAux)){
 								System.out.println("black");
@@ -61,8 +63,8 @@ public class Game {
 		}
 		this.blackTerritory = blackTerritory.size();
 		this.whiteTerritory = whiteTerritory.size();
-		System.out.println("White: " + blackTerritory.size());
-		System.out.println("Black: " + whiteTerritory.size());
+		System.out.println("White: " + whiteTerritory.size());
+		System.out.println("Black: " + blackTerritory.size());
 		return;
 
 	}
@@ -87,17 +89,17 @@ public class Game {
 			if(position == player){
 				continue;
 			}
-			if(j-1>0){
-				queue.offer(new TilesPosition(i,j-1));
+			if(current.getJ()-1>0){
+				queue.offer(new TilesPosition(current.getI(),current.getJ()-1));
 			}
-			if(j+1 < Constants.BOARDSIZE){
-				queue.offer(new TilesPosition(i,j+1));
+			if(current.getJ()+1 < Constants.BOARDSIZE){
+				queue.offer(new TilesPosition(current.getI(),current.getJ()+1));
 			}
-			if(i-1>0){
-				queue.offer(new TilesPosition(i-1,j));
+			if(current.getI()-1>0){
+				queue.offer(new TilesPosition(current.getI()-1,current.getJ()));
 			}
-			if(i+1<Constants.BOARDSIZE){
-				queue.offer(new TilesPosition(i+1,j));
+			if(current.getI()+1<Constants.BOARDSIZE){
+				queue.offer(new TilesPosition(current.getI()+1,current.getJ()));
 			}
 			set.add(current);
 		}
