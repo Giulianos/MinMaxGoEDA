@@ -6,6 +6,7 @@ public class Move {
 	private Integer score; //For the ai to rate the move
 	private boolean poda;
 	private boolean chosen;
+	
 	public void setPoda(boolean poda) {
 		this.poda = poda;
 	}
@@ -51,5 +52,12 @@ public class Move {
 		Move m= new Move(position, player);
 		m.rate(score);
 		return m;
+	}
+	
+	public boolean isPoda() {
+		return poda;
+	}
+	public boolean isChosen() {
+		return chosen;
 	}
 }

@@ -22,6 +22,8 @@ public class MinMaxTree {
     static int num = 0;
     private Game g;
     private boolean poda;
+	private static long idCount=0;
+	private TreeGenerator t= new TreeGenerator();
 
     public MinMaxTree(State rootState, char AIPlayer, int depth, Heuristic heuristic) {
         this.AIPlayer = AIPlayer;
@@ -31,13 +33,16 @@ public class MinMaxTree {
         rootNode = new StateNode(rootState, enemyPlayer, 0);
         rootNode.move = new Move(0, 0, enemyPlayer);
     }
-
+    
+    
+    
     private static class StateNode {
         private State state;
         private ArrayList<StateNode> nextStates;
         private char player;
       	private Move move;
       	private int level;
+      	private long id;
       	
       	@Override
       	public int hashCode() {
@@ -60,6 +65,7 @@ public class MinMaxTree {
             nextStates=new ArrayList<StateNode>();
             this.player = player;
             this.level=level;
+            this.id=idCount++;
         }
 
     }
@@ -168,8 +174,8 @@ public class MinMaxTree {
 			depth=10;
 		}
 	}
-	public Move getOptimalMoveBFS(boolean pass, boolean pod, boolean timer, long timemilis) {
-			optimizeDepth();
+	public Move getOptimalMoveBFS(boolean pass, boolean pod, boolean timer, long timemilis, boolean generateDOT) {
+			if(!generateDOT) optimizeDepth();
 			this.poda=pod;
 			long init= System.currentTimeMillis();
     	
@@ -210,20 +216,21 @@ public class MinMaxTree {
         System.out.println("los podados son:" +podados);
         rootNode.move=new Move(-1,-1,AIPlayer); //dummy node
         rootNode.move.setChosen(true);
-        
+        if(generateDOT) treeGenerator();
         return bestState.move;
     }
 	
-	public Move getOptimalMoveDFS(boolean pod, boolean pass){
-		optimizeDepth();
+	public Move getOptimalMoveDFS(boolean pod, boolean pass, boolean generateDOT){
+		if(!generateDOT) optimizeDepth();
 		this.poda=pod;
-		rootNode.move= new Move(null, rootNode.player);
+		rootNode.move= new Move(1,1, rootNode.player);
 		rootNode.move.setChosen(true);
 		Move m= getOptimalMoveDFS(rootNode,pass, null);
 		if(m==null){ //la maquina dice paso
 			return new Move(-2,-2, AIPlayer);
 		}
 		
+		if(generateDOT) this.treeGenerator();
 		return m;
 	}
 	
@@ -259,6 +266,19 @@ public class MinMaxTree {
 			if(!generatedStates.contains(nod)) {
 				generatedStates.add(nod);
 				n.nextStates.add(nod);
+				
+				
+				if(prev!=null && poda &&best!=null){
+					if(n.player==enemyPlayer && best.getScore()>prev){
+						podados++;
+						nod.move.setPoda(true);
+						continue;
+					}else if(n.player==AIPlayer && best.getScore()<prev){
+						podados++;
+						nod.move.setPoda(true);
+						continue;
+					}
+				}
 				Move aux= getOptimalMoveDFS(nod,currPass, (best==null)? null: best.getScore());
 				if(aux==null) {
 					continue; //hubo poda
@@ -272,17 +292,7 @@ public class MinMaxTree {
     			} else if(aux.getScore()<best.getScore() && (n.player==AIPlayer)){
     				best=aux;
     			}
-				if(prev!=null && poda){
-					if(n.player==enemyPlayer && best.getScore()>prev){
-						podados++;
-						n.move.setPoda(true);;
-						return null;
-					}else if(n.player==AIPlayer && best.getScore()<prev){
-						podados++;
-						n.move.setPoda(true);;
-						return null;
-					}
-				}
+				
 			}
 		
 	}
@@ -296,6 +306,72 @@ public class MinMaxTree {
 			return best;
 		}
 		return n.move;
+	}
+	
+	
+	
+	// GENERACION DE DOT --------------------------------------------------
+	
+	
+	/**
+	 * must be call getOptimizedBFS before calling treeGenerator
+	 * @return
+	 */
+	
+	
+	private void treeGenerator(){
+		
+		getDOT(rootNode);
+		t.close();
+		
+		
+	}
+	
+	
+	
+	
+	public void getDOT(StateNode current)
+
+	{
+
+
+		if(current.level == 0)
+
+		{
+
+
+			t.drawNode(0, "START", "square", "red");
+
+		}
+
+		else
+
+		{
+			String color= "white";
+			if(current.move.isPoda()){
+				color="grey";
+			}else if(current.move.isChosen()){
+				color="red";
+			}
+
+			t.drawNode(current.id, "\""+current.move.getPosition().toString()+" "+current.move.getScore()+"\"",current.level%2==0? "square" : "box", color);
+
+		}
+
+
+		for(StateNode s : current.nextStates)
+
+		{
+
+
+			t.drawArc(current.id, s.id);
+
+			getDOT(s);
+
+
+		}
+
+
 	}
 	
 	
