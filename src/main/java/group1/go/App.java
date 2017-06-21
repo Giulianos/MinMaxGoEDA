@@ -86,7 +86,7 @@ public class App
         			char player = new Integer(cmd.getOptionValue("player"))==1?Constants.WHITE:Constants.BLACK;
         			game.startGame(player, loadedBoard);
         			MinMaxTree minMax=new MinMaxTree(game.getState(), game.getCurrentPlayer(), new Integer(cmd.getOptionValue("depth")), new squareHeuristic());
-        			Move m= minMax.getOptimalMoveBFS( false, cmd.hasOption("prune"),  false,  10000, cmd.hasOption("tree"));
+        			Move m= minMax.getOptimalMoveDFS( cmd.hasOption("prune"), false, cmd.hasOption("tree"));
         			if(m.getPosition().getI() == -2)
         				System.out.println("PASS!");
         			else
