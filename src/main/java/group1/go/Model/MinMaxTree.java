@@ -268,10 +268,12 @@ public class MinMaxTree {
 					if(n.player==enemyPlayer && best.getScore()>prev){
 						podados++;
 						nod.move.setPoda(true);
+						n.move.rate(best.getScore());
 						continue;
 					}else if(n.player==AIPlayer && best.getScore()<prev){
 						podados++;
 						nod.move.setPoda(true);
+						n.move.rate(best.getScore());
 						continue;
 					}
 				}

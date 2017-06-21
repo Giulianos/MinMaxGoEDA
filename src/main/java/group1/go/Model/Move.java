@@ -23,6 +23,7 @@ public class Move {
 		this.player = player;
 		this.poda=false;
 		this.chosen=false;
+		this.score=null;
 	}
 	
 	public Move(int i, int j, char player) {
@@ -36,7 +37,7 @@ public class Move {
 		this.score = score;
 	}
 	
-	public int getScore()
+	public Integer getScore()
 	{
 		return score;
 	}
